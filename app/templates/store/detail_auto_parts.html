@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %} {{ part.get_meta_title }} {% endblock %}
+
+{% block content %}
+<section class="spare-part">
+            <div class="spare-part__container">
+                <div class="container">
+                    <div class="spare-part__inner">
+                        <h1 class="spare-part__title">
+                            {{ part.title }}
+                        </h1>
+                        <div class="spare-part__content">
+                            <div class="spare-part__images">
+                                <div class="spare-part__img">
+                                    <a href="{{ part.image.url }}" class="spare-part__image-link"
+                                        data-lightbox="roadtrip">
+                                        <img class="spare-part__image" src="{{ part.image.url }}" alt="{{ part.title }}">
+                                    </a>
+                                </div>
+                                <div class="spare-part__imgs-sub">
+                                    <div class="spare-part__img-sub">
+                                        <a href="/img/test_photo.jpg" class="spare-part__image-link"
+                                            data-lightbox="roadtrip">
+                                            <img class="spare-part__image" src="/img/test_photo.jpg" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="spare-part__specification">
+                                <p class="spare-part__price">
+                                    <span class="text-red text-bold">Цена:</span> {{ part.price }} BYN
+                                </p>
+                                <div class="spare-part__btn">
+                                    <a class="spare-part__button" href="#">КУПИТЬ</a>
+                                </div>
+
+                                <table class="spare-part__specification-table">
+                                    <tr>
+                                        <td colspan="2">
+                                            <span class="text-bold">Характеристики</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-bold">Марка</span>
+                                        </td>
+                                        <td>
+                                            {{ part.get_car_brand__title }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-bold">Модель</span>
+                                        </td>
+                                        <td>
+                                            {{ part.get_car_model__title }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-bold">Артикул</span>
+                                        </td>
+                                        <td>
+                                            {{ part.article }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-bold">Описание</span>
+                                        </td>
+                                        <td>
+                                            {{ part.description }}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="info">
+            <div class="info__content">
+            <div class="container">
+                <div class="info__item">
+                    <h2 class="info__title">
+                        Доставка
+                    </h2>
+                    <div class="info__item-text">
+                        <p class="info__text">
+                            Бесплатная доставка при заказе от 200 бел. рублей в Минск и города РБ (Витебск, Могилев, Гомель,
+                            Гродно, Брест, Барановичи, Пинск, Мозырь, Полоцк, Слуцк, Бобруйск и др.)
+                        </p>
+                        <ul class="info__list">
+                            <li class="info__text">
+                                Доставка
+                            </li>
+                            <li class="info__text">
+                                Самовывоз
+                            </li>
+                            <li class="info__text">
+                                Возможна доставка в РФ
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="info__item">
+                    <h2 class="info__title">
+                        Гарантия
+                    </h2>
+                    <div class="info__item-text">
+                        <p class="info__text">
+                            Срок проверки (со дня реализации):
+                        </p>
+                        <ul class="info__list">
+                            <li class="info__text">
+                                Двигатель - 20 дней
+                            </li>
+                            <li class="info__text">
+                                КПП, АКПП, редуктор - 10 дней
+                            </li>
+                            <li class="info__text">
+                                Другие запчасти - 7 дней
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="info__item">
+                    <h2 class="info__title">
+                        Оплата
+                    </h2>
+                    <div class="info__item-text">
+                        <ul class="info__list">
+                            <li class="info__text">
+                                Безналичный расчет (для юридических лиц)
+                            </li>
+                            <li class="info__text">
+                                Наличные
+                            </li>
+                            <li class="info__text">
+                                Банковская карта
+                            </li>
+                            <li class="info__text">
+                                Карта рассрочки «Халва» и «Карта покупок» в рассрочку до 3 месяцев
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        </section>
+{% endblock %}

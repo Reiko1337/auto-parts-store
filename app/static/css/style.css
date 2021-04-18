@@ -1,0 +1,236 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    font-family: 'Montserrat', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    color: #000;
+}
+.page{
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.container{
+    max-width: 1430px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* ---------------------- main ---------------------- */
+.info__item{
+    margin-bottom: 40px;
+}
+.info__item:last-child{
+    margin-bottom: 0;
+}
+.info__content{
+    margin-bottom: 100px;
+}
+.info__title{
+    color: red;
+}
+.info__item-text{
+    margin-top: 10px;
+}
+.info__text{
+    font-size: 16px;
+    line-height: 19px;
+    padding-bottom: 5px;
+}
+.info__text:last-child{
+    padding-bottom: 0;
+}
+.info__list{
+    margin-top: 10px;
+    padding-left: 20px;
+}
+.map{
+    margin-top: 20px;
+    max-width: 800px;
+}
+#map{
+    width: 100%;
+}
+/* -------------------------------------------------- */
+
+
+/* ---------------------- auto parts ---------------------- */
+
+.item__content{
+    margin-bottom: 100px;
+}
+.item__inner{
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+    /* margin-top: 50px; */
+}
+
+.item__img {
+    flex: 0 0 55%;
+    position: relative;
+    min-height: 150px;
+}
+.item__image{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.item__title{
+    text-decoration: none;
+    color: #000;
+    font-weight: 700;
+}
+.item__title:hover{
+    text-decoration: underline;
+}
+.item__part{
+    padding: 10px;
+    display: flex;
+    background: #F8F8F8;
+    box-shadow: 4px 6px 23px 3px rgba(0, 0, 0, 0.3);
+} 
+.item__specification{
+    height: 100%;
+    width: 100%;
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding-bottom:100px;
+}
+.item__specification-list{
+    margin-top: 10px;
+}
+.item__price{
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.item__specification-title{
+    font-weight: 700;
+    padding-bottom: 10px;
+}
+.item__specification-list{
+    list-style: none;
+    font-size: 16px;
+    line-height: 19px;
+}
+.item__buy{
+    position: absolute;
+    margin-top: 10px;
+    bottom: 0;
+}
+.item__button{
+    display: inline-block;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #0da018;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 14px;
+    line-height: 16px;
+}
+.item__button:hover{
+    background-color: #12d11f;
+} 
+
+/* --------------------------------------------------- */
+
+/* --------------------- detail auto parts ------------------------ */
+
+.spare-part__container{
+    margin-bottom: 50px;
+}
+.spare-part__title{
+    margin-bottom: 10px;
+    font-size: 24px;
+    line-height: 28px;
+}
+.spare-part__content{
+    display: flex;
+}
+.spare-part__specification{
+    margin-left: 30px;
+    width: 100%;
+}
+.spare-part__specification-list li{
+    font-size: 16px;
+    line-height: 19px;
+}
+.spare-part__img {
+    width: 100%;
+    height: 400px;
+    position: relative; 
+}
+.spare-part__image{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.spare-part__price{
+    font-size: 22px;
+    line-height: 26px;
+    margin-bottom: 10px;
+}
+.spare-part__button{
+    display: inline-block;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #0da018;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 30px;
+    font-size: 14px;
+    line-height: 16px;
+}
+.spare-part__imgs-sub{
+    display: grid;
+    /* flex-wrap: wrap; */
+    grid-gap: 5px;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 10px;
+}
+.spare-part__images{
+    max-width: 600px;
+}
+.spare-part__button:hover{
+    background-color: #12d11f;
+} 
+
+.spare-part__img-sub{
+    /* width: 33.333%; */
+    height: 100px;
+    position: relative; 
+}
+
+.spare-part__specification-table{
+    margin-top: 30px;
+    width: 100%;
+}
+.spare-part__specification-table tr{
+    border-bottom: 1px solid #000;
+    transition: all 0.2s;
+}
+.spare-part__specification-table tr:hover{
+    background-color: rgb(240, 239, 239);
+}
+.spare-part__specification-table td{
+    /* border: 1px solid #000; */
+}
+.spare-part__specification-table td{
+    padding: 5px;
+}
+
+/* ----------------------------------------------------------- */

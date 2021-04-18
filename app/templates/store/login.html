@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section>
+    <div class="container">
+    <h2>Вход</h2>
+    {% if user.is_authenticated %}
+        <p>Вы уже выполнили вход ({{ user }})</p>
+        <a href="{% url 'store:logout' %}">Выход</a>
+    {% else %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="hidden" name="next" value="{{ next }}">
+        <input type="submit" value="Войти">
+    </form>
+    {% endif %}
+</div>
+</section>
+
+{% endblock %}

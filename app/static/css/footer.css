@@ -1,0 +1,28 @@
+.footer{
+    margin-top: auto;
+    background-color: #3C434D;
+}
+.footer__inner{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+.footer__item-title{
+    font-size: 26px;
+    line-height: 32px;
+    color: #FFFFFF;
+}
+.footer__menu-list{
+    list-style: none;
+    margin-top: 20px; 
+}
+.footer__menu-item{
+    margin-top: 5px;
+}
+.footer__menu-link{
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 20px;
+    color: #929090;
+}
