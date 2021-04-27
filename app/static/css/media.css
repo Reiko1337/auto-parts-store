@@ -7,6 +7,9 @@
         position: relative;
         min-height: 150px;
     }
+    .car .item__img {
+        flex: 0 0 50%;
+    }
     .spare-part__images{
         max-width: 450px;
     }
@@ -70,6 +73,16 @@
     .select2-container{
         margin-bottom: 10px;
         width: 100%;
+    }
+    .wheel .select2-container,
+    .filter__button{
+        width: 100%;
+    }
+    .car .select2-container{
+        width: 100%;
+    }
+    .padding-top-none {
+        padding-top: 0;
     }
     .select2-container:last-child{
         margin-bottom: 0;

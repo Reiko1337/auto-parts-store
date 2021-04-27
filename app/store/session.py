@@ -2,6 +2,7 @@ import copy
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from .models import AutoPart
+from django.contrib.contenttypes.models import ContentType
 
 
 class Session:
@@ -29,36 +30,51 @@ class CartSession(Session):
         """Добавить в корзину"""
         self.validation()
         item_id = str(item.pk)
-        if not self.session['cart'].get(item_id):
-            self.session['cart'][item_id] = {}
+        item_model = str(item._meta.model_name)
+        if not self.session['cart'].get(item_model):
+            self.session['cart'][item_model] = {}
+        self.session['cart'][item_model][item_id] = {}
         self.save()
 
     def __iter__(self):
         self.validation()
-        for item_id in reversed(self.cart):
-            item = get_object_or_404(AutoPart, Q(pk=item_id) & Q(in_stock=True))
-            yield {'id': item.pk, 'item': item}
+        for model in reversed(self.cart):
+            for id in self.cart[model]:
+                item_model = get_object_or_404(ContentType, model=model)
+                item = get_object_or_404(item_model.model_class(), pk=id)
+                yield {'id': item.pk, 'item': item}
 
     def get_final_price(self):
         """Итоговая цена"""
         self.validation()
-        return sum(get_object_or_404(AutoPart, pk=item_id).price for item_id in self.cart)
+        final_price = 0
+        for model in reversed(self.cart):
+            for id in self.cart[model]:
+                item_model = get_object_or_404(ContentType, model=model)
+                item = get_object_or_404(item_model.model_class(), pk=id)
+                final_price += item.price
+        return final_price
 
     def get_total_items(self):
         """Количество кроссовок"""
         self.validation()
-        return len(self.cart.keys())
+        count = 0
+        for model in reversed(self.cart):
+            for _ in self.cart[model]:
+                count += 1
+        return count
 
-    def delete_item(self, item):
+    def delete_item(self, model, id):
         """Удалить кроссовки из корзины"""
-        item_id = str(item.pk)
-        if item_id in self.cart.keys():
-            del self.cart[item_id]
+        if model in self.cart.keys():
+            del self.cart[model][id]
             self.save()
 
     def validation(self):
         cart = copy.deepcopy(self.cart)
-        for item_id in cart:
-            item = get_object_or_404(AutoPart, pk=item_id)
-            if not item.in_stock:
-                self.delete_item(item)
+        for model in cart:
+            for id in cart[model]:
+                item_model = get_object_or_404(ContentType, model=model)
+                item = get_object_or_404(item_model.model_class(), pk=id)
+                if not item.in_stock:
+                    self.delete_item(model, id)

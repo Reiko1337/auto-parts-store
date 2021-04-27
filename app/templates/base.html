@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{% static 'css/footer.css' %}">
     <link rel="stylesheet" href="{% static 'css/filtet.css' %}">
     <link rel="stylesheet" href="{% static 'css/popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/media.css' %}">
     <title>{% block title %}Разборка в Молодечно{% endblock %}</title>
@@ -60,7 +61,14 @@
                         </div>
                     </div>
                     <div class="header__right">
-                        <a class="header__right-link header__right-profile" href="{% url 'store:login' %}">Вход</a>
+                            {% if user.is_authenticated %}
+                                <a class="header__right-link header__right-profile" href="{% url 'account:profile' %}">Мой профиль</a>
+                                <a class="header__right-link" href="{% url 'account:logout' %}">Выход</a>
+                            {% else %}
+                        <a class="header__right-link" href="{% url 'account:registration' %}">Регистрация</a>
+                                  <a class="header__right-link" href="{% url 'account:login' %}">Войти</a>
+                            {% endif %}
+
                         <a class="header__right-link header__right-cart popup-link" href="#cart-popup">Корзина</a>
                     </div>
                 </div>
@@ -73,10 +81,10 @@
                             <a class="navigation__list-link" href="{% url 'store:auto_parts' %}">Автозапчасти</a>
                         </li>
                         <li class="navigation__list-item">
-                            <a class="navigation__list-link" href="#">Машинокомплекты</a>
+                            <a class="navigation__list-link" href="{% url 'store:kids_car' %}">Машинокомплекты</a>
                         </li>
                         <li class="navigation__list-item">
-                            <a class="navigation__list-link" href="#">Диски/Шины</a>
+                            <a class="navigation__list-link" href="{% url 'store:wheels_drive' %}">Диски/Шины</a>
                         </li>
                     </ul>
                 </nav>
@@ -159,12 +167,12 @@
                                     <img class="cart__img" src="{{ item.item.image.url }}" alt="">
                                 </div>
                                 <ul class="cart__content">
-                                    <li class="cart__sneaker-title">{{ item.item.title }}</li>
+                                    <li class="cart__sneaker-title">{{ item.item.get_title }}</li>
                                     <li class="cart__price">{{ item.item.price }} BYN</li>
                                 </ul>
                             </div>
                             <div class="cart__item-del">
-                                <a href="{% url 'store:delete_item_in_cart' item.id %}" class="cart__btn-del">X</a>
+                                <a href="{% url 'store:delete_from_cart' item.item.get_model_name item.id %}" class="cart__btn-del">X</a>
                             </div>
                         </div>
                         {% endfor %}
@@ -188,61 +196,24 @@
         </div>
     </div>
 
-
-<!--    <div id="cart-popup" class="popup">-->
-<!--        <div class="popup__body">-->
-<!--            <div class="popup__content">-->
-<!--                <div class="popup__top">-->
-<!--                    <a href="#" class="popup__close close-popup">></a>-->
-<!--                    <div class="popup__title">Корзина ({{ cart.get_cart_content_count }})</div>-->
-<!--                </div>-->
-<!--                <div class="popup__bottom">-->
-<!--                    <div class="cart">-->
-<!--                        {% for item in cart.get_cart_content %}-->
-<!--                        <div class="cart__item">-->
-<!--                            <div class="cart__item-inner">-->
-<!--                                <div class="cart__image">-->
-<!--                                    <img class="cart__img" src="{{ item.content_object.image.url }}" alt="">-->
-<!--                                </div>-->
-<!--                                <ul class="cart__content">-->
-<!--                                    <li class="cart__sneaker-title">{{ item.content_object.title }}</li>-->
-<!--                                    <li class="cart__price">{{ item.content_object.price }} BYN</li>-->
-<!--                                </ul>-->
-<!--                            </div>-->
-<!--                            <div class="cart__item-del">-->
-<!--                                <a href="{% url 'store:delete_item_in_cart' item.id %}" class="cart__btn-del">X</a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        {% endfor %}-->
-<!--                        <div class="cart__final-cost">-->
-<!--                            <div class="cart__total">-->
-<!--                                <div class="cart__final-price-title">-->
-<!--                                    Итого:-->
-<!--                                </div>-->
-<!--                                <div class="cart__final-price">-->
-<!--                                    {{ cart.get_total_price }} BYN-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="cart__btns">-->
-<!--                            <a class="cart__btn" href="#">Открыть корзину</a>-->
-<!--                            <a class="cart__btn cart__btn-dark" href="#">Оформить заказ</a>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="{% static 'js/lightbox.min.js' %}"></script>
-<script src="{% static 'js/select2.min.js' %}"></script>
 <script src="{% static 'js/popup.js' %}"></script>
+<script src="{% static 'js/select2.min.js' %}"></script>
 <script src="{% static 'js/i18n/ru.js' %}"></script>
 <script src="{% static 'js/filter.js' %}"></script>
+<script src="{% static 'js/generate_filter_models.js' %}"></script>
+{% block scripts_js %}
+{% endblock %}
+<!--<script src="{% static 'js/wheel_drive_filter.js' %}"></script>-->
+<!--<script src="{% static 'js/auto_part_filter.js' %}"></script>-->
+
 <script src="{% static 'js/scripts.js' %}"></script>
+
+
 </body>
 
 </html>

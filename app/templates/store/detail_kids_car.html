@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %} {{ part.get_meta_title }} {% endblock %}
+
+{% block content %}
+<section class="spare-part">
+            <div class="spare-part__container">
+                <div class="container">
+                    <div class="spare-part__inner">
+                        <h1 class="spare-part__title">
+                            {{ car.title }}
+                        </h1>
+                        <div class="spare-part__content">
+                            <div class="spare-part__images">
+                                <div class="spare-part__img">
+                                    <a href="{{ car.image.url }}" class="spare-part__image-link"
+                                        data-lightbox="roadtrip">
+                                        <img class="spare-part__image" src="{{ car.image.url }}" alt="{{ car.title }}">
+                                    </a>
+                                </div>
+                                {% if car.additional_photo.all %}
+                                <div class="spare-part__imgs-sub">
+                                    {% for item in car.additional_photo.all %}
+                                    <div class="spare-part__img-sub">
+                                        <a href="{{ item.image.url }}" class="spare-part__image-link"
+                                            data-lightbox="roadtrip">
+                                            <img class="spare-part__image" src="{{ item.image.url }}" alt="">
+                                        </a>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+
+                            </div>
+                            <div class="spare-part__specification">
+                                <p class="spare-part__price">
+                                    <span class="text-red text-bold">Цена:</span> {{ car.price }} BYN
+                                </p>
+                                <div class="spare-part__btn">
+                                    <a class="spare-part__button" href="{% url 'store:add_to_cart' car.get_model_name car.id %}">КУПИТЬ</a>
+                                </div>
+
+                                <table class="spare-part__specification-table">
+                                    <tr>
+                                        <td colspan="2">
+                                            <span class="text-bold">Характеристики</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-bold">Марка</span>
+                                        </td>
+                                        <td>
+                                            {{ car.get_car_brand__title }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-bold">Модель</span>
+                                        </td>
+                                        <td>
+                                            {{ car.get_car_model__title }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-bold">Год</span>
+                                        </td>
+                                        <td>
+                                            {{ car.year }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-bold">Пробег</span>
+                                        </td>
+                                        <td>
+                                            {{ car.mileage }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-bold">Кузов</span>
+                                        </td>
+                                        <td>
+                                            {{ car.bodywork.title }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-bold">Тип двигателя</span>
+                                        </td>
+                                        <td>
+                                            {{ car.engine_type.title }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-bold">Объем двигателя</span>
+                                        </td>
+                                        <td>
+                                            {{ car.engine_capacity }} л.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-bold">Коробка передач</span>
+                                        </td>
+                                        <td>
+                                            {{ car.get_transmission_display }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-bold">Привод</span>
+                                        </td>
+                                        <td>
+                                            {{ car.get_drive_display }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-bold">VIN</span>
+                                        </td>
+                                        <td>
+                                            {{ car.vin }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-bold">Описание</span>
+                                        </td>
+                                        <td>
+                                            {{ car.description }}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {% include 'store/include_info_item.html' %}
+{% endblock %}

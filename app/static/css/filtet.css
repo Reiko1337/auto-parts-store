@@ -42,3 +42,23 @@
 .filter__btn:hover{
     background-color: #12d11f;
 }
+.wheel.filter__inner:last-child{
+    padding: 0 0 10px 0;
+}
+.wheel .select2-container,
+.filter__button{
+    width: 30%;
+}
+.filter__button{
+    display: flex;
+    justify-content: flex-end;
+}
+.pcd-select{
+    margin-left: 20px;
+}
+.car .select2-container{
+    width: 30%;
+}
+.car.filter__inner:last-child{
+    justify-content: flex-end;
+}

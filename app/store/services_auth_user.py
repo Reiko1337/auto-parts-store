@@ -1,6 +1,7 @@
 from .models import Cart, AutoPart, CartContent
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from django.contrib.contenttypes.models import ContentType
 
 
 class CartUser:
@@ -11,7 +12,9 @@ class CartUser:
         self.cart = self.get_cart_auth_user(self.request)
 
     def add_to_cart(self, item):
-        item_in_cart = CartContent.objects.filter(Q(object_id=item.pk) & Q(cart=self.cart)).first()
+        model = ContentType.objects.get_for_model(item)
+        item_in_cart = CartContent.objects.filter(
+            Q(object_id=item.pk) & Q(cart=self.cart) & Q(content_type=model)).first()
         if not item_in_cart:
             CartContent.objects.create(cart=self.cart, content_object=item)
 

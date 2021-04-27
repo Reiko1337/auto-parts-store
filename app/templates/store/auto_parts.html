@@ -47,11 +47,11 @@
                 <div class="item__part">
                     <div class="item__img">
                         <a href="{{ part.get_absolute_url }}" class="item__image-link">
-                            <img class="item__image" src="{{ part.image.url }}" alt="{{ part.title }}">
+                            <img class="item__image" src="{{ part.image.url }}" alt="">
                         </a>
                     </div>
                     <div class="item__specification">
-                        <a class="item__title" href="{{ part.get_absolute_url }}">{{ part.title }}</a>
+                        <a class="item__title" href="{{ part.get_absolute_url }}">{{ part.get_title }}</a>
                         <ul class="item__specification-list">
                             <p class="item__specification-title">Характеристика</p>
                             <li><span class="text-bold">Марка:</span> {{ part.get_car_brand__title }}</li>
@@ -60,7 +60,7 @@
                         </ul>
                         <div class="item__buy">
                             <p class="box item__price"><span class="text-red text-bold">Цена:</span> {{ part.price }} BYN</p>
-                            <a class="item__button" href="{% url 'store:add_item_in_cart' part.id %}">КУПИТЬ</a>
+                            <a class="item__button" href="{% url 'store:add_to_cart' part.get_model_name part.id %}">КУПИТЬ</a>
                         </div>
                     </div>
                 </div>
@@ -69,4 +69,9 @@
         </div>
     </div>
 </section>
+
+{% endblock %}
+
+{% block scripts_js %}
+    <script src="{% static 'js/auto_part_filter.js' %}"></script>
 {% endblock %}

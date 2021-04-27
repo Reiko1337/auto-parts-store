@@ -70,11 +70,17 @@ body{
     grid-template-columns: repeat(2, 1fr);
     /* margin-top: 50px; */
 }
+.car.item__inner{
+    grid-template-columns: repeat(1, 1fr);
+}
 
 .item__img {
     flex: 0 0 55%;
     position: relative;
     min-height: 150px;
+}
+.car .item__img{
+    min-height: 220px;
 }
 .item__image{
     width: 100%;

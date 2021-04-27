@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Category, CarModel, CarBrand, AutoPart, Cart, CartContent
+from .models import Category, CarModel, CarBrand, AutoPart, Cart, CartContent, WheelDrive, AdditionalPhoto, Car, \
+    EngineType, Bodywork
+from django.contrib.contenttypes.admin import GenericTabularInline
 
 
 @admin.register(Category)
@@ -27,6 +29,11 @@ class CarModelPanel(admin.TabularInline):
                            'meta_title': ('title',)}
     extra = 1
     ordering = ['title']
+
+
+class AdditionalPhotoPanel(GenericTabularInline):
+    model = AdditionalPhoto
+    extra = 1
 
 
 @admin.register(CarBrand)
@@ -74,15 +81,15 @@ class CarModelAdmin(admin.ModelAdmin):
 
 @admin.register(AutoPart)
 class AutoPartAdmin(admin.ModelAdmin):
-    list_display = ('id', 'car_model', 'title')
+    inlines = (AdditionalPhotoPanel,)
+    list_display = ('id', 'car_model')
     list_filter = ('car_model__title', 'car_model__car_brand')
-    search_fields = ('car_model__title', 'title')
+    search_fields = ('car_model__title',)
     autocomplete_fields = ('car_model',)
-    prepopulated_fields = {'slug': ('title',),
-                           'meta_title': ('title',)}
+    prepopulated_fields = {'slug': ('article',)}
     fieldsets = (
         (None, {
-            'fields': ('car_model', 'category', 'title', 'slug', 'description', 'article', 'price', 'in_stock')
+            'fields': ('car_model', 'category', 'slug', 'description', 'article', 'price', 'in_stock')
         }),
         ('Фотографии', {
             'fields': ('image',)
@@ -93,6 +100,13 @@ class AutoPartAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(WheelDrive)
+class WheelDriveAdmin(admin.ModelAdmin):
+    inlines = (AdditionalPhotoPanel,)
+    prepopulated_fields = {'slug': ('title',),
+                           'meta_title': ('title',)}
+
+
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     pass
@@ -100,6 +114,21 @@ class CartAdmin(admin.ModelAdmin):
 
 @admin.register(CartContent)
 class CartContentAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Bodywork)
+class BodyworkAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Car)
+class CarAdmin(admin.ModelAdmin):
+    inlines = (AdditionalPhotoPanel,)
+
+
+@admin.register(EngineType)
+class EngineTypeAdmin(admin.ModelAdmin):
     pass
 
 

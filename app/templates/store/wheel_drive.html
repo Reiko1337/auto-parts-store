@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Запчасти{% endblock %}
+
+{% block content %}
+<section class="filter">
+    <div class="filter__content">
+        <div class="container">
+            <div class="wheel filter__inner">
+                <select class="car-brand-select filter__list" placeholder="Марка автомобиля">
+                    <option value=""></option>
+                    <option value="*">Все марки автомобилей</option>
+                    {% for brand in car_brands %}
+                    <option value="{{ brand.slug }}">{{ brand.title }}</option>
+                    {% endfor %}
+                </select>
+                <select class="model-select filter__list" placeholder="Модель автомобиля">
+                    <option value=""></option>
+                    {% if car_models %}
+                    <option value='*'>Все модели автомобилей</option>
+                    {% for model in car_models %}
+                    <option value="{{ model.slug }}">{{ model.title }}</option>
+                    {% endfor %}
+                    {% endif %}
+                </select>
+                <select class="diameter-select filter__list" placeholder="Диаметр">
+                    <option value=""></option>
+                    <option value="*">Диаметр</option>
+                    {% for wheel in wheels_filter_diameter %}
+                    <option value="{{ wheel.diameter }}">{{ wheel.diameter }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="wheel filter__inner">
+                <select class="material-select filter__list" placeholder="Материал">
+                    <option value=""></option>
+                    <option value="*">Материал</option>
+                    {% for wheel in wheels_filter_material %}
+                    <option value="{{ wheel.material }}">{{ wheel.material }}</option>
+                    {% endfor %}
+                </select>
+                <select class="pcd-select filter__list" placeholder="PCD (мм)">
+                    <option value=""></option>
+                    <option value="*">PCD (мм)</option>
+                    {% for wheel in wheels_filter_pcd %}
+                    <option value="{{ wheel.pcd }}">{{ wheel.pcd }}</option>
+                    {% endfor %}
+                </select>
+                <div class="filter__button">
+                <a class="filter__btn" href="#">Показать ({{ wheels.count }})</a>
+                    </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="item">
+    <div class="item__content">
+        <div class="container">
+
+            <div class="item__inner">
+                {% for wheel in wheels %}
+                <div class="item__part">
+                    <div class="item__img">
+                        <a href="{{ wheel.get_absolute_url }}" class="item__image-link">
+                            <img class="item__image" src="{{ wheel.image.url }}" alt="{{ part.title }}">
+                        </a>
+                    </div>
+                    <div class="item__specification">
+                        <a class="item__title" href="{{ wheel.get_absolute_url }}">{{ wheel.title }}</a>
+                        <ul class="item__specification-list">
+                            <p class="item__specification-title">Характеристика</p>
+                            <li><span class="text-bold">Марка:</span> {{ wheel.get_car_brand__title }}</li>
+                            <li><span class="text-bold">Модель:</span> {{ wheel.get_car_model__title }}</li>
+                            <li><span class="text-bold">Артикул:</span> {{ wheel.article }}</li>
+                            <li><span class="text-bold">Диаметр:</span> {{ wheel.diameter }}</li>
+                            <li><span class="text-bold">Материал:</span> {{ wheel.material }}</li>
+                            <li><span class="text-bold">PCD:</span> {{ wheel.pcd }}</li>
+                        </ul>
+                        <div class="item__buy">
+                            <p class="box item__price"><span class="text-red text-bold">Цена:</span> {{ wheel.price }}
+                                BYN</p>
+                            <a class="item__button" href="{% url 'store:add_to_cart' wheel.get_model_name wheel.id %}">КУПИТЬ</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts_js %}
+<script src="{% static 'js/wheel_drive_filter.js' %}"></script>
+{% endblock %}

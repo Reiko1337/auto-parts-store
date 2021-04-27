@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<section class="login">
+    <div class="login__inner">
+        <div class="container">
+            <div class="login__content">
+                <p class="login__title">Авторизация</p>
+                <form class="form__login" method="post">
+                    {% csrf_token %}
+                    {% render_field form.username class="form__input" placeholder=form.username.label %}
+                    {{ form.username.errors|striptags }}
+                    {% render_field form.password class="form__input" placeholder=form.password.label %}
+                    {{ form.password.errors|striptags }}
+                    {% render_field form.email class="form__input" placeholder=form.email.label %}
+                    <input type="hidden" name="next" value="{{ next }}">
+                    <input class="form__input-submit" type="submit" value="Войти">
+                    <a class="form__input-button">Регистрация</a>
+                </form>
+                <a class="login__resrt-link" href="#">Забыли пароль?</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

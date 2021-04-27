@@ -23,8 +23,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'store.apps.StoreConfig',
+    'account.apps.AccountConfig',
 
     'django_cleanup.apps.CleanupConfig',
+    'django_filters',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -68,8 +71,6 @@ DATABASES = {
         'PORT': env('PORT'),
     }
 }
-
-LOGIN_REDIRECT_URL = 'store:main'
 
 AUTH_PASSWORD_VALIDATORS = [
     {

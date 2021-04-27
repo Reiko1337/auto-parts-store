@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<section class="login">
+    <div class="container">
+        {{ user.username }}<br>
+        {{ user.email }}
+    </div>
+</section>
+
+{% endblock %}
