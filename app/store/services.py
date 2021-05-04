@@ -71,7 +71,7 @@ def get_auto_parts_filter(brand, model, part):
     if part_slug:
         category = Category.objects.filter(slug=part_slug).first()
         auto_part = auto_part.filter(category=category).all()
-    return auto_part
+    return auto_part.filter(in_stock=True).all()
 
 
 def get_wheel_drive_filter(brand, model, diameter, material, pcd):
@@ -98,7 +98,7 @@ def get_wheel_drive_filter(brand, model, diameter, material, pcd):
 
     wheel_drive = wheel_drive.filter(
         Q(diameter__icontains=diameter) & Q(material__icontains=material) & Q(pcd__icontains=pcd))
-    return wheel_drive
+    return wheel_drive.filter(in_stock=True).all()
 
 
 def get_kid_car_filter(brand, model, transmission, bodywork, engine_type, drive):
@@ -136,7 +136,7 @@ def get_kid_car_filter(brand, model, transmission, bodywork, engine_type, drive)
     car = car.filter(
         Q(transmission__icontains=transmission) & Q(drive__icontains=drive) & Q(bodywork__in=bodywork) & Q(
             engine_type__in=engine_type))
-    return car
+    return car.filter(in_stock=True).all()
 
 
 def get_car_models_filter(brand):

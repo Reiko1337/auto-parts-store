@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="profile">
+    <div class="profile__inner">
+        <div class="container">
+            <div class="profile__content">
+                {% include 'account/menu_profile.html' %}
+                <div class="profile__profile">
+                    <table class="profile__order-info">
+                        <tr>
+                            <th>#</th>
+                            <th id="profile__order-count">Количество</th>
+                            <th>Цена, BYN</th>
+                            <th>Дата</th>
+                            <th>Статус</th>
+                        </tr>
+                        {% for order in orders %}
+                        <tr>
+                            <td><a class="order__link" href="{% url 'account:order_detail' order.pk %}">{{ order.pk }}</a></td>
+                            <td>{{ order.get_count }}</td>
+                            <td>{{ order.price }}</td>
+                            <td>{{ order.data_place }}</td>
+                            <td>{{ order.get_status_display }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts_js %}
+<script src="{% static 'js/menu_profile_active.js' %}"></script>
+{% endblock %}

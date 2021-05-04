@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, get_list_or_404
-from django.views.generic import View, ListView, DetailView
+from django.views.generic import View, ListView, DetailView, CreateView
 from django.contrib.auth.views import LoginView
 from .models import AutoPart, CarModel, CartContent, WheelDrive, Car, Bodywork, EngineType
 from .services import get_cart_model, get_category, get_cart_brand, get_auto_parts_filter, get_car_models_filter, \
@@ -12,6 +12,8 @@ from .services import get_cart_model, get_category, get_cart_brand, get_auto_par
 from .session import CartSession
 from .forms import AutoPartFilter
 from collections import namedtuple
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 
 
 class Main(View):
@@ -120,7 +122,7 @@ class DetailKidCar(DetailView):
     model = WheelDrive
     template_name = 'store/detail_kids_car.html'
     context_object_name = 'car'
-    pk_url_kwarg = 'id'
+    slug_url_kwarg = 'car'
 
     def get_queryset(self):
         car_model = get_object_or_404(CarModel, slug=self.kwargs.get('model'))

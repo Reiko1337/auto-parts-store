@@ -22,3 +22,14 @@ function menuActive() {
     }
 }
 menuActive();
+
+
+window.addEventListener("resize", function() {
+    if(innerWidth <= 500){
+        document.querySelector("#profile__order-count").innerHTML = "К-во";
+    }
+    else{
+        document.querySelector("#profile__order-count").innerHTML = "Количество";
+    }
+
+}, false);

@@ -4,7 +4,8 @@ from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
-from django.db.models import Sum
+from django.utils.text import slugify
+from account.models import AddressUser
 
 
 class MataTag(models.Model):
@@ -67,7 +68,7 @@ class AutoPart(MataTag):
     image = models.ImageField(verbose_name='Фотография', upload_to='auto_parts', null=True)
     slug = models.SlugField(verbose_name='URL', unique=True, db_index=True)
     description = models.TextField(verbose_name='Описание')
-    article = models.CharField(verbose_name='Артикул', max_length=120, db_index=True, unique=True)
+    article = models.CharField(verbose_name='Артикул', max_length=120, db_index=True)
     price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12, validators=[MinValueValidator(0)],
                                 default=0)
     in_stock = models.BooleanField(verbose_name='В наличии', default=True)
@@ -78,6 +79,9 @@ class AutoPart(MataTag):
         verbose_name = 'Запчасть'
         verbose_name_plural = 'Запчасти'
         ordering = ['-id']
+
+    def __str__(self):
+        return '{0} {1}'.format(self.car_model, self.category)
 
     def get_title(self):
         return '{0} {1} {2}'.format(self.category.title, self.get_car_brand__title(), self.get_car_model__title())
@@ -91,12 +95,17 @@ class AutoPart(MataTag):
     def get_car_model__title(self):
         return self.car_model.title
 
+    def get_in_stock(self):
+        return 'В наличии' if self.in_stock else 'Нет в наличии'
+
     def get_absolute_url(self):
         return reverse('store:detail_auto_parts', kwargs={'brand': self.car_model.car_brand.slug,
                                                           'model': self.car_model.slug,
                                                           'auto_part': self.slug})
 
     def save(self, *args, **kwargs):
+        value = 'auto-part-{0}'.format(self.pk)
+        self.slug = slugify(value, allow_unicode=True)
         if not self.in_stock:
             cart_contents = self.cart_content.all()
             for item in cart_contents:
@@ -127,6 +136,8 @@ class WheelDrive(MataTag):
         ordering = ['-id']
 
     def save(self, *args, **kwargs):
+        value = 'wheel-drive-{0}'.format(self.pk)
+        self.slug = slugify(value, allow_unicode=True)
         if not self.in_stock:
             cart_contents = self.cart_content.all()
             for item in cart_contents:
@@ -135,6 +146,9 @@ class WheelDrive(MataTag):
 
     def get_title(self):
         return self.title
+
+    def get_in_stock(self):
+        return 'В наличии' if self.in_stock else 'Нет в наличии'
 
     def get_model_name(self):
         return self._meta.model_name
@@ -151,7 +165,7 @@ class WheelDrive(MataTag):
                                                             'wheel_drive': self.slug})
 
     def __str__(self):
-        return '{0} -> {1}'.format(self.car_model, self.title)
+        return '{0} {1}'.format(self.car_model, self.title)
 
 
 class Bodywork(MataTag):
@@ -206,9 +220,9 @@ class Car(MataTag):
     mileage = models.PositiveIntegerField(verbose_name='Пробег')
     year = models.PositiveSmallIntegerField(verbose_name='Год')
     color = models.CharField(verbose_name='Цвет', max_length=255)
-    vin = models.CharField(verbose_name='VIN', max_length=255)
-    description = models.TextField(verbose_name='Описание', null=True)
-    price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12)
+    vin = models.CharField(verbose_name='VIN', max_length=255, unique=True)
+    description = models.TextField(verbose_name='Описание', null=True, blank=True)
+    price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12, null=True, blank=True)
     in_stock = models.BooleanField(verbose_name='В наличии', default=True)
 
     cart_content = GenericRelation('CartContent')
@@ -222,6 +236,9 @@ class Car(MataTag):
     def get_title(self):
         return self.car_model
 
+    def get_in_stock(self):
+        return 'В наличии' if self.in_stock else 'Нет в наличии'
+
     def get_model_name(self):
         return self._meta.model_name
 
@@ -234,7 +251,19 @@ class Car(MataTag):
     def get_absolute_url(self):
         return reverse('store:detail_kits_car', kwargs={'brand': self.car_model.car_brand.slug,
                                                         'model': self.car_model.slug,
-                                                        'id': self.pk})
+                                                        'car': self.slug})
+
+    def save(self, *args, **kwargs):
+        value = 'car-{0}'.format(self.pk)
+        self.slug = slugify(value, allow_unicode=True)
+        if not self.in_stock:
+            cart_contents = self.cart_content.all()
+            for item in cart_contents:
+                item.delete()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return '{0} {1} {2}'.format(self.car_model, self.year, self.vin)
 
 
 class Cart(models.Model):
@@ -282,4 +311,62 @@ class AdditionalPhoto(models.Model):
     class Meta:
         verbose_name = 'Дополнительное фото'
         verbose_name_plural = 'Дополнительные фото'
+        ordering = ['-id']
+
+
+class Order(models.Model):
+    STATUS_CHOICES = (
+        ('new', 'Новый заказ'),
+        ('in_progress', 'Заказ в обработке'),
+        ('is_ready', 'Заказ готов'),
+        ('completed', 'Заказ выполнен'),
+        ('cancel', 'Заказ отменен')
+    )
+    SHIPPING = (
+        (None, 'Выберите способ доставки'),
+        ('delivery', 'Доставка'),
+        ('pick_up', 'Самовывоз')
+    )
+    PAYMENT_TYPE_CHOICES = (
+        (None, 'Выберите способ оплаты'),
+        ('cash', 'Наличные'),
+        ('card', 'Карта'),
+        ('non_cash', 'Безналичный расчет (для юридических лиц)'),
+        ('card_halva', 'Карта рассрочки «Халва»'),
+        ('card_buy', '«Карта покупок» в рассрочку до 3 месяцев')
+    )
+    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
+    address_user = models.ForeignKey(AddressUser, verbose_name='Адрес доставки', on_delete=models.SET_NULL, null=True, blank=True)
+    shipping_method = models.CharField(verbose_name='Доставка', choices=SHIPPING, max_length=24)
+    payment_type = models.CharField(max_length=100, verbose_name='Способ оплаты', choices=PAYMENT_TYPE_CHOICES)
+    status = models.CharField(max_length=100, verbose_name='Статус заказ', choices=STATUS_CHOICES, default='new')
+    price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12, null=True, blank=True)
+    data_place = models.DateTimeField(verbose_name='Дата заказа', auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+        ordering = ['-id']
+
+    def __str__(self):
+        return '{0} {1} {2}'.format(self.user.username, self.data_place.strftime('%d.%m.%Y'), self.get_status_display())
+
+    def get_order_content(self):
+        return self.ordercontent_set.all()
+
+    def get_count(self):
+        return self.ordercontent_set.all().count()
+
+
+class OrderContent(models.Model):
+    order = models.ForeignKey(Order, verbose_name='Заказ', on_delete=models.CASCADE)
+    title = models.CharField(verbose_name='Название товара', max_length=255)
+    price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12, null=True, blank=True)
+    content_type = models.ForeignKey(ContentType, on_delete=models.SET_NULL, null=True, blank=True)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey(ct_field='content_type', fk_field='object_id')
+
+    class Meta:
+        verbose_name = 'Содержимое в заказе'
+        verbose_name_plural = 'Содержимое в заказе'
         ordering = ['-id']

@@ -189,7 +189,8 @@ body{
     line-height: 26px;
     margin-bottom: 10px;
 }
-.spare-part__button{
+.spare-part__button,
+.spare-part__button-red{
     display: inline-block;
     text-decoration: none;
     outline: none;
@@ -200,6 +201,9 @@ body{
     padding: 10px 30px;
     font-size: 14px;
     line-height: 16px;
+}
+.spare-part__button-red{
+    background-color: red;
 }
 .spare-part__imgs-sub{
     display: grid;

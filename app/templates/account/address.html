@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="profile">
+    <div class="profile__inner">
+        <div class="container">
+            <div class="profile__content">
+                {% include 'account/menu_profile.html' %}
+                <div class="profile__profile">
+                    {% if addresses %}
+                    <table class="profile__address-info">
+                        <tr>
+                            <th class="text-bold">Адрес</th>
+                        </tr>
+                        {% for address in addresses %}
+                        <tr>
+                            <td>
+                                <ul class="address__info">
+                                    <li><span class="text-bold">Фамилия: </span>{{ address.last_name }}</li>
+                                    <li><span class="text-bold">Имя: </span>{{ address.first_name }}</li>
+                                    <li><span class="text-bold">Отчество: </span>{{ address.patronymic }}</li>
+                                    <li><span class="text-bold">Страна: </span>{{ address.get_country_display }}</li>
+                                    <li><span class="text-bold">Регион: </span>{{ address.region }}</li>
+                                    <li><span class="text-bold">Город: </span>{{ address.city }}</li>
+                                    <li><span class="text-bold">Адрес: </span>{{ address.address }}</li>
+                                    <li><span class="text-bold">Номер телефона: </span>{{ address.phone_number }}</li>
+                                    <li><span class="text-bold">Почтовый адрес: </span>{{ address.email }}</li>
+                                </ul>
+                                <div class="profile__buttons">
+                                    <a class="profile__btn" href="{% url 'account:address_update' address.pk %}">Редактировать</a>
+                                    <a class="profile__btn profile__btn_red"
+                                       href="{% url 'account:address_delete' address.pk %}">Удалить</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    {% else %}
+                    <p>В адресной книге нет ни одного адреса</p>
+                    {% endif %}
+                    <div class="profile__buttons">
+                        <a class="profile__btn" href="{% url 'account:address_add' %}">Добавить новый адрес</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts_js %}
+<script src="{% static 'js/menu_profile_active.js' %}"></script>
+{% endblock %}

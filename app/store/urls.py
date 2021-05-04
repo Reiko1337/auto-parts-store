@@ -23,7 +23,7 @@ urlpatterns = [
     path('kits-car/filter/', views.KidCarFilter.as_view(), name='kits_car_filter'),
     path('kits-car/<slug:brand>/', views.ListKidsCar.as_view(), name='kids_car'),
     path('kits-car/<slug:brand>/<slug:model>/', views.ListKidsCar.as_view(), name='kids_car'),
-    path('kits-car/detail/<slug:brand>/<slug:model>/<int:id>/', views.DetailKidCar.as_view(), name='detail_kits_car'),
+    path('kits-car/detail/<slug:brand>/<slug:model>/<slug:car>/', views.DetailKidCar.as_view(), name='detail_kits_car'),
 
     path('filter-models/', views.FilterModelsGenerate.as_view()),
 

@@ -39,7 +39,11 @@
                                     <span class="text-red text-bold">Цена:</span> {{ wheel.price }} BYN
                                 </p>
                                 <div class="spare-part__btn">
-                                    <a class="spare-part__button" href="{% url 'store:add_to_cart' wheel.get_model_name wheel.id %}">КУПИТЬ</a>
+                                    {% if wheel.in_stock %}
+                                        <a class="spare-part__button" href="{% url 'store:add_to_cart' wheel.get_model_name wheel.id %}">КУПИТЬ</a>
+                                    {% else %}
+                                        <a class="spare-part__button-red">{{ wheel.get_in_stock }}</a>
+                                     {% endif %}
                                 </div>
 
                                 <table class="spare-part__specification-table">

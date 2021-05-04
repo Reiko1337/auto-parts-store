@@ -1,13 +1,49 @@
 {% extends 'base.html' %}
-{% load widget_tweaks %}
+{% load static %}
 
 {% block content %}
 
-<section class="login">
-    <div class="container">
-        {{ user.username }}<br>
-        {{ user.email }}
+<section class="profile">
+    <div class="profile__inner">
+        <div class="container">
+            <div class="profile__content">
+                {% include 'account/menu_profile.html' %}
+                <div class="profile__profile">
+                    <table class="profile__profile-info">
+                        <tr>
+                            <td class="text-bold">Имя пользователя</td>
+                            <td>{{ user.username }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-bold">Email</td>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-bold">Фамилия</td>
+                            <td>{{ user.last_name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-bold">Имя</td>
+                            <td>{{ user.first_name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-bold">Дата регистрации</td>
+                            <td>{{ user.date_joined }}</td>
+                        </tr>
+                    </table>
+                    <div class="profile__buttons">
+                        <a class="profile__btn" href="#">Изменить пароль</a>
+                        <a class="profile__btn" href="#">Редактировать профиль</a>
+                        <a class="profile__btn profile__btn_red" href="#">Удалить профиль</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
+{% endblock %}
+
+{% block scripts_js %}
+<script src="{% static 'js/menu_profile_active.js' %}"></script>
 {% endblock %}

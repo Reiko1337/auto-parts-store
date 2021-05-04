@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<section class="checkout">
+    <div class="checkout__inner">
+        <div class="container">
+            <div class="checkout__contetn">
+                {% if cart.get_total_items %}
+                <form class="checkout__form"  method="post">
+                    <h1 class="checkout__title">ОФОРМЛЕНИЕ ЗАКАЗА</h1>
+                    {% csrf_token %}
+                    {{ form.non_field_errors|striptags }}
+                    {% render_field form.shipping_method class="checkout-shipping-select" placeholder=form.shipping_method.label %}
+                    {{ form.shipping_method.errors|striptags }}
+                    <select class="checkout-address-select" name="address_user" required>
+                        <option value=""></option>
+                        {% for address in addresses %}
+                         <option value="{{ address.pk }}">{{ address }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="checkout__add-address">
+                        <a class="checkout__add-address-link" href="{% url 'account:address_add' %}">Добавить адрес доставки</a>
+                    </div>
+                    {% render_field form.payment_type class="checkout-payment-select" placeholder=form.payment_type.label %}
+                    {{ form.payment_type.errors|striptags }}
+                    <input class="form__input-submit" type="submit" value="Разместить заказ">
+                </form>
+
+                <div class="checkout__product">
+                    <h2 class="checkout__title">СОСТАВ ЗАКАЗА </h2>
+                    <table class="checkout__product-list">
+                        <tr>
+                            <th>Фото</th>
+                            <th>Название</th>
+                            <th>Цена, BYN</th>
+                        </tr>
+                        {% for item in cart %}
+                        <tr>
+                            <td class="checkout__product-image">
+                                <img class="checkout__product-img" src="{{ item.item.image.url }}" alt="">
+                            </td>
+                            <td>
+                                {{ item.item.get_title }}
+                            </td>
+                            <td>
+                                {{ item.item.price }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td class="text-bold" colspan="2">Итого:</td>
+                            <td class="text-bold"> {{ cart.get_final_price}} BYN</td>
+                        </tr>
+                    </table>
+                </div>
+                {% else %}
+                    <h1 class="checkout__title">Ваша корзина пуста</h1>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

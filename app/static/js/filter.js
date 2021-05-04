@@ -59,4 +59,26 @@ $(document).ready(function () {
         language: "ru",
         width: null
     });
+
+      $('.checkout-address-select').select2({
+        placeholder: "Адрес доставки",
+        minimumResultsForSearch: Infinity,
+        maximumSelectionLength: 2,
+        language: "ru",
+        width: '100%'
+    });
+    $('.checkout-shipping-select').select2({
+        placeholder: "Способ получения",
+        minimumResultsForSearch: Infinity,
+        maximumSelectionLength: 2,
+        language: "ru",
+        width: '100%'
+    });
+    $('.checkout-payment-select').select2({
+        placeholder: "Способ оплаты",
+        minimumResultsForSearch: Infinity,
+        maximumSelectionLength: 2,
+        language: "ru",
+        width: '100%'
+    });
 });

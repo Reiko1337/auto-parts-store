@@ -19,11 +19,9 @@ class CartUser:
             CartContent.objects.create(cart=self.cart, content_object=item)
 
     def get_final_price(self):
-        """Итоговая цена"""
         return self.cart.get_total_price()
 
     def get_total_items(self):
-        """Количество кроссовок"""
         return self.cart.get_cart_content_count()
 
     def __iter__(self):
@@ -31,7 +29,6 @@ class CartUser:
             yield {'id': item.pk, 'item': item.content_object}
 
     def delete_item(self, item_id):
-        """Удалить кроссовки из корзины"""
         item = get_object_or_404(CartContent, pk=item_id)
         item.delete()
 

@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="{% static 'css/filtet.css' %}">
     <link rel="stylesheet" href="{% static 'css/popup.css' %}">
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/media.css' %}">
     <title>{% block title %}Разборка в Молодечно{% endblock %}</title>
@@ -188,7 +190,7 @@
                         </div>
                         <div class="cart__btns">
                             <a class="cart__btn" href="#">Открыть корзину</a>
-                            <a class="cart__btn cart__btn-dark" href="#">Оформить заказ</a>
+                            <a class="cart__btn cart__btn-dark" href="{% url 'account:checkout' %}">Оформить заказ</a>
                         </div>
                     </div>
                 </div>
@@ -208,9 +210,6 @@
 <script src="{% static 'js/generate_filter_models.js' %}"></script>
 {% block scripts_js %}
 {% endblock %}
-<!--<script src="{% static 'js/wheel_drive_filter.js' %}"></script>-->
-<!--<script src="{% static 'js/auto_part_filter.js' %}"></script>-->
-
 <script src="{% static 'js/scripts.js' %}"></script>
 
 
