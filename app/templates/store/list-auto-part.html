@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% load tag_product %}
+{% load static %}
+
+
+{% block title %}
+    Автозапчасти - Разборка в молодечно
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/list-product.css' %}">
+    <link rel="stylesheet" href="{% static 'css/media/list-product-media.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="list-product">
+            <div class="list-product__content">
+                <div class="container">
+                    <div class="list-product__container">
+                        <h1 class="list-product__title">
+                            Автозапчасти
+                        </h1>
+                        <div class="list-product__row">
+                            <div class="list-product__filter">
+                                <div class="filter__burger">
+                                    <span></span>
+                                    <p class="filter__burger-title">Фильтр</p>
+                                </div>
+                                <div class="list__filter-items">
+                                    <div class="list__filter-item">
+                                        <select class="brand-select" placeholder="Марка автомобиля">
+                                            <option value=""></option>
+                                            <option value="*">Марка автомобиля</option>
+                                            {% for field in filter_fields.brand %}
+                                                <option value="{{ field.slug }}">{{ field.title }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="list__filter-item">
+                                        <select class="model-select" placeholder="Модель автомобиля">
+                                            <option value=""></option>
+                                            <option value="*">Модель автомобиля</option>
+                                            {% for field in filter_fields.model %}
+                                                <option value="{{ field.slug }}">{{ field.title }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="list__filter-item">
+                                        <select class="spare-part-select" placeholder="Запчасти">
+                                            <option value=""></option>
+                                            <option value="*">Запчасти</option>
+                                             {% for field in filter_fields.category %}
+                                                <option value="{{ field.slug }}">{{ field.title }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="list__filter-item">
+                                        <p class="list__filter-item-title">Цена</p>
+                                        <div class="list__filter-input-container list__filter-input-container_price">
+                                            <input class="list__filter-input input__form mask__price" type="text" placeholder="От">
+                                            <input class="list__filter-input input__form mask__price" type="text" placeholder="До">
+                                        </div>
+                                    </div>
+                                    <a class="list__filter-button button" href="#">Найдено ({{ count_products }})</a>
+                                </div>
+                            </div>
+
+                            <div class="list-product__items-row">
+
+                                    {% tag_list_product model products %}
+
+                                {% if page_obj.has_other_pages %}
+                                <div class="pagination">
+                                    <div class="pagination__container">
+                                        <ul class="pagination__list">
+                                            {% if page_obj.has_previous %}
+                                                <li class="pagination__previous">
+                                                    <a class="pagination__link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.part %}&part={{ request.GET.part }}{% endif %}{% if request.GET.priceFrom %}&priceFrom={{ request.GET.priceFrom }}{% endif %}{% if request.GET.priceTo %}&priceTo={{ request.GET.priceTo }}{% endif %}">&#10094 Назад</a>
+                                                </li>
+                                            {% else %}
+                                                <li class="pagination__previous pagination_active">
+                                                    <a class="pagination__link">&#10094 Назад</a>
+                                                </li>
+                                            {% endif %}
+
+                                            {% for num in page_obj.paginator.page_range %}
+                                                {% if page_obj.number == num  %}
+                                                    <li class="pagination__page pagination_active">
+                                                        <a class="pagination__link">{{ num }}</a>
+                                                    </li>
+                                                 {% elif num > page_obj.number|add:-3 and  num < page_obj.number|add:3 %}
+                                                    <li class="pagination__page">
+                                                        <a class="pagination__link" href="?page={{ num }}{% if request.GET.part %}&part={{ request.GET.part }}{% endif %}{% if request.GET.priceFrom %}&priceFrom={{ request.GET.priceFrom }}{% endif %}{% if request.GET.priceTo %}&priceTo={{ request.GET.priceTo }}{% endif %}">{{ num }}</a>
+                                                    </li>
+                                                {% endif %}
+                                             {% endfor %}
+
+                                            {% if page_obj.has_next %}
+                                            <li class="pagination__next">
+                                                <a class="pagination__link" href="?page={{ page_obj.next_page_number }}{% if request.GET.part %}&part={{ request.GET.part }}{% endif %}{% if request.GET.priceFrom %}&priceFrom={{ request.GET.priceFrom }}{% endif %}{% if request.GET.priceTo %}&priceTo={{ request.GET.priceTo }}{% endif %}">Вперед &#10095</a>
+                                            </li>
+                                             {% else %}
+                                             <li class="pagination__next pagination_active">
+                                                <a class="pagination__link">Вперед &#10095</a>
+                                            </li>
+                                             {% endif %}
+                                        </ul>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+{% endblock %}
+
+{% block script %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="{% static 'js/select2.min.js' %}"></script>
+    <script src="{% static 'js/i18n/ru.js' %}"></script>
+    <script src="{% static 'js/filter/filter.js' %}"></script>
+    <script src="{% static 'js/filter/filter_models.js' %}"></script>
+    <script src="{% static 'js/filter/filter_auto_part.js' %}"></script>
+{% endblock %}

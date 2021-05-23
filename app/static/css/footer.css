@@ -1,28 +1,94 @@
 .footer{
     margin-top: auto;
-    background-color: #3C434D;
+    background: #2C2C2C;
 }
-.footer__inner{
-    padding-top: 20px;
-    padding-bottom: 20px;
+.footer__container{
+    display: flex;
+    padding-bottom: 40px;
+}
+.footer__info{
+    margin-right: 90px;
+}
+.footer__logo{
+    width: 267px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.footer__image{
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+.footer__schedule{
+    max-width: 170px;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+    color: rgba(255, 255, 255, 1);
+}
+.footer__info-items{
+    width: 100%;
+    margin-top: 33px;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    margin-left: -20px;
+    margin-right: -20px;
 }
-.footer__item-title{
-    font-size: 26px;
-    line-height: 32px;
-    color: #FFFFFF;
+.footer__info-item{
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
-.footer__menu-list{
+.footer__info-title{
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 21px;
+    color: rgba(255, 255, 255, 1);
+    margin-bottom: 15px;
+}
+.footer__list{
     list-style: none;
-    margin-top: 20px; 
 }
-.footer__menu-item{
-    margin-top: 5px;
+.footer__list-item{
+    margin-bottom: 10px;
 }
-.footer__menu-link{
+.footer__list-item:last-child{
+    margin-bottom: 0;
+}
+.footer__list-link{
+    position: relative;
+    padding-left: 18px;
     text-decoration: none;
-    font-size: 16px;
-    line-height: 20px;
-    color: #929090;
+    color: rgba(255, 255, 255, 1);
+}
+.footer__list-link::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("../img/arrow-point.svg");
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 15px;
+}
+.footer__list-item_spare{
+    cursor: pointer;
+}
+.footer__list-sub{
+    display: none;
+    margin-top: 5px;
+    padding-left: 20px;
+}
+.footer__list-sub_active{
+    display: block;
+}
+.footer__list-link_sub{
+    padding-left: 20px;
+}
+.footer__list-link.footer__list-link_sub::before{
+    background-image: url("../img/point.svg");
+}
+.footer__list-item_spare-spoiler::before{
+    transform: rotate(90deg);
 }

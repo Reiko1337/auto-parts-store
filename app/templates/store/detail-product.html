@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load tag_product %}
+
+
+{% block title %}
+{{ product.get_title }} - Разборка в молодечно
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/detail-product.css' %}">
+<link rel="stylesheet" href="{% static 'css/media/detail-product-media.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="detail-product">
+    <div class="detail-product__content">
+        <div class="container">
+            <div class="detail-product__container">
+                <div class="detail-product__row">
+                    {% if similar_products.exists %}
+                    <div class="product__similar">
+                        <h2 class="similar-product__title">
+                            Похожие автозапчасти
+                        </h2>
+                        <div class="product__similar-container">
+                            <div class="product__similar-items">
+                                {% for item in similar_products %}
+                                <div class="product__similar-item">
+                                    <a class="product__similar-item-title" href="{{ item.get_absolute_url }}">
+                                        {{ item.get_title }}
+                                    </a>
+                                    <div class="product__similar-image">
+                                        <a class="product__similar-image-link" href="{{ item.get_absolute_url }}">
+                                            <img class="product__similar-img"
+                                                 src="{{ item.image.url }}" alt="">
+                                        </a>
+                                    </div>
+                                    <p class="product__similar-item-price">
+                                        <span class="text__red text__bold">Цена:</span> <span
+                                            class="text__white">
+                                                    {{ item.price }} BYN</span>
+                                    </p>
+                                    <a class="product__similar-buy button" href="{% url 'store:add_to_cart' item.get_model_name item.id %}">КУПИТЬ</a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <ul class="product__similar-pagination pagination__list">
+                                <li class="pagination__previous">
+                                    <a class="pagination__link">&#10094 Назад</a>
+                                </li>
+                                <li class="pagination__next">
+                                    <a class="pagination__link">Вперед &#10095</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% tag_detail_product product similar_products.exists %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="{% static 'js/detail-product-script.js' %}"></script>
+<script src="{% static 'js/lightbox.min.js' %}"></script>
+<script src="{% static 'js/lightbox-setting-script.js' %}"></script>
+{% endblock %}

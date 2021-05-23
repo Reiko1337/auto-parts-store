@@ -1,157 +1,311 @@
 <!DOCTYPE html>
-{% load static %}
 <html lang="en">
-
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
     <link rel="stylesheet" href="{% static 'css/select2.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/lightbox.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'css/popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/header.css' %}">
     <link rel="stylesheet" href="{% static 'css/footer.css' %}">
-    <link rel="stylesheet" href="{% static 'css/filtet.css' %}">
-    <link rel="stylesheet" href="{% static 'css/popup.css' %}">
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
-    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
-    <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/media.css' %}">
-    <title>{% block title %}Разборка в Молодечно{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/media/header-media.css' %}">
+    <link rel="stylesheet" href="{% static 'css/media/footer-media.css' %}">
+    {% block style %}
+
+    {% endblock %}
+
+    <title>{% block title %}Разборка в молодечно{% endblock %}</title>
 </head>
 
 <body>
-<div class="page">
-    <header class="header">
-        <div class="header__content">
-            <div class="header__top">
-                <div class="container">
-                    <div class="header__top-container">
-                        <a class="header__top-link header__top-map" href="#">г. Молодечно, ул. Т. Дудко 4</a>
-                        <a class="header__top-link header__top-tel" href="tel:375293436988">+375 (29) 343-69-88</a>
-                        <a class="header__top-link header__top-email" href="#">transmolregion@tut.by</a>
-                    </div>
+    <div class="page">
+        <div class="top-line">
+            <div class="container">
+                <div class="top-line__container">
+                    <a class="top-line__phone-link" href="tel:+375293436988">
+                        +375 (29) 343-69-88
+                    </a>
+                    <a href="{% url 'store:about' %}#location" class="top-line__address-link">
+                        г. Молодечно, ул. Т. Дудко 4
+                    </a>
                 </div>
             </div>
-
-            <div class="container">
-                <div class="header__inner">
-                    <div class="header__left">
-                        <div class="logo">
-                            <img class="logo__img" src="{% static 'img/logo.png' %}" alt="logo">
+        </div>
+        <header class="header">
+            <div class="header__content">
+                <div class="container">
+                    <div class="header__container-info">
+                        <div class="header__container-item">
+                            <div class="logo">
+                                <div class="logo__content">
+                                    <a href="{% url 'store:about' %}" class="logo__link">
+                                        <img class="logo__image" src="{% static 'img/main-logo.png' %}" alt="logo">
+                                    </a>
+                                </div>
+                            </div>
+                            <p class="header__schedule">
+                                <span class="text__blue">ПН - ПТ</span> 8:00 - 19:00
+                                <span class="text__blue">СБ</span> 09:00 - 16:00&emsp;
+                                <span class="text__blue">ВС</span> выходной
+                            </p>
                         </div>
-                        <div class="search">
-                            <form class="form-search" action="#">
-                                <input class="form__input-search" placeholder="Введите артикул или VIN-Код"
-                                       type="text">
-                                <input class="form__btn" type="submit" value="">
+                        <div class="header__container-item">
+                            <a href="{% url 'store:about' %}#location" class="header__address-link">
+                                г. Молодечно, ул. Т. Дудко 4
+                            </a>
+                            <form class="header__form-search" action="#" method="POST">
+                                <input class="header__input-search input__form" type="text" placeholder="Поиск">
+                                <input class="header__form-button" type="submit" value="">
                             </form>
                         </div>
-                        <div class="schedule-items">
-                            <p class="schedule-item">
-                                <span class="text-bold">ПН - ПТ</span> 8:00 - 19:00
-                            </p>
-                            <p class="schedule-item">
-                                <span class="text-bold">СБ</span> 09:00 - 16:00
-                            </p>
-                            <p class="schedule-item">
-                                <span class="text-bold text-red">ВС</span> <span class="text-red"> выходной</span>
+                    </div>
+
+                    <div class="header__container-navigation">
+                        <div class="header__burger">
+                            <span></span>
+                        </div>
+                        <a class="header__phone-link" href="tel:375293436988">
+                            +375 (29) 343-69-88
+                        </a>
+                        <nav class="navigation catalog">
+                            <ul class="navigation__list">
+                                <li class="navigation__item">
+                                    <a class="navigation__item-link navigation__item-link_about" href="{% url 'store:about' %}">
+                                        О нас
+                                    </a>
+                                </li>
+                                <li class="navigation__item navigation__item_spare">
+                                    <a class="navigation__item-link navigation__item-link_spare">
+                                        Запчасти
+                                    </a>
+                                    <div class="sub-navigation__list-container">
+                                        <ul class="sub-navigation__list">
+
+                                            <li class="sub-navigation__item">
+                                                <a class="sub-navigation__item-link sub-navigation__item-link_car"
+                                                    href="{% url 'store:list_auto_part' %}">
+                                                    Легковые
+                                                </a>
+                                            </li>
+                                            <li class="sub-navigation__item">
+                                                <a class="sub-navigation__item-link sub-navigation__item-link_trailer"
+                                                    href="#">
+                                                    Прицепы
+                                                </a>
+                                            </li>
+                                            <li class="sub-navigation__item">
+                                                <a class="sub-navigation__item-link sub-navigation__item-link_semi-trailer"
+                                                    href="#">
+                                                    Полуприцепы
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="navigation__item">
+                                    <a class="navigation__item-link navigation__item-link_car" href="{% url 'store:list_kit_car' %}">
+                                        Машинокомплект
+                                    </a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a class="navigation__item-link navigation__item-link_wheel" href="{% url 'store:list_wheel' %}">
+                                        Диски/шины
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <nav class="navigation profile">
+                            <ul class="navigation__list">
+                                {% if user.is_authenticated  %}
+                                 <li class="navigation__item">
+                                    <a class="navigation__item-link navigation__item-link_profile" href="{% url 'account:profile' %}">
+                                        Мой профиль
+                                    </a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a class="navigation__item-link navigation__item-link_profile" href="{% url 'account:logout' %}">
+                                        Выход
+                                    </a>
+                                </li>
+                                {% else %}
+                                <li class="navigation__item">
+                                    <a class="navigation__item-link navigation__item-link_profile" href="{% url 'account:registration' %}">
+                                        Регистрация
+                                    </a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a class="navigation__item-link navigation__item-link_profile" href="{% url 'account:login' %}">
+                                        Вход
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        <a class="navigation__item-link navigation__item-link_shopping-cart button popup-link" href="#cart-popup">
+                            ({{ cart.get_total_items }}) BYN {{ cart.get_final_price}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        {% if messages %}
+        <section class="message">
+            <div class="container">
+                <ul class="message__list">
+                    {% for message in messages %}
+                    <li class="message__content {{ message.tags }}">
+                        <span class="message__text">{{ message|safe }}</span>
+                        <img class="message__close" src="{% static 'img/close_message.svg' %}" alt="">
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+
+        <footer class="footer">
+            <div class="footer__content">
+                <div class="container">
+                    <div class="footer__container">
+                        <div class="footer__info">
+                            <div class="footer__logo">
+                                <a href="{% url 'store:about' %}" class="footer__logo-link">
+                                    <img class="footer__image" src="{% static 'img/footer-logo.png' %}" alt="">
+                                </a>
+                            </div>
+                            <p class="footer__schedule">
+                                <span class="text__blue">ПН - ПТ</span> 8:00 - 19:00
+                                <span class="text__blue">СБ</span> 09:00 - 16:00&emsp;
+                                <span class="text__blue">ВС</span> выходной
                             </p>
                         </div>
+                        <div class="footer__info-items">
+
+                            <div class="footer__info-item">
+                                <p class="footer__info-title">
+                                    КОНТАКТЫ
+                                </p>
+                                <ul class="footer__list">
+                                    <li class="footer__list-item">
+                                        <a class="footer__list-link" href="{% url 'store:about' %}#location">
+                                            г. Молодечно, ул. Т. Дудко 4
+                                        </a>
+                                    </li>
+                                    <li class="footer__list-item">
+                                        <a class="footer__list-link" href="tel:+375293436988">
+                                            А1 +375 (29) 343 – 69 – 88
+                                        </a>
+                                    </li>
+                                    <li class="footer__list-item">
+                                        <a class="footer__list-link">
+                                            transmolregion@tut.by
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="footer__info-item footer__info-item_information">
+                                <p class="footer__info-title">
+                                    ИНФОРМАЦИЯ
+                                </p>
+                                <ul class="footer__list">
+                                    <li class="footer__list-item">
+                                        <a class="footer__list-link" href="{% url 'store:about' %}#delivery">
+                                            Доставка
+                                        </a>
+                                    </li>
+                                    <li class="footer__list-item">
+                                        <a class="footer__list-link" href="{% url 'store:about' %}#payment">
+                                            Оплата
+                                        </a>
+                                    </li>
+                                    <li class="footer__list-item">
+                                        <a class="footer__list-link" href="{% url 'store:about' %}#warranty">
+                                            Гарантия
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+
+                            <div class="footer__info-item">
+                                <p class="footer__info-title">
+                                    О НАС
+                                </p>
+                                <ul class="footer__list">
+                                    <li class="footer__list-item">
+                                        <a class="footer__list-link" href="{% url 'store:about' %}#contacts">
+                                            Контакты
+                                        </a>
+                                    </li>
+                                    <li class="footer__list-item">
+                                        <a class="footer__list-link" href="{% url 'store:about' %}#location">
+                                            Как добраться?
+                                        </a>
+                                    </li>
+                                    <li class="footer__list-item">
+                                        <a class="footer__list-link" href="{% url 'store:about' %}#bank">
+                                            Реквизиты
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="footer__info-item">
+                                <p class="footer__info-title">
+                                    КАТАЛОГ
+                                </p>
+                                <ul class="footer__list">
+                                    <li class="footer__list-item footer__list-item_spare">
+                                        <a class="footer__list-link">
+                                            Запчасти
+                                        </a>
+                                        <ul class="footer__list footer__list-sub">
+                                            <li class="footer__list-item">
+                                                <a class="footer__list-link footer__list-link_sub" href="{% url 'store:list_auto_part' %}">
+                                                    Легковые
+                                                </a>
+                                            </li>
+                                            <li class="footer__list-item">
+                                                <a class="footer__list-link footer__list-link_sub" href="">
+                                                    Прицепы
+                                                </a>
+                                            </li>
+                                            <li class="footer__list-item">
+                                                <a class="footer__list-link footer__list-link_sub" href="#">
+                                                    Полуприцепы
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="footer__list-item">
+                                        <a class="footer__list-link" href="{% url 'store:list_kit_car' %}">
+                                            Машинокомплект
+                                        </a>
+                                    </li>
+                                    <li class="footer__list-item">
+                                        <a class="footer__list-link" href="{% url 'store:list_wheel' %}">
+                                            Диски/шины
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
                     </div>
-                    <div class="header__right">
-                            {% if user.is_authenticated %}
-                                <a class="header__right-link header__right-profile" href="{% url 'account:profile' %}">Мой профиль</a>
-                                <a class="header__right-link" href="{% url 'account:logout' %}">Выход</a>
-                            {% else %}
-                        <a class="header__right-link" href="{% url 'account:registration' %}">Регистрация</a>
-                                  <a class="header__right-link" href="{% url 'account:login' %}">Войти</a>
-                            {% endif %}
-
-                        <a class="header__right-link header__right-cart popup-link" href="#cart-popup">Корзина</a>
-                    </div>
-                </div>
-                <nav class="navigation">
-                    <ul class="navigation__list">
-                        <li class="navigation__list-item">
-                            <a class="navigation__list-link" href="{% url 'store:main' %}">Главная</a>
-                        </li>
-                        <li class="navigation__list-item">
-                            <a class="navigation__list-link" href="{% url 'store:auto_parts' %}">Автозапчасти</a>
-                        </li>
-                        <li class="navigation__list-item">
-                            <a class="navigation__list-link" href="{% url 'store:kids_car' %}">Машинокомплекты</a>
-                        </li>
-                        <li class="navigation__list-item">
-                            <a class="navigation__list-link" href="{% url 'store:wheels_drive' %}">Диски/Шины</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </header>
-
-    {% block content %}
-    {% endblock %}
-
-
-    <footer class="footer">
-        <div class="container">
-            <div class="footer__inner">
-                <div class="footer__item">
-                    <p class="footer__item-title">
-                        КАТАЛОГ
-                    </p>
-                    <ul class="footer__menu-list">
-                        <li class="footer__menu-item">
-                            <a class="footer__menu-link" href="#">Запчасти Б/У</a>
-                        </li>
-                        <li class="footer__menu-item">
-                            <a class="footer__menu-link" href="#">Машинокомплекты</a>
-                        </li>
-                        <li class="footer__menu-item">
-                            <a class="footer__menu-link" href="#">Диски / шины</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="footer__item">
-                    <p class="footer__item-title">
-                        О НАС
-                    </p>
-                    <ul class="footer__menu-list">
-                        <li class="footer__menu-item">
-                            <a class="footer__menu-link" href="#">Контакты</a>
-                        </li>
-                        <li class="footer__menu-item">
-                            <a class="footer__menu-link" href="index.html#map">Как добраться?</a>
-                        </li>
-                        <li class="footer__menu-item">
-                            <a class="footer__menu-link" href="#">Реквезиты</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="footer__item">
-                    <p class="footer__item-title">
-                        ИНФОРМАЦИЯ
-                    </p>
-                    <ul class="footer__menu-list">
-                        <li class="footer__menu-item">
-                            <a class="footer__menu-link" href="#">Доставка</a>
-                        </li>
-                        <li class="footer__menu-item">
-                            <a class="footer__menu-link" href="#">Оплата</a>
-                        </li>
-                        <li class="footer__menu-item">
-                            <a class="footer__menu-link" href="#">Гарантия</a>
-                        </li>
-                    </ul>
                 </div>
             </div>
-        </div>
-    </footer>
+        </footer>
 
         <div id="cart-popup" class="popup">
         <div class="popup__body">
@@ -166,10 +320,14 @@
                         <div class="cart__item">
                             <div class="cart__item-inner">
                                 <div class="cart__image">
-                                    <img class="cart__img" src="{{ item.item.image.url }}" alt="">
+                                    <a href="{{ item.item.get_absolute_url }}" class="cart__image-link">
+                                        <img class="cart__img" src="{{ item.item.image.url }}" alt="">
+                                    </a>
                                 </div>
                                 <ul class="cart__content">
-                                    <li class="cart__sneaker-title">{{ item.item.get_title }}</li>
+                                    <li class="cart__product-title">
+                                        <a href="{{ item.item.get_absolute_url }}" class="cart__product-title-link">{{ item.item.get_title }}</a>
+                                    </li>
                                     <li class="cart__price">{{ item.item.price }} BYN</li>
                                 </ul>
                             </div>
@@ -189,8 +347,7 @@
                             </div>
                         </div>
                         <div class="cart__btns">
-                            <a class="cart__btn" href="#">Открыть корзину</a>
-                            <a class="cart__btn cart__btn-dark" href="{% url 'account:checkout' %}">Оформить заказ</a>
+                            <a class="cart__btn button" href="{% url 'account:checkout' %}">Оформить заказ</a>
                         </div>
                     </div>
                 </div>
@@ -198,21 +355,20 @@
         </div>
     </div>
 
-</div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-<script src="{% static 'js/lightbox.min.js' %}"></script>
-<script src="{% static 'js/popup.js' %}"></script>
-<script src="{% static 'js/select2.min.js' %}"></script>
-<script src="{% static 'js/i18n/ru.js' %}"></script>
-<script src="{% static 'js/filter.js' %}"></script>
-<script src="{% static 'js/generate_filter_models.js' %}"></script>
-{% block scripts_js %}
-{% endblock %}
-<script src="{% static 'js/scripts.js' %}"></script>
 
 
+    </div>
+
+
+
+
+    <script src="{% static 'js/header-script.js' %}"></script>
+    <script src="{% static 'js/footer-script.js' %}"></script>
+    <script src="{% static 'js/popup.js' %}"></script>
+    <script src="{% static 'js/message.js' %}"></script>
+    {% block script %}
+
+    {% endblock %}
 </body>
 
 </html>

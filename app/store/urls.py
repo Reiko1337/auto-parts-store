@@ -5,30 +5,29 @@ from django.contrib.auth.views import LogoutView, LoginView
 app_name = 'store'
 
 urlpatterns = [
-    path('', views.Main.as_view(), name='main'),
+    path('', views.AboutView.as_view(), name='about'),
 
-    path('auto-parts/', views.ListAutoParts.as_view(), name='auto_parts'),
-    path('auto-parts/filter/', views.AutoPartFilter.as_view(), name='auto_parts_filter'),
-    path('auto-parts/<slug:brand>/', views.ListAutoParts.as_view(), name='auto_parts_model'),
-    path('auto-parts/<slug:brand>/<slug:model>/', views.ListAutoParts.as_view(), name='auto_parts_model'),
-    path('auto-parts/detail/<slug:brand>/<slug:model>/<slug:auto_part>/', views.DetailAutoPart.as_view(), name='detail_auto_parts'),
+    path('list/auto-part/', views.ListAutoPart.as_view(), name='list_auto_part'),
+    path('list/auto-part/filter/', views.AutoPartFilter.as_view(), name='list_auto_part_filter'),
+    path('list/auto-part/<slug:brand>/', views.ListAutoPart.as_view(), name='list_auto_part_brand'),
+    path('list/auto-part/<slug:brand>/<slug:model>/', views.ListAutoPart.as_view(), name='list_auto_part_brand_model'),
+    path('detail/auto-part/<slug:brand>/<slug:model>/<slug:category>/<slug:slug>/', views.DetailAutoPart.as_view(), name='detail_auto_part'),
 
-    path('wheels-drive/', views.ListWheelsDrive.as_view(), name='wheels_drive'),
-    path('wheels-drive/filter/', views.WheelDriveFilter.as_view(), name='wheels_drive_filter'),
-    path('wheels-drive/<slug:brand>/', views.ListWheelsDrive.as_view(), name='wheels_drive'),
-    path('wheels-drive/<slug:brand>/<slug:model>/', views.ListWheelsDrive.as_view(), name='wheels_drive'),
-    path('wheels-drive/detail/<slug:brand>/<slug:model>/<slug:wheel_drive>/', views.DetailWheelDrive.as_view(), name='detail_wheels_drive'),
+    path('list/kit-car/', views.ListKitCar.as_view(), name='list_kit_car'),
+    path('list/kit-car/filter/', views.KitCarFilter.as_view(), name='list_kit_car_filter'),
+    path('list/kit-car/<slug:brand>/', views.ListKitCar.as_view(), name='list_kit_car_brand'),
+    path('list/kit-car/<slug:brand>/<slug:model>/', views.ListKitCar.as_view(), name='list_kit_car_brand_model'),
+    path('detail/kit-car/<slug:brand>/<slug:model>/<slug:slug>/', views.DetailKitCar.as_view(), name='detail_kit_car'),
 
-    path('kits-car/', views.ListKidsCar.as_view(), name='kids_car'),
-    path('kits-car/filter/', views.KidCarFilter.as_view(), name='kits_car_filter'),
-    path('kits-car/<slug:brand>/', views.ListKidsCar.as_view(), name='kids_car'),
-    path('kits-car/<slug:brand>/<slug:model>/', views.ListKidsCar.as_view(), name='kids_car'),
-    path('kits-car/detail/<slug:brand>/<slug:model>/<slug:car>/', views.DetailKidCar.as_view(), name='detail_kits_car'),
 
-    path('filter-models/', views.FilterModelsGenerate.as_view()),
+    path('list/wheel/', views.ListWheel.as_view(), name='list_wheel'),
+    path('list/wheel/filter/', views.WheelFilter.as_view(), name='list_wheel_filter'),
+    path('list/wheel/<slug:brand>/', views.ListWheel.as_view(), name='list_wheel_brand'),
+    path('list/wheel/<slug:brand>/<slug:model>/', views.ListWheel.as_view(), name='list_wheel_brand_model'),
+    path('detail/wheel/<slug:brand>/<slug:model>/<slug:slug>/', views.DetailWheel.as_view(), name='detail_wheel'),
+
+    path('filter-models/', views.FilterModelsGenerate.as_view(), name='filter_models'),
 
     path('cart/add/<str:model>/<str:id>/', views.AddToCart.as_view(), name='add_to_cart'),
     path('cart/delete/<str:model>/<str:id>/', views.DeleteItemInCart.as_view(), name='delete_from_cart'),
-
-    path('test/', views.TestView.as_view())
 ]

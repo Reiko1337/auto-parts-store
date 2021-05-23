@@ -4,6 +4,7 @@ from .models import AutoPart, WheelDrive
 
 
 class AutoPartFilter(django_filters.FilterSet):
+
     class Meta:
         model = WheelDrive
         fields = ['car_model', 'diameter', 'material', 'pcd']

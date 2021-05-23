@@ -1,0 +1,31 @@
+<div class="list-product__items list-product__items-row-{{ count_column }}">
+    {% for item in products %}
+    <div class="list-product__item">
+        <div class="list__item-image">
+            <a class="list__item-image-link" href="{{ item.url }}">
+                <img class="list__item-img"
+                     src="{{ item.image }}" alt="">
+            </a>
+        </div>
+        <div class="list__item-content">
+
+            <a class="list__item-title" href="{{ item.url }}">
+                {{ item.title }}
+            </a>
+            <ul class="list__item-specification">
+                {% for key, value in item.specification.items %}
+                <li class="list__specification-item">
+                    <span class="text__bold">{{ key }}:</span> {{ value }}
+                </li>
+                {% endfor %}
+            </ul>
+            <div class="list__item-buy">
+                <p class="list__item-price">
+                    <span class="text__red text__bold">Цена:</span> {{ item.price }} BYN
+                </p>
+                <a class="list__item-button button" href="{% url 'store:add_to_cart' item.model_name item.id %}">КУПИТЬ</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

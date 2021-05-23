@@ -1,0 +1,80 @@
+{% load static %}
+
+<div class="detail-product__info-row {% if not similar_product %}detail-product__info-row_main{% endif %}">
+    <div class="detail-product__info">
+        <div class="detail-product__images {% if not similar_product %}detail-product__info-row_main{% endif %}">
+            <div class="detail-product__image">
+                <a class="detail-product__image-link" href="{{ product.image }}" data-lightbox="product-photo">
+                    <img class="detail-product__img"
+                         src="{{ product.image }}" alt="">
+                </a>
+            </div>
+            {% if product.additional_images %}
+                <div class="detail-product__image-list {% if not similar_product %}detail-product__info-row_main{% endif %}">
+                    {% for additional_image in product.additional_images %}
+                    <div class="detail-product__image-item">
+                        <a class="detail-product__image-link" href="{{ additional_image.image.url }}" data-lightbox="product-photo">
+                            <img class="detail-product__img"
+                                 src="{{ additional_image.image.url }}" alt="">
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="detail-product__spetification {% if not similar_product %}detail-product__info-row_main{% endif %}">
+
+            <h1 class="detail-product__title">
+                {{ product.title }}
+            </h1>
+            <p class="detail-product__price">
+                <span class="text__red text__bold">Цена:</span> {{ product.price }} BYN
+            </p>
+            <a class="detail-product__buy button" href="{% url 'store:add_to_cart' product.model_name product.id %}">КУПИТЬ</a>
+            <ul class="detail-product__spetification-list">
+                {% for key, value in product.specification.items %}
+                <li>
+                    <span class="text__bold">{{ key }}:</span> <span>{{ value }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+            <h4 class="detail-product__description-title">
+                Описание:
+            </h4>
+            <p class="detail-product__description">
+                {{ product.description }}
+            </p>
+        </div>
+    </div>
+    <div class="additional-info__container">
+        <h2 class="additional-info__title">
+            ГАРАНТИЯ
+        </h2>
+        <div class="additional-info__row additional-info__row_3">
+            <div class="additional-info__column">
+                <div class="additional-info__image">
+                    <img class="additional-info__img" src="{% static 'img/engine.svg' %}" alt="">
+                </div>
+                <p class="additional-info__column-text">
+                    Двигатель - 20 дней
+                </p>
+            </div>
+            <div class="additional-info__column">
+                <div class="additional-info__image">
+                    <img class="additional-info__img" src="{% static 'img/transmission.svg' %}" alt="">
+                </div>
+                <p class="additional-info__column-text">
+                    КПП, АКПП, редуктор - 10 дней
+                </p>
+            </div>
+            <div class="additional-info__column">
+                <div class="additional-info__image">
+                    <img class="additional-info__img" src="{% static 'img/other-spare.svg' %}" alt="">
+                </div>
+                <p class="additional-info__column-text">
+                    Другие запчасти - 7 дней
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

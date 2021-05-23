@@ -1,0 +1,158 @@
+.order__content{
+    margin-bottom: 100px;
+}
+.order__container{
+    display: flex;
+}
+.order__composition{
+    margin-right: 50px;
+    width: 903px;
+}
+.order__registration{
+    max-width: 447px;   
+}
+.order__registration-content{
+    width: 447px;   
+}
+.order__title{
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28px;
+    margin-bottom: 30px;
+}
+.order__composition-item{
+    /* padding: 10px; */
+    padding: 3px 10px 10px 10px;
+    width: 100%;
+    background: #F5F5F5;
+    box-shadow: 5px 5px 10px rgba(0, 100, 217, 0.2);
+}
+
+.order__composition-item-image{
+    /* width: 270px; */
+    /* max-width: 270px; */
+    height: 140px;
+    margin-right: 15px;
+    flex: 0 1 270px;
+}
+.order__composition-info{
+    flex: 0 1 608px;
+    /* max-width: 608px; */
+}
+
+.order__composition-item-img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.order__composition-item-title{
+    display: inline-block;
+    color: rgba(0, 0, 0, 0.8);
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 21px;
+    margin-bottom: 15px;
+}
+.order__composition-item-info{
+    display: flex;
+}
+.order__composition-price{
+    margin-top: 5px;
+    flex: 0 0 20%;
+    font-size: 16px;
+    line-height: 19px;
+}
+.order__composition-item{
+    /* display: flex;
+    justify-content: space-between; */
+}
+.order__composition-delete-image{
+    text-align: right;
+    /* margin-left: 20px; */
+}
+.order__composition-item + .order__composition-item{
+    margin-top: 20px;
+}
+.order__registration-item + .order__registration-item{
+    margin-top: 30px;
+}
+.order__registration-item-title{
+    font-size: 16px;
+    line-height: 19px;
+    font-weight: 500;
+}
+.order__registration-form-label{
+    display: block;
+}
+.order__registration-form-label + .order__registration-form-label{
+    margin-top: 10px;
+}
+.order__registration-form-label{
+    vertical-align: middle;
+}
+.order__registration-form{
+    margin-top: 20px
+}
+.order__registration-form-radio{
+    /*display: none;*/
+    opacity: 0;
+    position: absolute;
+}
+.order__registration-form-point{
+    position: absolute;
+    display: inline-block;
+    background: #F5F5F5;
+    border: 1px solid #0064D9;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    /* position: relative; */
+}
+.order__registration-form-text{
+    display: inline-block;
+    padding-left: 24px;
+}
+.order__registration-form-point::before{
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #0064D9;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: 0.2s;
+}
+.order__registration-form-radio:checked + .order__registration-form-point::before{
+    opacity: 1;
+}
+.order__registration-item-title-link{
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 15px;
+    color: rgba(0, 0, 0, 0.8);
+}
+.order__registration-item-help-text{
+    margin-top: 5px;
+    font-size: 12px;
+    line-height: 14px;
+}
+.order__registration-price{
+    margin-top: 40px;
+    font-size: 18px;
+    line-height: 21px;
+}
+.order__registration-form-button{
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    color: rgba(255, 255, 255, 1);
+}

@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Оформление заказа - Разборка в молодечно
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/order.css' %}">
+<link rel="stylesheet" href="{% static 'css/media/order-media.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="order">
+    <div class="order__content">
+        <div class="container">
+            <div class="order__container">
+                <div class="order__composition">
+                    <h2 class="order__title">
+                        Состав заказа
+                    </h2>
+
+                    {% for item in cart %}
+                    <div class="order__composition-item">
+                        <div class="order__composition-delete-image">
+                            <a href="{% url 'store:delete_from_cart' item.item.get_model_name item.id %}"
+                               class="order__composition-delete-link">
+                                <img class="order__composition-delete-btn" src="{% static 'img/delete-btn(1).svg' %}"
+                                     alt="">
+                            </a>
+                        </div>
+                        <div class="order__composition-item-info">
+                            <div class="order__composition-item-image">
+                                <a href="{{ item.item.get_absolute_url }}" class="order__composition-item-link">
+                                    <img class="order__composition-item-img"
+                                         src="{{ item.item.image.url }}" alt="">
+                                </a>
+                            </div>
+                            <div class="order__composition-info">
+                                <a class="order__composition-item-title" href="{{ item.item.get_absolute_url }}">
+                                    {{ item.item.get_title }}
+                                </a>
+                                <p class="order__composition-item-article">
+                                    {% if item.item.article %}Артикул: {{ item.item.article }}
+                                    {% else %}VIN: {{ item.item.vin }}
+                                    {% endif %}
+                                </p>
+                                <p class="order__composition-price">
+                                    <span class="text__bold text__red">Цена:</span> {{ item.item.price }} BYN
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+
+                </div>
+                <div class="order__registration">
+                    <form method="post">
+                        {% csrf_token %}
+                        {% for error in form.non_field_errors %}
+                            <span class="error-message">{{ error }}</span>
+                        {% endfor %}
+                        <div class="order__registration-content">
+                            <h2 class="order__title">
+                                Оформление заказа
+                            </h2>
+                            <div class="order__registration-item">
+                                <p class="order__registration-item-title">
+                                    Способ получения:
+                                </p>
+                                <div class="order__registration-form">
+
+                                    {% for radio in form.shipping_method %}
+                                    <label class="order__registration-form-label">
+                                        {{ radio.tag }}
+                                        <span class="order__registration-form-point"></span>
+                                        <span class="order__registration-form-text">{{ radio.choice_label }}</span>
+                                    </label>
+                                    {% endfor %}
+                                    {{ form.shipping_method.errors }}
+                                </div>
+                            </div>
+                            <div class="order__registration-item">
+                                <p class="order__registration-item-title">
+                                    Адрес доставки <a class="order__registration-item-title-link" href="#">(<span
+                                        class="text__blue">добавить адрес доставки</span>)</a>:
+                                </p>
+                                <p class="order__registration-item-help-text">
+                                    Бесплатная доставка при заказе от 200 бел. рублей в Минск и города РБ (Витебск,
+                                    Могилев, Гомель, Гродно, Брест, Барановичи, Пинск, Мозырь, Полоцк, Слуцк,
+                                    Бобруйск и др.)
+                                </p>
+                                <div class="order__registration-form">
+                                     {% for radio in form.address_user %}
+                                    <label class="order__registration-form-label">
+                                        {{ radio.tag }}
+                                        <span class="order__registration-form-point"></span>
+                                        <span class="order__registration-form-text">{{ radio.choice_label }}</span>
+                                    </label>
+                                    {% endfor %}
+
+                                    {{ form.address_user.errors }}
+                                </div>
+                            </div>
+                            <div class="order__registration-item">
+                                <p class="order__registration-item-title">
+                                    Способ оплаты:
+                                </p>
+                                <div class="order__registration-form">
+                                    {% for radio in form.payment_type %}
+                                    <label class="order__registration-form-label">
+                                        {{ radio.tag }}
+                                        <span class="order__registration-form-point"></span>
+                                        <span class="order__registration-form-text">{{ radio.choice_label }}</span>
+                                    </label>
+                                    {% endfor %}
+                                    {{ form.payment_type.errors }}
+                                </div>
+                            </div>
+                            <p class="order__registration-price">
+                                <span class="text__bold">Сумма вашего заказа:</span> {{ cart.get_final_price }} BYN
+                            </p>
+                            <input class="order__registration-form-button button" type="submit"
+                                   value="ОФОРМИТЬ ЗАКАЗ">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

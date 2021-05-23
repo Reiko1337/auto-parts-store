@@ -1,40 +1,158 @@
 {% extends 'base.html' %}
+
 {% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+Авторизация - Разборка в молодечно
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/media/profile-media.css' %}">
+{% endblock %}
+
 
 {% block content %}
-
 <section class="profile">
-    <div class="profile__inner">
+    <div class="profile__content">
         <div class="container">
-            <div class="profile__content">
-                {% include 'account/menu_profile.html' %}
-                <div class="profile__profile">
-                    <table class="profile__profile-info">
-                        <tr>
-                            <td class="text-bold">Имя пользователя</td>
-                            <td>{{ user.username }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-bold">Email</td>
-                            <td>{{ user.email }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-bold">Фамилия</td>
-                            <td>{{ user.last_name }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-bold">Имя</td>
-                            <td>{{ user.first_name }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-bold">Дата регистрации</td>
-                            <td>{{ user.date_joined }}</td>
-                        </tr>
-                    </table>
-                    <div class="profile__buttons">
-                        <a class="profile__btn" href="#">Изменить пароль</a>
-                        <a class="profile__btn" href="#">Редактировать профиль</a>
-                        <a class="profile__btn profile__btn_red" href="#">Удалить профиль</a>
+            <div class="profile__container">
+                <div class="profile__item">
+                    <h2 class="profile__item-title">
+                        Мой профиль
+                    </h2>
+                    <div class="profile__item-content">
+                        <div class="profile__item-info">
+                            <ul class="profile__item-info-list">
+                                <li>
+                                    <span class="text__bold">Email:</span>
+                                    <span>{{ user.email }}</span>
+                                </li>
+                                <li>
+                                    <span class="text__bold">Фамилия:</span>
+                                    <span>{{ user.last_name }}</span>
+                                </li>
+                                <li>
+                                    <span class="text__bold">Имя:</span>
+                                    <span>{{ user.first_name }}</span>
+                                </li>
+                                <li>
+                                    <span class="text__bold">Отчество:</span>
+                                    <span></span>
+                                </li>
+                                <li>
+                                    <span class="text__bold">Дата регистрации:</span>
+                                    <span>{{ user.date_joined }}</span>
+                                </li>
+                            </ul>
+                            <div class="profile__item-buttons">
+                                <a class="profile__item-button button" href="#">
+                                    Изменить пароль
+                                </a>
+                                <a class="profile__item-button button" href="#">
+                                    Редактировать профиль
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile__item">
+                    <h2 class="profile__item-title">
+                        Мой заказы
+                    </h2>
+                    <div class="profile__item-content">
+                        <div class="profile__item-info">
+                            <ul class="profile__item-info-list">
+                                <li>
+                                    <a class="profile__item-info-link text__blue" href="#">1001</a>
+                                    <span class="profile__item-info-order">3 мая 2021 г. 13:33</span>
+                                    <span>Новый заказ</span>
+                                </li>
+                                <li>
+                                    <a class="profile__item-info-link text__blue" href="#">1001</a>
+                                    <span class="profile__item-info-order">3 мая 2021 г. 13:33</span>
+                                    <span>Новый заказ</span>
+                                </li>
+                                <li>
+                                    <a class="profile__item-info-link text__blue" href="#">1001</a>
+                                    <span class="profile__item-info-order">3 мая 2021 г. 13:33</span>
+                                    <span>Новый заказ</span>
+                                </li>
+                            </ul>
+                            <div class="profile__item-buttons">
+                                <a class="profile__item-button button" href="#">
+                                    Подробнее
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile__item">
+                    <h2 class="profile__item-title">
+                        Адресная книга
+                    </h2>
+                    <div class="profile__item-content">
+                        <div class="profile__item-info">
+                            <ul class="profile__item-info-list">
+                                <li>
+                                    <span class="text__bold">Фамилия:</span>
+                                    <span>Курец</span>
+                                </li>
+                                <li>
+                                    <span class="text__bold">Имя:</span>
+                                    <span>Кирилл</span>
+                                </li>
+                                <li>
+                                    <span class="text__bold">Отчество:</span>
+                                    <span>Дмитриевич</span>
+                                </li>
+                                <li>
+                                    <span class="text__bold">Страна:</span>
+                                    <span>Беларусь</span>
+                                </li>
+                                <li>
+                                    <span class="text__bold">Регион:</span>
+                                    <span>Минская область</span>
+                                </li>
+
+                                <li>
+                                    <span class="text__bold">Город:</span>
+                                    <span>п. Чисть</span>
+                                </li>
+                                <li>
+                                    <span class="text__bold">Адрес:</span>
+                                    <span>ул мира, д.25, кв.28</span>
+                                </li>
+                                <li>
+                                    <span class="text__bold">Номер телефона:</span>
+                                    <span>80298581685</span>
+                                </li>
+                            </ul>
+                            <div class="profile__item-buttons">
+                                <a class="profile__item-button button" href="#">
+                                    Подробнее
+                                </a>
+                                <a class="profile__item-button button" href="#">
+                                    добавить
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile__item">
+                    <h2 class="profile__item-title">
+                        Список желаемого
+                    </h2>
+                    <div class="profile__item-content">
+                        <div class="profile__item-info">
+                            <p class="profile__item-count-product">8 Товаров</p>
+                            <div class="profile__item-buttons">
+                                <a class="profile__item-button button" href="#">
+                                    Подробнее
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -44,6 +162,8 @@
 
 {% endblock %}
 
-{% block scripts_js %}
-<script src="{% static 'js/menu_profile_active.js' %}"></script>
-{% endblock %}
+
+
+
+
+

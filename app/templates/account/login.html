@@ -1,28 +1,47 @@
 {% extends 'base.html' %}
+
+{% load static %}
 {% load widget_tweaks %}
 
-{% block content %}
+{% block title %}
+Авторизация - Разборка в молодечно
+{% endblock %}
 
-<section class="login">
-    <div class="login__inner">
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/panel-input.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<section class="panel-input">
+    <div class="panel-input__content">
         <div class="container">
-            <div class="login__content">
-                <p class="login__title">Авторизация</p>
-                <form class="form__login" method="post">
+            <div class="panel-input__container">
+                <h1 class="panel-input__title">
+                    Авторизация
+                </h1>
+                <form method="post" class="panel-input__form">
                     {% csrf_token %}
-                    {% render_field form.username class="form__input" placeholder=form.username.label %}
-                    {{ form.username.errors|striptags }}
-                    {% render_field form.password class="form__input" placeholder=form.password.label %}
+                    {{ form.non_field_errors }}
+                    {% render_field form.username class="panel-input__form-input input__form" placeholder=form.username.label %}
+                    {{ form.username.errors }}
+                    {% render_field form.password class="panel-input__form-input input__form" placeholder=form.password.label %}
                     {{ form.password.errors|striptags }}
-                    {% render_field form.email class="form__input" placeholder=form.email.label %}
                     <input type="hidden" name="next" value="{{ next }}">
-                    <input class="form__input-submit" type="submit" value="Войти">
-                    <a class="form__input-button">Регистрация</a>
+                    <input class="panel-input__form-button button" type="submit" value="Войти">
+                    <label class="panel-input__form-label">
+                        <input class="panel-input__form-checkbox" type="checkbox" value="3"
+                               name="delivery">
+                        <span class="panel-input__form-point"></span>
+                        <span class="panel-input__form-text">Запомнить меня</span>
+                    </label>
+                    <a class="panel-input__reset-password-link" href="#">
+                        Забыли пароль?
+                    </a>
                 </form>
-                <a class="login__resrt-link" href="#">Забыли пароль?</a>
             </div>
         </div>
     </div>
 </section>
-
 {% endblock %}
+

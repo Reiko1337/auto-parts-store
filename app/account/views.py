@@ -7,34 +7,37 @@ from django.urls import reverse_lazy
 from .models import AddressUser
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
-from store.services import get_cart_auth_user
+from store.services.cart_services import get_cart_auth_user
 from store.models import OrderContent, Order, CartContent
 from django.db import transaction
 from store.session import CartSession
+from store.services_auth_user import CartUser
+from django.contrib import messages
 
 
 class Login(LoginView):
+    """Авторизация"""
     template_name = 'account/login.html'
     redirect_authenticated_user = True
 
     def form_valid(self, form):
         cart = CartSession(self.request)
         super().form_valid(form)
-        cart_aut_user = get_cart_auth_user(self.request)
-        item_content = [item.content_object for item in cart_aut_user.get_cart_content()]
+        cart_auth_user = CartUser(self.request)
         for item in cart:
-            if not item['item'] in item_content:
-                CartContent.objects.create(cart=cart_aut_user, content_object=item['item'])
+            cart_auth_user.add_to_cart(item['item'])
         return HttpResponseRedirect(self.get_success_url())
 
 
 class RegistrationView(CreateView):
+    """Регистрация"""
     form_class = RegistrationForm
     success_url = reverse_lazy('account:login')
-    template_name = 'account/reg.html'
+    template_name = 'account/registration.html'
 
 
 class ProfileView(LoginRequiredMixin, View):
+    """Профиль пользователя"""
     template_name = 'account/profile.html'
 
     def get(self, request):
@@ -94,29 +97,32 @@ class AddressUserUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class CheckoutView(LoginRequiredMixin, View):
-    template_name = 'account/checkout.html'
+    """Оформление заказа"""
+    template_name = 'account/order-registration.html'
+
+    def handle_no_permission(self):
+        messages.info(self.request, 'Для оформления заказа необходимо авторизоваться')
+        return super().handle_no_permission()
 
     def get(self, request):
-        form = CheckoutForm()
-        address_user = AddressUser.objects.filter(user=request.user).all()
+        cart = get_cart_auth_user(request)
+        if not cart.get_cart_content_count():
+            messages.error(request, 'Для оформления заказа необходимо добавить товар в корзину')
+            return redirect('store:about')
+        form = CheckoutForm(user=request.user)
         context = {
             'form': form,
-            'addresses': address_user
         }
         return render(request, self.template_name, context=context)
 
     @transaction.atomic
     def post(self, request):
+        form = CheckoutForm(request.POST, user=request.user)
         cart = get_cart_auth_user(request)
         cart_content = cart.get_cart_content()
-        form = CheckoutForm(request.POST)
-        user = request.user
-        address_user_id = request.POST['address_user']
-        address_user = AddressUser.objects.filter(Q(user=user) & Q(pk=address_user_id)).first()
-        if form.is_valid() and address_user and cart_content:
+        if form.is_valid():
             order = form.save(commit=False)
-            order.user = user
-            order.address_user = address_user
+            order.user = request.user
             order.price = cart.get_total_price()
             order.save()
             for item in cart_content:
@@ -125,6 +131,6 @@ class CheckoutView(LoginRequiredMixin, View):
                 item.content_object.in_stock = False
                 item.content_object.save()
                 item.delete()
-        else:
-            print('False')
-        return redirect('account:address')
+            messages.success(request, 'Заказ оформлен')
+            return redirect('store:about')
+        return render(request, self.template_name, {'form': form})

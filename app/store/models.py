@@ -84,7 +84,10 @@ class AutoPart(MataTag):
         return '{0} {1}'.format(self.car_model, self.category)
 
     def get_title(self):
-        return '{0} {1} {2}'.format(self.category.title, self.get_car_brand__title(), self.get_car_model__title())
+        return '{0}'.format(self.category.title)
+
+    def get_category__title(self):
+        return '{0}'.format(self.category.title)
 
     def get_model_name(self):
         return self._meta.model_name
@@ -99,9 +102,10 @@ class AutoPart(MataTag):
         return 'В наличии' if self.in_stock else 'Нет в наличии'
 
     def get_absolute_url(self):
-        return reverse('store:detail_auto_parts', kwargs={'brand': self.car_model.car_brand.slug,
-                                                          'model': self.car_model.slug,
-                                                          'auto_part': self.slug})
+        return reverse('store:detail_auto_part', kwargs={'brand': self.car_model.car_brand.slug,
+                                                         'model': self.car_model.slug,
+                                                         'category': self.category.slug,
+                                                         'slug': self.slug})
 
     def save(self, *args, **kwargs):
         value = 'auto-part-{0}'.format(self.pk)
@@ -119,7 +123,7 @@ class WheelDrive(MataTag):
     title = models.CharField(verbose_name='Название', max_length=255, db_index=True)
     image = models.ImageField(verbose_name='Фотография', upload_to='wheel_drive', null=True)
     slug = models.SlugField(verbose_name='URL', unique=True, db_index=True)
-    diameter = models.CharField(verbose_name='Диаметр', max_length=255)
+    diameter = models.PositiveSmallIntegerField(verbose_name='Диаметр')
     material = models.CharField(verbose_name='Материал', max_length=255)
     pcd = models.CharField(verbose_name='PCD', max_length=255)
     description = models.TextField(verbose_name='Описание', null=True)
@@ -160,9 +164,9 @@ class WheelDrive(MataTag):
         return self.car_model.title
 
     def get_absolute_url(self):
-        return reverse('store:detail_wheels_drive', kwargs={'brand': self.car_model.car_brand.slug,
+        return reverse('store:detail_wheel', kwargs={'brand': self.car_model.car_brand.slug,
                                                             'model': self.car_model.slug,
-                                                            'wheel_drive': self.slug})
+                                                            'slug': self.slug})
 
     def __str__(self):
         return '{0} {1}'.format(self.car_model, self.title)
@@ -214,7 +218,7 @@ class Car(MataTag):
     slug = models.SlugField(verbose_name='URL', unique=True, db_index=True)
     bodywork = models.ForeignKey(Bodywork, verbose_name='Кузов', on_delete=models.SET_NULL, null=True)
     engine_type = models.ForeignKey(EngineType, verbose_name='Тип двигателя', on_delete=models.SET_NULL, null=True)
-    engine_capacity = models.CharField(verbose_name='Объем двигателя', max_length=255)
+    engine_capacity = models.DecimalField(verbose_name='Объем двигателя', decimal_places=1, max_digits=3)
     transmission = models.CharField(verbose_name='Коробка передач', choices=TRANSMISSION, max_length=10)
     drive = models.CharField(verbose_name='Привод', choices=DRIVE, max_length=32)
     mileage = models.PositiveIntegerField(verbose_name='Пробег')
@@ -249,9 +253,9 @@ class Car(MataTag):
         return self.car_model.title
 
     def get_absolute_url(self):
-        return reverse('store:detail_kits_car', kwargs={'brand': self.car_model.car_brand.slug,
+        return reverse('store:detail_kit_car', kwargs={'brand': self.car_model.car_brand.slug,
                                                         'model': self.car_model.slug,
-                                                        'car': self.slug})
+                                                        'slug': self.slug})
 
     def save(self, *args, **kwargs):
         value = 'car-{0}'.format(self.pk)
@@ -324,7 +328,8 @@ class Order(models.Model):
     )
     SHIPPING = (
         (None, 'Выберите способ доставки'),
-        ('delivery', 'Доставка'),
+        ('delivery_by', 'Доставка по Беларуси'),
+        ('delivery_ru', 'Доставка в РФ'),
         ('pick_up', 'Самовывоз')
     )
     PAYMENT_TYPE_CHOICES = (
@@ -336,7 +341,8 @@ class Order(models.Model):
         ('card_buy', '«Карта покупок» в рассрочку до 3 месяцев')
     )
     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
-    address_user = models.ForeignKey(AddressUser, verbose_name='Адрес доставки', on_delete=models.SET_NULL, null=True, blank=True)
+    address_user = models.ForeignKey(AddressUser, verbose_name='Адрес доставки', on_delete=models.SET_NULL, null=True,
+                                     blank=True)
     shipping_method = models.CharField(verbose_name='Доставка', choices=SHIPPING, max_length=24)
     payment_type = models.CharField(max_length=100, verbose_name='Способ оплаты', choices=PAYMENT_TYPE_CHOICES)
     status = models.CharField(max_length=100, verbose_name='Статус заказ', choices=STATUS_CHOICES, default='new')

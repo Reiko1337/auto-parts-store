@@ -1,7 +1,5 @@
 import copy
 from django.shortcuts import get_object_or_404
-from django.db.models import Q
-from .models import AutoPart
 from django.contrib.contenttypes.models import ContentType
 
 
@@ -33,8 +31,13 @@ class CartSession(Session):
         item_model = str(item._meta.model_name)
         if not self.session['cart'].get(item_model):
             self.session['cart'][item_model] = {}
-        self.session['cart'][item_model][item_id] = {}
+        if self.session['cart'][item_model].get(item_id) is None:
+            self.session['cart'][item_model][item_id] = {}
+            result = True
+        else:
+            result = False
         self.save()
+        return result
 
     def __iter__(self):
         self.validation()
@@ -56,7 +59,7 @@ class CartSession(Session):
         return final_price
 
     def get_total_items(self):
-        """Количество кроссовок"""
+        """Общее количество товаров"""
         self.validation()
         count = 0
         for model in reversed(self.cart):
@@ -65,12 +68,13 @@ class CartSession(Session):
         return count
 
     def delete_item(self, model, id):
-        """Удалить кроссовки из корзины"""
+        """Удалить товар из корзины"""
         if model in self.cart.keys():
             del self.cart[model][id]
             self.save()
 
     def validation(self):
+        """Валидация товара"""
         cart = copy.deepcopy(self.cart)
         for model in cart:
             for id in cart[model]:

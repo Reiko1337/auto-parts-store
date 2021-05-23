@@ -28,6 +28,14 @@ body.lock{
     display: flex;
     justify-content: flex-end;
 }
+.popup__title{
+    font-size: 18px;
+    line-height: 21px;
+}
+.cart__product-title-link{
+    color: rgba(0, 0, 0, 0.8);
+    text-decoration: none;
+}
 .popup__content{
     background-color: #fff;
     color: #000;
@@ -42,21 +50,22 @@ body.lock{
     text-align: center;
 }
 .popup__close{
+    font-weight: 700;
     position: absolute;
     left: 10px;
     top: 12px;
     font-size: 20px;
     line-height: 0px;
-    color: #000;
+    color: #0064D9;
     text-decoration: none;
     background-color: #fff;
     padding: 15px 10px;
     border-radius: 5px;
-    border: 2px solid #3C434D;
+    border: 2px solid #0064D9;
     transition: all 0.2s ease 0s;
 }
 .popup__close:hover{
-    background: #3C434D;
+    background: #0064D9;
     color: #fff;
 }
 .cart__item{
@@ -85,7 +94,7 @@ body.lock{
 .cart__content li + .cart__content li{
     margin-top: 3px;
 }
-.cart__sneaker-title{
+.cart__product-title{
     font-size: 14px;
     line-height: 16px;
     margin-bottom: 5px;
@@ -131,13 +140,13 @@ body.lock{
 }
 .cart__preliminary-cost, .cart__total{
     padding: 10px 0;
-    border-top: 1px solid #323030;
+    border-top: 1px solid #0064D9;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 .cart__total{
-    border-bottom: 1px solid #3C434D;
+    border-bottom: 1px solid #0064D9;
 }
 .cart__final-price-title{
     font-size: 12px;
@@ -151,29 +160,15 @@ body.lock{
 }
 .cart__btns{
     margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
 }
 .cart__btn{
+    display: block;
+    text-align: center;
     text-decoration: none;
     color: #000;
     font-size: 12px;
     line-height: 15px;
-    border: 1px solid #323030;
-    border-radius: 3px;
     padding: 10px 15px;
-    font-weight: 700;
-    transition: all 0.2s ease 0s;
-}
-.cart__btn-dark{
-    background:#3C434D;
-    color: #fff;
-}
-.cart__btn.cart__btn-dark:hover{
-    background: #fff;
-    color: #000;
-}
-.cart__btn:hover{
-    background: #3C434D;
-    color: #fff;
+    width: 100%;
+    font-weight: 500;
 }

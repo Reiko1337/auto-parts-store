@@ -1,5 +1,3 @@
-from django.contrib.auth.models import User
-from .services import get_cart_auth_user
 from .session import CartSession
 from .services_auth_user import CartUser
 
