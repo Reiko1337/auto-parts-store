@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 
 {% load static %}
-
+{% load widget_tweaks %}
 {% block title %}
 Оформление заказа - Разборка в молодечно
 {% endblock %}
 
 {% block style %}
+<link rel="stylesheet" href="{% static 'css/panel-input.css' %}">
 <link rel="stylesheet" href="{% static 'css/order.css' %}">
 <link rel="stylesheet" href="{% static 'css/media/order-media.css' %}">
 {% endblock %}
@@ -60,9 +61,7 @@
                 <div class="order__registration">
                     <form method="post">
                         {% csrf_token %}
-                        {% for error in form.non_field_errors %}
-                            <span class="error-message">{{ error }}</span>
-                        {% endfor %}
+                        {{ form.non_field_errors }}
                         <div class="order__registration-content">
                             <h2 class="order__title">
                                 Оформление заказа
@@ -85,7 +84,7 @@
                             </div>
                             <div class="order__registration-item">
                                 <p class="order__registration-item-title">
-                                    Адрес доставки <a class="order__registration-item-title-link" href="#">(<span
+                                    Адрес доставки <a class="order__registration-item-title-link" href="{% url 'address_add' %}">(<span
                                         class="text__blue">добавить адрес доставки</span>)</a>:
                                 </p>
                                 <p class="order__registration-item-help-text">
@@ -94,15 +93,66 @@
                                     Бобруйск и др.)
                                 </p>
                                 <div class="order__registration-form">
-                                     {% for radio in form.address_user %}
-                                    <label class="order__registration-form-label">
-                                        {{ radio.tag }}
-                                        <span class="order__registration-form-point"></span>
-                                        <span class="order__registration-form-text">{{ radio.choice_label }}</span>
-                                    </label>
+                                    {% for address in addresses %}
+                                       <label class="order__registration-form-label">
+                                            <input class="order__registration-form-radio" type="radio" value="{{ address.pk }}"
+                                                name="address">
+                                            <span class="order__registration-form-point"></span>
+                                            <span class="order__registration-form-text">{{ address }}</span>
+                                        </label>
                                     {% endfor %}
 
-                                    {{ form.address_user.errors }}
+                            <div class="panel-input__form-container panel-input__form-container_order">
+                                {% render_field form.last_name class="panel-input__form-input input__form" placeholder=form.last_name.label %}
+                                {{ form.last_name.errors }}
+                            </div>
+
+                            <div class="panel-input__form-container panel-input__form-container_order">
+                                {% render_field form.first_name class="panel-input__form-input input__form" placeholder=form.first_name.label %}
+                                {{ form.first_name.errors }}
+                            </div>
+
+                            <div class="panel-input__form-container panel-input__form-container_order">
+                                {% render_field form.patronymic class="panel-input__form-input input__form" placeholder=form.patronymic.label %}
+                                {{ form.patronymic.errors }}
+                            </div>
+
+                            <div class="panel-select__content panel-input__form-container_order">
+                                {% render_field form.country class="country-select" placeholder=form.country.label %}
+                                {{ form.country.errors }}
+                            </div>
+
+                            <div class="panel-input__form-container panel-input__form-container_order">
+                                {% render_field form.region class="panel-input__form-input input__form" placeholder=form.region.label %}
+                                {{ form.region.errors }}
+                            </div>
+
+                            <div class="panel-input__form-container panel-input__form-container_order">
+                                {% render_field form.city class="panel-input__form-input input__form" placeholder=form.city.label %}
+                                {{ form.city.errors }}
+                            </div>
+
+                            <div class="panel-input__form-container panel-input__form-container_order">
+                                {% render_field form.address class="panel-input__form-input input__form" placeholder=form.address.label %}
+                                {{ form.address.errors }}
+                            </div>
+
+                            <div class="panel-input__form-container">
+                         <div class="panel-input__form-container_phone">
+                             <div class="panel-input__form-country-phone">
+                                 <select class="country-phone-select" placeholder="Код">
+
+                                     <option value="Bel">Беларусь +375</option>
+                                     <option value="ru">Россия +7</option>
+                                 </select>
+                            </div>
+                         <div class="panel-input__form-phone">
+                             {% render_field form.phone_number id="phoneMask" class="panel-input__form-input input__form" placeholder=form.phone_number.label %}
+                            </div>
+                         </div>
+                          {{ form.phone_number.errors }}
+                      </div>
+
                                 </div>
                             </div>
                             <div class="order__registration-item">
@@ -133,3 +183,13 @@
     </div>
 </section>
 {% endblock %}
+
+{% block script %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="{% static 'js/select2.min.js' %}"></script>
+    <script src="{% static 'js/i18n/ru.js' %}"></script>
+    <script src="{% static 'js/jquery.maskedinput.js' %}"></script>
+    <script src="{% static 'js/maskedinput.js' %}"></script>
+    <script src="{% static 'js/order-registration-script.js' %}"></script>
+{% endblock %}
+

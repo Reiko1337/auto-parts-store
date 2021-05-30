@@ -29,6 +29,10 @@
                                     <span class="text__bold">Email:</span>
                                     <span>{{ user.email }}</span>
                                 </li>
+                                 <li>
+                                    <span class="text__bold">Имя пользователя:</span>
+                                    <span>{{ user.username }}</span>
+                                </li>
                                 <li>
                                     <span class="text__bold">Фамилия:</span>
                                     <span>{{ user.last_name }}</span>
@@ -39,7 +43,11 @@
                                 </li>
                                 <li>
                                     <span class="text__bold">Отчество:</span>
-                                    <span></span>
+                                    <span>{% if user.phone_number %}{{ user.patronymic }}{% endif %}</span>
+                                </li>
+                                 <li>
+                                    <span class="text__bold">Номер телефона:</span>
+                                    <span>{% if user.phone_number %}{{ user.phone_number }}{% endif %}</span>
                                 </li>
                                 <li>
                                     <span class="text__bold">Дата регистрации:</span>
@@ -47,11 +55,14 @@
                                 </li>
                             </ul>
                             <div class="profile__item-buttons">
-                                <a class="profile__item-button button" href="#">
+                                <a class="profile__item-button button" href="{% url 'account_change_password' %}">
                                     Изменить пароль
                                 </a>
-                                <a class="profile__item-button button" href="#">
+                                <a class="profile__item-button button" href="{% url 'account_profile_update' %}">
                                     Редактировать профиль
+                                </a>
+                                 <a class="profile__item-button button" href="{% url 'account_profile_update' %}">
+                                    Мой список желаемого
                                 </a>
                             </div>
                         </div>
@@ -59,29 +70,27 @@
                 </div>
                 <div class="profile__item">
                     <h2 class="profile__item-title">
-                        Мой заказы
+                        Мои заказы
                     </h2>
                     <div class="profile__item-content">
                         <div class="profile__item-info">
+                            {% if orders_process %}
                             <ul class="profile__item-info-list">
+                                {% for order in orders_process %}
                                 <li>
-                                    <a class="profile__item-info-link text__blue" href="#">1001</a>
-                                    <span class="profile__item-info-order">3 мая 2021 г. 13:33</span>
-                                    <span>Новый заказ</span>
+                                    <a class="profile__item-info-link text__blue" href="{% url 'order_detail' order.pk %}">{{ order.pk }}</a>
+                                    <span class="profile__item-info-order">{{ order.data_place }}</span>
+                                    <span>{{ order.get_status_display }}</span>
                                 </li>
-                                <li>
-                                    <a class="profile__item-info-link text__blue" href="#">1001</a>
-                                    <span class="profile__item-info-order">3 мая 2021 г. 13:33</span>
-                                    <span>Новый заказ</span>
-                                </li>
-                                <li>
-                                    <a class="profile__item-info-link text__blue" href="#">1001</a>
-                                    <span class="profile__item-info-order">3 мая 2021 г. 13:33</span>
-                                    <span>Новый заказ</span>
-                                </li>
+                                {% endfor %}
                             </ul>
+                            {% else %}
+                             <p class="profile__item-info-text">
+                               У вас нет действующих заказов
+                           </p>
+                            {% endif %}
                             <div class="profile__item-buttons">
-                                <a class="profile__item-button button" href="#">
+                                <a class="profile__item-button button" href="{% url 'list_order' %}">
                                     Подробнее
                                 </a>
                             </div>
@@ -94,62 +103,15 @@
                     </h2>
                     <div class="profile__item-content">
                         <div class="profile__item-info">
-                            <ul class="profile__item-info-list">
-                                <li>
-                                    <span class="text__bold">Фамилия:</span>
-                                    <span>Курец</span>
-                                </li>
-                                <li>
-                                    <span class="text__bold">Имя:</span>
-                                    <span>Кирилл</span>
-                                </li>
-                                <li>
-                                    <span class="text__bold">Отчество:</span>
-                                    <span>Дмитриевич</span>
-                                </li>
-                                <li>
-                                    <span class="text__bold">Страна:</span>
-                                    <span>Беларусь</span>
-                                </li>
-                                <li>
-                                    <span class="text__bold">Регион:</span>
-                                    <span>Минская область</span>
-                                </li>
-
-                                <li>
-                                    <span class="text__bold">Город:</span>
-                                    <span>п. Чисть</span>
-                                </li>
-                                <li>
-                                    <span class="text__bold">Адрес:</span>
-                                    <span>ул мира, д.25, кв.28</span>
-                                </li>
-                                <li>
-                                    <span class="text__bold">Номер телефона:</span>
-                                    <span>80298581685</span>
-                                </li>
-                            </ul>
+                           <p class="profile__item-info-text">
+                               Адресная книга хранит список адресов доставки. Может использовать при оформлении нового закза.
+                           </p>
                             <div class="profile__item-buttons">
-                                <a class="profile__item-button button" href="#">
+                                <a class="profile__item-button button" href="{% url 'address' %}">
                                     Подробнее
                                 </a>
-                                <a class="profile__item-button button" href="#">
-                                    добавить
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="profile__item">
-                    <h2 class="profile__item-title">
-                        Список желаемого
-                    </h2>
-                    <div class="profile__item-content">
-                        <div class="profile__item-info">
-                            <p class="profile__item-count-product">8 Товаров</p>
-                            <div class="profile__item-buttons">
-                                <a class="profile__item-button button" href="#">
-                                    Подробнее
+                                <a class="profile__item-button button" href="{% url 'address_add' %}">
+                                    Добавить
                                 </a>
                             </div>
                         </div>

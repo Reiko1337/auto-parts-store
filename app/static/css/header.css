@@ -197,7 +197,8 @@
 .navigation__item-link.navigation__item-link_profile{
     padding-left: 0;
 }
-.navigation__item_spare{
+.navigation__item_spare,
+.navigation__item_wheel-tires{
     position: relative;
     cursor: pointer;
 }
@@ -220,6 +221,9 @@
     display: block;
 }
 body.mouse .navigation__item_spare:hover .sub-navigation__list-container{
+    display: block;
+}
+body.mouse .navigation__item_wheel-tires:hover .sub-navigation__list-container{
     display: block;
 }
 .sub-navigation__item{
@@ -251,6 +255,12 @@ body.mouse .navigation__item_spare:hover .sub-navigation__list-container{
 }
 .sub-navigation__item-link_semi-trailer::before{
     background-image: url('../img/semi-tailer.svg');
+}
+.sub-navigation__item-link_wheel::before{
+    background-image: url('../img/wheel-sub.svg');
+}
+.sub-navigation__item-link_tire::before{
+    background-image: url('../img/tire-sub.svg');
 }
 .header__burger{
     display: none;

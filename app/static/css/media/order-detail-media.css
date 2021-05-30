@@ -1,0 +1,25 @@
+@media (max-width:1000px){
+    .detail-order__info{
+        grid-template-columns: repeat(1, 1fr);
+        grid-gap: 20px;
+    }
+}
+@media (max-width:500px){
+    .detail-order__info-spoiler{
+        display: inline-block;
+    }
+    .detail-order__info-list.detail-order__info-list_product li{
+        flex-direction: column;
+    }
+    .detail-order__info-list-link{
+        margin-bottom: 5px;
+    }
+    .detail-order__info-list.detail-order__info-list_product li span:last-child{
+        margin-left: 10px;
+        text-align: left;
+    }
+    .detail-order__title{
+        font-size: 20px;
+        line-height: 23px;
+    }
+}

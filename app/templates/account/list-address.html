@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load widget_tweaks %}
+
+{% block title %}
+Список адресных книг - Разборка в молодечно
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/list-address.css' %}">
+<link rel="stylesheet" href="{% static 'css/media/list-address-media.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<section class="list-address">
+        <div class="list-address__content">
+            <div class="container">
+                <div class="list-address__container">
+                    <h1 class="list-address__title">
+                        Список адресных книг
+                    </h1>
+                    {% if addresses %}
+                    <div class="list-address__items">
+                        {% for address in addresses %}
+                        <div class="list-address__item">
+                            <p class="list-address__item-title">
+                                {{ address.get_title }}
+                            </p>
+                            <ul class="list-address__item-detail">
+                                <li>
+                                    <span class="text__bold">Фамилия:</span> <span>{{ address.last_name }}</span>
+                                </li>
+                                <li>
+                                    <span class="text__bold">Имя:</span> <span>{{ address.first_name }}</span>
+                                </li>
+                                <li>
+                                    <span class="text__bold">Отчество:</span> <span>{{ address.patronymic }}</span>
+                                </li>
+                                <li>
+                                    <span class="text__bold">Страна:</span> <span>{{ address.get_country_display }}</span>
+                                </li>
+                                <li>
+                                    <span class="text__bold">Регион:</span> <span>{{ address.region }}</span>
+                                </li>
+                                <li>
+                                    <span class="text__bold">Город:</span> <span>{{ address.city }}</span>
+                                </li>
+                                <li>
+                                    <span class="text__bold">Адрес:</span> <span>{{ address.address }}</span>
+                                </li>
+                                <li>
+                                    <span class="text__bold">Номер телефона:</span> <span>{{ address.phone_number }}</span>
+                                </li>
+                            </ul>
+                            <div class="list-address__buttons">
+                                <a class="list-address__btn button" href="{% url 'address_update' address.pk %}">Редактировать</a>
+                                <a class="list-address__btn button" href="{% url 'address_delete' address.pk %}">Удалить</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                         <p class="help__text">Вы не добавили адрес доставки</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+      </section>
+{% endblock %}
+

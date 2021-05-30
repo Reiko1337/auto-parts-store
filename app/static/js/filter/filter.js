@@ -89,6 +89,31 @@ $(document).ready(function () {
         width: "100%",
     });
 
+
+    $('.manufacturer-select').select2({
+        placeholder: "Производитель",
+        maximumSelectionLength: 2,
+        language: "ru",
+        width: "100%",
+    });
+    $('.season-select').select2({
+        placeholder: "Сезон",
+        maximumSelectionLength: 2,
+        language: "ru",
+        width: "100%",
+    });
+    $('.width-select').select2({
+        placeholder: "Ширина",
+        maximumSelectionLength: 2,
+        language: "ru",
+        width: "100%",
+    });
+    $('.profile-select').select2({
+        placeholder: "Профиль",
+        maximumSelectionLength: 2,
+        language: "ru",
+        width: "100%",
+    });
 });
 
 $(".year-from-select").on("select2:select", function (e) {

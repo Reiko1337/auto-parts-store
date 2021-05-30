@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load widget_tweaks %}
+{% load account %}
+
+{% block title %}
+Регистрация - Разборка в молодечно
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/panel-input.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<section class="panel-input">
+    <div class="panel-input__content">
+        <div class="container">
+            <div class="panel-input__container">
+                <h1 class="panel-input__title">
+                    Регистрация
+                </h1>
+                <form class="panel-input__form" method="post">
+                     {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    <div class="panel-input__form-container">
+                        {% render_field form.email class="panel-input__form-input input__form" placeholder=form.email.label %}
+                        {{ form.email.errors}}
+                    </div>
+                     <div class="panel-input__form-container">
+                         {% render_field form.username class="panel-input__form-input input__form" placeholder=form.username.label %}
+                         {{ form.username.errors }}
+                    </div>
+                     <div class="panel-input__form-container">
+                         {% render_field form.password1 class="panel-input__form-input input__form" placeholder=form.password1.label %}
+                         {{ form.password1.errors }}
+                    </div>
+                    <div class="panel-input__form-container">
+                          {% render_field form.password2 class="panel-input__form-input input__form" placeholder=form.password2.label %}
+                          {{ form.password2.errors }}
+                    </div>
+                     {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                     {% endif %}
+                    <input class="panel-input__form-button button" type="submit" value="Зарегистрироваться">
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+    

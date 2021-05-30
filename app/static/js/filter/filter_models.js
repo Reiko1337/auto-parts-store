@@ -1,8 +1,10 @@
 const brandSelect = $(".brand-select");
 
 brandSelect.on("select2:select", function (e) {
+    const pageUrl = new URL(document.location.href);
+    let chapter = pageUrl.pathname.split('/')[3]
     const xhr = new XMLHttpRequest();
-    const url = `/filter-models/?brand=${this.value}`;
+    const url = `/filter-models/?brand=${this.value}&chapter=${chapter}`;
     xhr.open('GET', url);
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     xhr.onreadystatechange = function () {

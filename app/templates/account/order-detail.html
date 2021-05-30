@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load widget_tweaks %}
+
+{% block title %}
+Заказ {{ order.pk }} от {{ order.data_place }} - Разборка в молодечно
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/order-detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/media/order-detail-media.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<section class="detail-order">
+            <div class="detail-order__content">
+                <div class="container">
+                    <div class="detail-order__container">
+                        <h1 class="detail-order__title">
+                            Заказ {{ order.pk }} от {{ order.data_place }}
+                        </h1>
+                        <p class="detail-order__status">
+                            <span class="text__bold">Статус:</span> {{ order.get_status_display }}
+                        </p>
+                        <div class="detail-order__info">
+                            <div class="detail-order__info-item">
+                                <h2 class="detail-order__info-title">
+                                    Информация о заказе
+                                </h2>
+                                <ul class="detail-order__info-list">
+                                    <li>
+                                        <span class="text__bold">Номер заказа:</span> <span>{{ order.pk }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="text__bold">Способ получения:</span> <span>{{ order.get_shipping_method_display }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="text__bold">Способ оплаты:</span> <span>{{ order.get_payment_type_display }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="text__bold">Статус:</span> <span>{{ order.get_status_display }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="text__bold">Дата заказа:</span> <span>{{ order.data_place }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="text__bold">Количество товара:</span> <span>{{ order.get_count }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="text__bold">Сумма заказа:</span> <span>{{ order.price }} BYN</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="detail-order__info-item">
+                                <h2 class="detail-order__info-title">
+                                    Адрес доставки
+                                </h2>
+                                <ul class="detail-order__info-list">
+                                    <li>
+                                        <span class="text__bold">Фамилия:</span> <span>{{ order.last_name }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="text__bold">Имя:</span> <span>{{ order.first_name }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="text__bold">Отчество:</span> <span>{{ order.patronymic }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="text__bold">Страна:</span> <span>{{ order.get_country_display }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="text__bold">Регион:</span> <span>{{ order.region }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="text__bold">Город:</span> <span>{{ order.city }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="text__bold">Адрес:</span> <span>{{ order.address }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="text__bold">Номер телефона:</span> <span>{{ order.phone_number }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="detail-order__info-item">
+                                <h2 class="detail-order__info-title">
+                                    Состав заказа
+                                </h2>
+                                <ul class="detail-order__info-list detail-order__info-list_product">
+                                    {% for item in order.get_order_content %}
+                                    <li>
+                                        <a class="detail-order__info-list-link" href="{{ item.content_object.get_absolute_url }}">
+                                            {{ item.title }}
+                                        </a>
+                                        <span><span class="text__red text__bold detail-order__info-spoiler">Цена:</span> {{ item.price }} BYN</span>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+{% endblock %}
+

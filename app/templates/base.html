@@ -90,19 +90,19 @@
 
                                             <li class="sub-navigation__item">
                                                 <a class="sub-navigation__item-link sub-navigation__item-link_car"
-                                                    href="{% url 'store:list_auto_part' %}">
+                                                    href="{% url 'store:list_spare_part' 'car' %}">
                                                     Легковые
                                                 </a>
                                             </li>
                                             <li class="sub-navigation__item">
                                                 <a class="sub-navigation__item-link sub-navigation__item-link_trailer"
-                                                    href="#">
+                                                    href="{% url 'store:list_spare_part' 'trailer' %}">
                                                     Прицепы
                                                 </a>
                                             </li>
                                             <li class="sub-navigation__item">
                                                 <a class="sub-navigation__item-link sub-navigation__item-link_semi-trailer"
-                                                    href="#">
+                                                    href="{% url 'store:list_spare_part' 'semi-trailer' %}">
                                                     Полуприцепы
                                                 </a>
                                             </li>
@@ -115,10 +115,29 @@
                                         Машинокомплект
                                     </a>
                                 </li>
-                                <li class="navigation__item">
-                                    <a class="navigation__item-link navigation__item-link_wheel" href="{% url 'store:list_wheel' %}">
+                                <li class="navigation__item navigation__item_wheel-tires">
+                                    <a class="navigation__item-link navigation__item-link_wheel">
                                         Диски/шины
                                     </a>
+                                     <div class="sub-navigation__list-container">
+                                        <ul class="sub-navigation__list">
+
+                                            <li class="sub-navigation__item">
+                                                <a class="sub-navigation__item-link sub-navigation__item-link_wheel"
+                                                    href="{% url 'store:list_wheel' %}">
+                                                    Диски
+                                                </a>
+                                            </li>
+                                            <li class="sub-navigation__item">
+                                                <a class="sub-navigation__item-link sub-navigation__item-link_tire"
+                                                    href="{% url 'store:list_tire' %}">
+                                                    Шины
+                                                </a>
+                                            </li>
+
+
+                                        </ul>
+                                    </div>
                                 </li>
                             </ul>
                         </nav>
@@ -126,23 +145,23 @@
                             <ul class="navigation__list">
                                 {% if user.is_authenticated  %}
                                  <li class="navigation__item">
-                                    <a class="navigation__item-link navigation__item-link_profile" href="{% url 'account:profile' %}">
+                                    <a class="navigation__item-link navigation__item-link_profile" href="{% url 'account_profile' %}">
                                         Мой профиль
                                     </a>
                                 </li>
                                 <li class="navigation__item">
-                                    <a class="navigation__item-link navigation__item-link_profile" href="{% url 'account:logout' %}">
+                                    <a class="navigation__item-link navigation__item-link_profile" href="{% url 'account_logout' %}">
                                         Выход
                                     </a>
                                 </li>
                                 {% else %}
                                 <li class="navigation__item">
-                                    <a class="navigation__item-link navigation__item-link_profile" href="{% url 'account:registration' %}">
+                                    <a class="navigation__item-link navigation__item-link_profile" href="{% url 'account_signup' %}">
                                         Регистрация
                                     </a>
                                 </li>
                                 <li class="navigation__item">
-                                    <a class="navigation__item-link navigation__item-link_profile" href="{% url 'account:login' %}">
+                                    <a class="navigation__item-link navigation__item-link_profile" href="{% url 'account_login' %}">
                                         Вход
                                     </a>
                                 </li>
@@ -272,7 +291,7 @@
                                         </a>
                                         <ul class="footer__list footer__list-sub">
                                             <li class="footer__list-item">
-                                                <a class="footer__list-link footer__list-link_sub" href="{% url 'store:list_auto_part' %}">
+                                                <a class="footer__list-link footer__list-link_sub" href="">
                                                     Легковые
                                                 </a>
                                             </li>
@@ -316,6 +335,7 @@
                 </div>
                 <div class="popup__bottom">
                     <div class="cart">
+                        {% if cart.get_total_items %}
                         {% for item in cart %}
                         <div class="cart__item">
                             <div class="cart__item-inner">
@@ -336,6 +356,7 @@
                             </div>
                         </div>
                         {% endfor %}
+
                         <div class="cart__final-cost">
                             <div class="cart__total">
                                 <div class="cart__final-price-title">
@@ -347,8 +368,13 @@
                             </div>
                         </div>
                         <div class="cart__btns">
-                            <a class="cart__btn button" href="{% url 'account:checkout' %}">Оформить заказ</a>
+                            <a class="cart__btn button" href="{% url 'checkout' %}">Оформить заказ</a>
                         </div>
+                        {% else %}
+                         <div class="cart__item">
+                          <p class="help__text">Ваша корзина пуста, необходимо добавить товар</p>
+                             </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

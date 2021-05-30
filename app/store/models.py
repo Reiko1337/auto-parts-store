@@ -3,53 +3,40 @@ from django.core.validators import MinValueValidator
 from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.auth.models import User
 from django.utils.text import slugify
-from account.models import AddressUser
+from profile.models import AddressUser, User
+from django.utils.html import mark_safe
+from multiselectfield import MultiSelectField
 
 
-class MataTag(models.Model):
+class MetaTag(models.Model):
     """Мета теги"""
-    meta_title = models.CharField(verbose_name='Meta title', max_length=255, null=True, blank=True)
-    meta_description = models.TextField(verbose_name='Meta description', null=True, blank=True)
-    meta_keywords = models.TextField(verbose_name='Meta Keywords', null=True, blank=True)
+    meta_description = models.TextField(verbose_name='Meta description', null=True, blank=True,
+                                        help_text='Meta Description – это одиночный тег, '
+                                                  'содержащий краткое описание web-страницы, '
+                                                  'используемое при формировании сниппета. '
+                                                  'Данный тег в значительной степени влияет на '
+                                                  'представление сайта в результатах поисковой выдачи, '
+                                                  'и рекомендуется к заполнению поисковыми системами.')
+    meta_keywords = models.TextField(verbose_name='Meta Keywords', null=True, blank=True,
+                                     help_text='Meta keywords — список ключевых слов , '
+                                               'соответствующих содержимому страницы сайта.')
 
     class Meta:
         abstract = True
 
 
-class CarBrand(MataTag):
-    """Марка автомобиля"""
-    title = models.CharField(verbose_name='Марка автомобиля', max_length=255, db_index=True)
-    slug = models.SlugField(verbose_name='URL', unique=True, db_index=True)
+class Category(MetaTag):
+    """Категория"""
+    SUBCATEGORY = (
+        ('car', 'Автомобили'),
+        ('truck', 'Прицеп/Полуприцеп')
+    )
+    title = models.CharField(verbose_name='Название', max_length=255, db_index=True)
 
-    class Meta:
-        verbose_name = 'Марка автомобиля'
-        verbose_name_plural = 'Марки автомобилей'
-        ordering = ['title']
+    subcategory = MultiSelectField(verbose_name='Подкатегория', choices=SUBCATEGORY,
+                                   help_text='Выберите одну или несколько подкатегорий')
 
-    def __str__(self):
-        return self.title
-
-
-class CarModel(MataTag):
-    """Модель автомобиля"""
-    car_brand = models.ForeignKey(CarBrand, verbose_name='Марка автомобиля', on_delete=models.CASCADE, db_index=True)
-    title = models.CharField(verbose_name='Модель автомобиля', max_length=255)
-    slug = models.SlugField(verbose_name='URL', unique=True, db_index=True)
-
-    class Meta:
-        verbose_name = 'Модель автомобиля'
-        verbose_name_plural = 'Модели автомобилей'
-        ordering = ['title']
-
-    def __str__(self):
-        return '{0} {1}'.format(self.car_brand.title, self.title)
-
-
-class Category(MataTag):
-    """Категрия"""
-    title = models.CharField(verbose_name='Название категории', max_length=255, db_index=True)
     slug = models.SlugField(verbose_name='URL', unique=True, db_index=True)
 
     class Meta:
@@ -61,17 +48,61 @@ class Category(MataTag):
         return self.title
 
 
-class AutoPart(MataTag):
-    """Запчасти"""
-    car_model = models.ForeignKey(CarModel, verbose_name='Марка автомобиля', on_delete=models.CASCADE, db_index=True)
-    category = models.ForeignKey(Category, verbose_name='Категория', on_delete=models.CASCADE, db_index=True)
-    image = models.ImageField(verbose_name='Фотография', upload_to='auto_parts', null=True)
+class Brand(MetaTag):
+    """Марка (автомобиля/прицепа)"""
+    title = models.CharField(verbose_name='Марка', max_length=255, db_index=True)
     slug = models.SlugField(verbose_name='URL', unique=True, db_index=True)
-    description = models.TextField(verbose_name='Описание')
+
+    class Meta:
+        verbose_name = 'Марка (автомобиля/прицепа)'
+        verbose_name_plural = 'Марки (автомобиля/прицепа)'
+        ordering = ['title']
+
+    def __str__(self):
+        return self.title
+
+
+class Model(MetaTag):
+    """Модель (автомобиля/прицепа)"""
+    TYPE_MODEL = (
+        (None, 'Выберите тип модели'),
+        ('car', 'Легковая'),
+        ('truck', 'Прицеп/Полуприцеп')
+    )
+
+    brand = models.ForeignKey(Brand, verbose_name='Марка', on_delete=models.CASCADE, db_index=True)
+    title = models.CharField(verbose_name='Модель', max_length=255)
+    slug = models.SlugField(verbose_name='URL', unique=True, db_index=True)
+    type_model = models.CharField(verbose_name='Тип модели', choices=TYPE_MODEL, max_length=20)
+
+    class Meta:
+        verbose_name = 'Модель (автомобиля/прицепа)'
+        verbose_name_plural = 'Модели (автомобиля/прицепа)'
+        ordering = ['title']
+
+    def __str__(self):
+        return self.title
+
+
+class SparePart(MetaTag):
+    """Запчасти"""
+    CHAPTER = (
+        (None, 'Выберите раздел'),
+        ('car', 'Легковые'),
+        ('semi-trailer', 'Полуприцепы'),
+        ('trailer', 'Прицепы')
+    )
+
+    chapter = models.CharField(verbose_name='Раздел', max_length=20, choices=CHAPTER)
+    model = models.ForeignKey(Model, verbose_name='Модель', on_delete=models.CASCADE, db_index=True)
+    category = models.ForeignKey(Category, verbose_name='Категория', on_delete=models.CASCADE, db_index=True)
+    image = models.ImageField(verbose_name='Фотография', upload_to='spare_parts', default='default.png')
+    slug = models.SlugField(verbose_name='URL', unique=True, db_index=True)
+    description = models.TextField(verbose_name='Описание', null=True, blank=True)
     article = models.CharField(verbose_name='Артикул', max_length=120, db_index=True)
-    price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12, validators=[MinValueValidator(0)],
-                                default=0)
+    price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12, validators=[MinValueValidator(0)])
     in_stock = models.BooleanField(verbose_name='В наличии', default=True)
+
     cart_content = GenericRelation('CartContent')
     additional_photo = GenericRelation('AdditionalPhoto')
 
@@ -80,8 +111,12 @@ class AutoPart(MataTag):
         verbose_name_plural = 'Запчасти'
         ordering = ['-id']
 
-    def __str__(self):
-        return '{0} {1}'.format(self.car_model, self.category)
+    def save(self, *args, **kwargs):
+        validation_in_stock_for_cart_content(self.in_stock, self.cart_content.all())
+        super().save(*args, **kwargs)
+        value = 'spare-part-{0}'.format(self.pk)
+        self.slug = slugify(value, allow_unicode=True)
+        return super().save(*args, **kwargs)
 
     def get_title(self):
         return '{0}'.format(self.category.title)
@@ -92,43 +127,34 @@ class AutoPart(MataTag):
     def get_model_name(self):
         return self._meta.model_name
 
-    def get_car_brand__title(self):
-        return self.car_model.car_brand.title
+    def get_brand__title(self):
+        return self.model.brand.title
 
-    def get_car_model__title(self):
-        return self.car_model.title
-
-    def get_in_stock(self):
-        return 'В наличии' if self.in_stock else 'Нет в наличии'
+    def get_model__title(self):
+        return self.model.title
 
     def get_absolute_url(self):
-        return reverse('store:detail_auto_part', kwargs={'brand': self.car_model.car_brand.slug,
-                                                         'model': self.car_model.slug,
+        return reverse('store:detail_auto_part', kwargs={'brand': self.model.brand.slug,
+                                                         'model': self.model.slug,
                                                          'category': self.category.slug,
                                                          'slug': self.slug})
 
-    def save(self, *args, **kwargs):
-        value = 'auto-part-{0}'.format(self.pk)
-        self.slug = slugify(value, allow_unicode=True)
-        if not self.in_stock:
-            cart_contents = self.cart_content.all()
-            for item in cart_contents:
-                item.delete()
-        super().save(*args, **kwargs)
+    def __str__(self):
+        return '{0} {1}'.format(self.model, self.category)
 
 
-class WheelDrive(MataTag):
+class Wheel(MetaTag):
     """Диски"""
-    car_model = models.ForeignKey(CarModel, verbose_name='Марка автомобиля', on_delete=models.CASCADE)
+    model = models.ForeignKey(Model, verbose_name='Модель', on_delete=models.CASCADE)
     title = models.CharField(verbose_name='Название', max_length=255, db_index=True)
-    image = models.ImageField(verbose_name='Фотография', upload_to='wheel_drive', null=True)
+    image = models.ImageField(verbose_name='Фотография', upload_to='wheel', default='default.png')
     slug = models.SlugField(verbose_name='URL', unique=True, db_index=True)
     diameter = models.PositiveSmallIntegerField(verbose_name='Диаметр')
     material = models.CharField(verbose_name='Материал', max_length=255)
     pcd = models.CharField(verbose_name='PCD', max_length=255)
-    description = models.TextField(verbose_name='Описание', null=True)
+    description = models.TextField(verbose_name='Описание', null=True, blank=True)
     article = models.CharField(verbose_name='Артикул', max_length=120, db_index=True)
-    price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12)
+    price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12, validators=[MinValueValidator(0)])
     in_stock = models.BooleanField(verbose_name='В наличии', default=True)
 
     cart_content = GenericRelation('CartContent')
@@ -140,53 +166,113 @@ class WheelDrive(MataTag):
         ordering = ['-id']
 
     def save(self, *args, **kwargs):
-        value = 'wheel-drive-{0}'.format(self.pk)
-        self.slug = slugify(value, allow_unicode=True)
-        if not self.in_stock:
-            cart_contents = self.cart_content.all()
-            for item in cart_contents:
-                item.delete()
+        validation_in_stock_for_cart_content(self.in_stock, self.cart_content.all())
         super().save(*args, **kwargs)
+        value = 'wheel-{0}'.format(self.pk)
+        self.slug = slugify(value, allow_unicode=True)
+        return super().save(*args, **kwargs)
 
     def get_title(self):
         return self.title
 
-    def get_in_stock(self):
-        return 'В наличии' if self.in_stock else 'Нет в наличии'
-
     def get_model_name(self):
         return self._meta.model_name
 
-    def get_car_brand__title(self):
-        return self.car_model.car_brand.title
+    def get_brand__title(self):
+        return self.model.brand.title
 
-    def get_car_model__title(self):
-        return self.car_model.title
+    def get_model__title(self):
+        return self.model.title
 
     def get_absolute_url(self):
-        return reverse('store:detail_wheel', kwargs={'brand': self.car_model.car_brand.slug,
-                                                            'model': self.car_model.slug,
-                                                            'slug': self.slug})
+        return reverse('store:detail_wheel', kwargs={'brand': self.model.brand.slug,
+                                                     'model': self.model.slug,
+                                                     'slug': self.slug})
 
     def __str__(self):
-        return '{0} {1}'.format(self.car_model, self.title)
+        return '{0} {1}'.format(self.model, self.title)
 
 
-class Bodywork(MataTag):
-    """Кузов"""
-    title = models.CharField(verbose_name='Кузов', max_length=255, db_index=True)
+class Manufacturer(MetaTag):
+    """Производитель шин"""
+    title = models.CharField(verbose_name='Название', max_length=255, db_index=True)
     slug = models.SlugField(verbose_name='URL', unique=True, db_index=True)
 
     class Meta:
-        verbose_name = 'Кузов'
-        verbose_name_plural = 'Кузовы'
-        ordering = ['-id']
+        verbose_name = 'Производитель шин'
+        verbose_name_plural = 'Производители шин'
+        ordering = ['-title']
 
     def __str__(self):
         return self.title
 
 
-class EngineType(MataTag):
+class Tire(MetaTag):
+    """Шины"""
+    SEASON = (
+        (None, 'Выберите сезон'),
+        ('summer', 'Летний'),
+        ('winter', 'Зимний'),
+        ('all-season', 'Всесезонный')
+    )
+
+    manufacturer = models.ForeignKey(Manufacturer, verbose_name='Производитель', on_delete=models.CASCADE)
+    season = models.CharField(verbose_name='Сезон', max_length=20, choices=SEASON)
+    diameter = models.DecimalField(verbose_name='Диаметр', decimal_places=1, max_digits=3)
+    width = models.DecimalField(verbose_name='Ширина', decimal_places=1, max_digits=4)
+    profile = models.DecimalField(verbose_name='Профиль', decimal_places=1, max_digits=3)
+    slug = models.SlugField(verbose_name='URL', unique=True, db_index=True)
+    article = models.CharField(verbose_name='Артикул', max_length=120, db_index=True)
+    price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12, validators=[MinValueValidator(0)])
+    in_stock = models.BooleanField(verbose_name='В наличии', default=True)
+    image = models.ImageField(verbose_name='Фотография', upload_to='tire', default='default.png')
+    description = models.TextField(verbose_name='Описание', null=True, blank=True)
+    cart_content = GenericRelation('CartContent')
+    additional_photo = GenericRelation('AdditionalPhoto')
+
+    class Meta:
+        verbose_name = 'Шины'
+        verbose_name_plural = 'Шины'
+        ordering = ['-id']
+
+    def save(self, *args, **kwargs):
+        validation_in_stock_for_cart_content(self.in_stock, self.cart_content.all())
+        super().save(*args, **kwargs)
+        value = 'tire-{0}'.format(self.pk)
+        self.slug = slugify(value, allow_unicode=True)
+        return super().save(*args, **kwargs)
+
+    def get_title(self):
+        return 'Шины {0}/{1} R{2}'.format(self.width, self.profile, self.diameter)
+
+    def get_model_name(self):
+        return self._meta.model_name
+
+    def get_manufacturer(self):
+        return self.manufacturer.title
+
+    def get_absolute_url(self):
+        return reverse('store:detail_tire', kwargs={'slug': self.slug})
+
+    def __str__(self):
+        return '{0}/{1} R{2}'.format(self.width, self.profile, self.diameter)
+
+
+class Bodywork(MetaTag):
+    """Кузов автомобиля"""
+    title = models.CharField(verbose_name='Кузов', max_length=255, db_index=True)
+    slug = models.SlugField(verbose_name='URL', unique=True, db_index=True)
+
+    class Meta:
+        verbose_name = 'Кузов автомобиля'
+        verbose_name_plural = 'Кузовы автомобилей'
+        ordering = ['title']
+
+    def __str__(self):
+        return self.title
+
+
+class EngineType(MetaTag):
     """Тип двигателя"""
     title = models.CharField(verbose_name='Тип двигателя', max_length=255, db_index=True)
     slug = models.SlugField(verbose_name='URL', unique=True, db_index=True)
@@ -194,14 +280,15 @@ class EngineType(MataTag):
     class Meta:
         verbose_name = 'Тип двигателя'
         verbose_name_plural = 'Типы двигателей'
-        ordering = ['-id']
+        ordering = ['title']
 
     def __str__(self):
         return self.title
 
 
-class Car(MataTag):
-    """Автомобиль"""
+class KitCar(MetaTag):
+    """Машинокомплект"""
+
     TRANSMISSION = (
         (None, 'Выберите коробку передач'),
         ('mechanics', 'Механика'),
@@ -213,8 +300,8 @@ class Car(MataTag):
         ('rear_drive', 'Задний привод')
     )
 
-    car_model = models.ForeignKey(CarModel, verbose_name='Марка автомобиля', on_delete=models.CASCADE)
-    image = models.ImageField(verbose_name='Фотография', upload_to='car', null=True)
+    model = models.ForeignKey(Model, verbose_name='Модель', on_delete=models.CASCADE)
+    image = models.ImageField(verbose_name='Фотография', upload_to='kit-car', default='default.png')
     slug = models.SlugField(verbose_name='URL', unique=True, db_index=True)
     bodywork = models.ForeignKey(Bodywork, verbose_name='Кузов', on_delete=models.SET_NULL, null=True)
     engine_type = models.ForeignKey(EngineType, verbose_name='Тип двигателя', on_delete=models.SET_NULL, null=True)
@@ -226,87 +313,47 @@ class Car(MataTag):
     color = models.CharField(verbose_name='Цвет', max_length=255)
     vin = models.CharField(verbose_name='VIN', max_length=255, unique=True)
     description = models.TextField(verbose_name='Описание', null=True, blank=True)
-    price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12, null=True, blank=True)
+    price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12, validators=[MinValueValidator(0)])
     in_stock = models.BooleanField(verbose_name='В наличии', default=True)
 
     cart_content = GenericRelation('CartContent')
     additional_photo = GenericRelation('AdditionalPhoto')
 
     class Meta:
-        verbose_name = 'Автомобиль'
-        verbose_name_plural = 'Автомобили'
+        verbose_name = 'Машинокомплект'
+        verbose_name_plural = 'Машинокомплекты'
         ordering = ['-id']
 
-    def get_title(self):
-        return self.car_model
+    def save(self, *args, **kwargs):
+        validation_in_stock_for_cart_content(self.in_stock, self.cart_content.all())
+        super().save(*args, **kwargs)
+        value = 'kit-car-{0}'.format(self.pk)
+        self.slug = slugify(value, allow_unicode=True)
+        return super().save(*args, **kwargs)
 
-    def get_in_stock(self):
-        return 'В наличии' if self.in_stock else 'Нет в наличии'
+    def get_title(self):
+        return self.model
 
     def get_model_name(self):
         return self._meta.model_name
 
-    def get_car_brand__title(self):
-        return self.car_model.car_brand.title
+    def get_brand__title(self):
+        return self.model.brand.title
 
-    def get_car_model__title(self):
-        return self.car_model.title
+    def get_model__title(self):
+        return self.model.title
 
     def get_absolute_url(self):
-        return reverse('store:detail_kit_car', kwargs={'brand': self.car_model.car_brand.slug,
-                                                        'model': self.car_model.slug,
-                                                        'slug': self.slug})
-
-    def save(self, *args, **kwargs):
-        value = 'car-{0}'.format(self.pk)
-        self.slug = slugify(value, allow_unicode=True)
-        if not self.in_stock:
-            cart_contents = self.cart_content.all()
-            for item in cart_contents:
-                item.delete()
-        super().save(*args, **kwargs)
+        return reverse('store:detail_kit_car', kwargs={'brand': self.model.brand.slug,
+                                                       'model': self.model.slug,
+                                                       'slug': self.slug})
 
     def __str__(self):
-        return '{0} {1} {2}'.format(self.car_model, self.year, self.vin)
-
-
-class Cart(models.Model):
-    """Корзина пользователя"""
-    customer = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE, null=True)
-
-    class Meta:
-        verbose_name = 'Корзина пользователя'
-        verbose_name_plural = 'Корзины пользователей'
-        ordering = ['-id']
-
-    def __str__(self):
-        return self.customer.username
-
-    def get_cart_content(self):
-        return self.cartcontent_set.all()
-
-    def get_total_price(self):
-        items = self.get_cart_content()
-        return sum(item.content_object.price for item in items)
-
-    def get_cart_content_count(self):
-        return self.get_cart_content().count()
-
-
-class CartContent(models.Model):
-    """Содержимое корзины"""
-    cart = models.ForeignKey(Cart, verbose_name='Корзина пользователя', on_delete=models.CASCADE)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey(ct_field='content_type', fk_field='object_id')
-
-    class Meta:
-        verbose_name = 'Содержимое в корзине'
-        verbose_name_plural = 'Содержимое в корзине'
-        ordering = ['-id']
+        return '{0} {1} {2}'.format(self.model, self.year, self.vin)
 
 
 class AdditionalPhoto(models.Model):
+    """Дополнительные фото"""
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey(ct_field='content_type', fk_field='object_id')
@@ -318,7 +365,52 @@ class AdditionalPhoto(models.Model):
         ordering = ['-id']
 
 
+class Cart(models.Model):
+    """Корзина пользователя"""
+
+    customer = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Корзина пользователя'
+        verbose_name_plural = 'Корзины пользователей'
+        ordering = ['-id']
+
+    def get_cart_content(self):
+        return self.cartcontent_set.all()
+
+    def get_total_price(self):
+        items = self.get_cart_content()
+        return sum(item.content_object.price for item in items)
+
+    def get_cart_content_count(self):
+        return self.get_cart_content().count()
+
+    def __str__(self):
+        return self.customer.username
+
+
+class CartContent(models.Model):
+    """Содержимое корзины"""
+
+    cart = models.ForeignKey(Cart, verbose_name='Корзина пользователя', on_delete=models.CASCADE)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey(ct_field='content_type', fk_field='object_id')
+
+    class Meta:
+        verbose_name = 'Содержимое в корзине'
+        verbose_name_plural = 'Содержимое в корзине'
+        ordering = ['-id']
+
+    def __str__(self):
+        return mark_safe('<a href="/admin/{0}/{1}/{2}/change/">ССЫЛКА</a>'.format(self.content_type.app_label,
+                                                                                  self.content_type.model,
+                                                                                  self.content_object.pk))
+
+
 class Order(models.Model):
+    """Заказ"""
+
     STATUS_CHOICES = (
         ('new', 'Новый заказ'),
         ('in_progress', 'Заказ в обработке'),
@@ -340,22 +432,31 @@ class Order(models.Model):
         ('card_halva', 'Карта рассрочки «Халва»'),
         ('card_buy', '«Карта покупок» в рассрочку до 3 месяцев')
     )
+    COUNTRY = (
+        (None, 'Выберите страну'),
+        ('Bel', 'Беларусь'),
+        ('ru', 'Россия')
+    )
+
     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
-    address_user = models.ForeignKey(AddressUser, verbose_name='Адрес доставки', on_delete=models.SET_NULL, null=True,
-                                     blank=True)
     shipping_method = models.CharField(verbose_name='Доставка', choices=SHIPPING, max_length=24)
     payment_type = models.CharField(max_length=100, verbose_name='Способ оплаты', choices=PAYMENT_TYPE_CHOICES)
     status = models.CharField(max_length=100, verbose_name='Статус заказ', choices=STATUS_CHOICES, default='new')
     price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12, null=True, blank=True)
     data_place = models.DateTimeField(verbose_name='Дата заказа', auto_now_add=True)
+    last_name = models.CharField(verbose_name='Фамилия', max_length=255)
+    first_name = models.CharField(verbose_name='Имя', max_length=255)
+    patronymic = models.CharField(verbose_name='Отчество', max_length=255)
+    country = models.CharField(verbose_name='Страна', choices=COUNTRY, max_length=16)
+    region = models.CharField(verbose_name='Регион', max_length=255)
+    city = models.CharField(verbose_name='Город', max_length=255)
+    address = models.CharField(verbose_name='Адрес', max_length=255)
+    phone_number = models.CharField(verbose_name='Номер телефона', max_length=255)
 
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
         ordering = ['-id']
-
-    def __str__(self):
-        return '{0} {1} {2}'.format(self.user.username, self.data_place.strftime('%d.%m.%Y'), self.get_status_display())
 
     def get_order_content(self):
         return self.ordercontent_set.all()
@@ -363,8 +464,16 @@ class Order(models.Model):
     def get_count(self):
         return self.ordercontent_set.all().count()
 
+    def get_title(self):
+        return 'Заказ {0} от {1}'.format(self.pk, self.data_place.strftime('%d.%m.%Y'))
+
+    def __str__(self):
+        return '{0} {1} {2}'.format(self.user.username, self.data_place.strftime('%d.%m.%Y'), self.get_status_display())
+
 
 class OrderContent(models.Model):
+    """Содержимое заказа"""
+
     order = models.ForeignKey(Order, verbose_name='Заказ', on_delete=models.CASCADE)
     title = models.CharField(verbose_name='Название товара', max_length=255)
     price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12, null=True, blank=True)
@@ -376,3 +485,15 @@ class OrderContent(models.Model):
         verbose_name = 'Содержимое в заказе'
         verbose_name_plural = 'Содержимое в заказе'
         ordering = ['-id']
+
+    def __str__(self):
+        return mark_safe('<a href="/admin/{0}/{1}/{2}/change/">ССЫЛКА</a>'.format(self.content_type.app_label,
+                                                                                  self.content_type.model,
+                                                                                  self.content_object.pk))
+
+
+def validation_in_stock_for_cart_content(in_stock, cart_contents):
+    """Проверка содержимого в корзине"""
+    if not in_stock:
+        for item in cart_contents:
+            item.delete()

@@ -1,6 +1,6 @@
-from ..models import CarModel, CarBrand, Category, AutoPart, Cart, WheelDrive, Car, Bodywork, EngineType
+from ..models import Model as ModelProduct, Brand, Category, SparePart, Tire, Wheel, KitCar, Bodywork, EngineType, Manufacturer
 from django.db.models import Q
-
+from .services import *
 
 def get_filter_fields(item_model, request, kwargs=None):
     """Поля фильтрации"""
@@ -21,10 +21,13 @@ def get_filter_fields(item_model, request, kwargs=None):
         'price_to': price_to.replace(',', '.')
     }
 
-    if item_model is AutoPart:
+    if item_model is SparePart:
         fields['spare_part'] = request.GET.get('part')
+        if request.GET.get('brand') or request.GET.get('model'):
+            fields['brand'] = request.GET.get('brand')
+            fields['model'] = request.GET.get('model')
 
-    if item_model is Car:
+    if item_model is KitCar:
         fields['transmission'] = request.GET.get('transmission') if request.GET.get('transmission') else ''
         fields['bodywork'] = request.GET.get('bodywork')
         fields['engine_type'] = request.GET.get('engineType')
@@ -38,10 +41,21 @@ def get_filter_fields(item_model, request, kwargs=None):
         fields['engine_capacity_to'] = request.GET.get('engineCapacityTo').replace(',', '.') if request.GET.get(
             'engineCapacityTo') else ''
 
-    if item_model is WheelDrive:
+    if item_model is Wheel:
         fields['diameter'] = request.GET.get('diameter') if request.GET.get('diameter') else ''
         fields['material'] = request.GET.get('material') if request.GET.get('material') else ''
         fields['pcd'] = request.GET.get('pcd') if request.GET.get('pcd') else ''
+
+    if item_model is Tire:
+        fields = {
+            'diameter': request.GET.get('diameter').replace(',', '.') if request.GET.get('diameter') else '',
+            'width': request.GET.get('width').replace(',', '.') if request.GET.get('width') else '',
+            'profile': request.GET.get('profile').replace(',', '.') if request.GET.get('profile') else '',
+            'season': request.GET.get('season') if request.GET.get('season') else '',
+            'manufacturer': request.GET.get('manufacturer') if request.GET.get('manufacturer') else '',
+            'price_from': price_from.replace(',', '.'),
+            'price_to': price_to.replace(',', '.')
+        }
 
     return fields
 
@@ -134,54 +148,60 @@ def mileage_filter_validation(list_products, mileage_from, mileage_to):
     return list_products
 
 
-def filter_brand_and_model(model, brand_slug, model_slug):
+def filter_brand_and_model(model_db, brand_slug, model_slug):
     """Фильтр по марке и модели автомобиля"""
     if brand_slug:
-        car_brand = CarBrand.objects.filter(slug=brand_slug).first()
+        brand = Brand.objects.filter(slug=brand_slug).first()
         if model_slug:
             if model_slug:
-                car_model = CarModel.objects.filter(slug=model_slug).all()
+                model = ModelProduct.objects.filter(slug=model_slug).all()
             else:
-                car_model = CarModel.objects.filter(car_brand=car_brand).all()
-            list_products = model.objects.filter(car_model__in=car_model).all()
+                model = ModelProduct.objects.filter(brand=brand).all()
+            list_products = model_db.objects.filter(model__in=model).all()
         else:
-            car_model = CarModel.objects.filter(car_brand=car_brand).all()
-            list_products = model.objects.filter(car_model__in=car_model).all()
+            model = ModelProduct.objects.filter(brand=brand).all()
+            list_products = model_db.objects.filter(model__in=model).all()
     else:
-        list_products = model.objects.all()
+        list_products = model_db.objects.all()
 
     return list_products
 
 
-def get_car_models_filter(brand):
+def get_car_models_filter(brand, chapter=None):
     """Вернуть список моделей автомобилей (AJAX)"""
     brand_slug = brand
-    car_brand_first = CarBrand.objects.filter(slug=brand_slug).first()
-    queryset = CarModel.objects.filter(car_brand=car_brand_first).all().values('title', 'slug')
+    if chapter is not None:
+        if chapter == 'car':
+            get_model_by_chapter_brand_slug()
+    car_brand_first = Brand.objects.filter(slug=brand_slug).first()
+    queryset = Model.objects.filter(brand=car_brand_first).all().values('title', 'slug')
     return queryset
 
 
-def get_auto_part_filter(request, kwargs=None):
+def get_spare_part_filter(request, kwargs=None):
     """Фильтр автозапчастей"""
 
-    fields = get_filter_fields(AutoPart, request, kwargs)
+    chapter = kwargs.get('chapter')
 
-    list_products = filter_brand_and_model(AutoPart, fields['brand'], fields['model'])
+    fields = get_filter_fields(SparePart, request, kwargs)
+    print(fields)
+
+    list_products = filter_brand_and_model(SparePart, fields['brand'], fields['model'])
+    list_products = list_products.filter(chapter=chapter).all()
 
     if fields['spare_part']:
         category = Category.objects.filter(slug=fields['spare_part']).first()
         list_products = list_products.filter(category=category).all()
 
     list_products = price_filter_validation(list_products, fields['price_from'], fields['price_to'])
-
     return list_products.filter(in_stock=True).all()
 
 
 def get_wheel_filter(request, kwargs=None):
     """Фильтр дисков"""
-    fields = get_filter_fields(WheelDrive, request, kwargs)
+    fields = get_filter_fields(Wheel, request, kwargs)
 
-    list_products = filter_brand_and_model(WheelDrive, fields['brand'], fields['model'])
+    list_products = filter_brand_and_model(Wheel, fields['brand'], fields['model'])
 
     list_products = price_filter_validation(list_products, fields['price_from'], fields['price_to'])
 
@@ -198,11 +218,52 @@ def get_wheel_filter(request, kwargs=None):
     return list_products.filter(in_stock=True).all()
 
 
+def get_tire_filter(request, kwargs=None):
+    """Фильтр шин"""
+    fields = get_filter_fields(Tire, request, kwargs)
+
+    if fields['manufacturer']:
+        manufacturer = Manufacturer.objects.filter(slug=fields['manufacturer']).first()
+        list_products = Tire.objects.filter(manufacturer=manufacturer).all()
+    else:
+        list_products = Tire.objects.all()
+
+    list_products = price_filter_validation(list_products, fields['price_from'], fields['price_to'])
+
+    try:
+        diameter = round(float(fields['diameter']), 1)
+    except ValueError:
+        diameter = None
+
+    try:
+        width = round(float(fields['width']), 1)
+    except ValueError:
+        width = None
+
+    try:
+        profile = round(float(fields['profile']), 1)
+    except ValueError:
+        profile = None
+
+    if diameter:
+        list_products = list_products.filter(diameter=diameter).all()
+
+    if width:
+        list_products = list_products.filter(width=width).all()
+
+    if profile:
+        list_products = list_products.filter(profile=profile).all()
+
+    list_products = list_products.filter(
+        Q(season__icontains=fields['season'])).all()
+    return list_products.filter(in_stock=True).all()
+
+
 def get_kit_car_filter(request, kwargs=None):
     """Фильтр машинокомплектов"""
-    fields = get_filter_fields(Car, request, kwargs)
+    fields = get_filter_fields(KitCar, request, kwargs)
 
-    list_products = filter_brand_and_model(Car, fields['brand'], fields['model'])
+    list_products = filter_brand_and_model(KitCar, fields['brand'], fields['model'])
 
     list_products = year_filter_validation(list_products, fields['year_from'], fields['year_to'])
     list_products = mileage_filter_validation(list_products, fields['mileage_from'], fields['mileage_to'])

@@ -1,0 +1,5 @@
+@media (max-width:850px){
+    .list-address__items{
+        grid-template-columns: repeat(1, 1fr);
+    }
+}

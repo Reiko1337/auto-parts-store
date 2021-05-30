@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load account %}
+
+{% block title %}
+Подтвердите ваш e-mail - Разборка в молодечно
+{% endblock %}
+
+
+{% block content %}
+    <section class="profile__confirmation">
+           <div class="profile-confirmation__content">
+                <div class="container">
+                    <div class="profile-confirmation__container">
+                        <h1 class="profile-confirmation__title">Подтвердите ваш e-mail</h1>
+                        <p class="profile-confirmation__text">
+                            Мы отправили вам e-mail с подтверждением. Для завершения процесса регистрации перейдите по указанной ссылке. Если вы не получили наше сообщение в течение нескольких минут, пожалуйста, свяжитесь с нами.
+                        </p>
+                    </div>
+                </div>
+           </div>
+       </section>
+{% endblock %}
+

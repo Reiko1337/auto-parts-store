@@ -1,0 +1,35 @@
+@media (max-width:800px){
+    .list-order__item-info{
+        flex-direction: column;
+    }
+    .list-order__item-id{
+        margin-bottom: 10px;
+    }
+    .list-order__item-price,
+    .list-order__item-date,
+    .list-order__item-status{
+        padding-top: 5px;
+    }
+    .list-order__item-price{
+        font-weight: 400;
+        margin: 0 0;
+        font-size: 14px;
+        line-height: 16px;
+    }
+    .list-order__item-date{
+        font-weight: 400;
+        margin: 0 0;
+    }
+    .list-order__item-status{
+        font-weight: 400;
+        text-align: left;
+    }
+    .list-order__item-info-spoiler{
+        display: inline-block;
+    }
+    .list-order__item-button{
+        margin-top: 25px;
+        margin-left: 0;
+        width: 100%;
+    }
+}

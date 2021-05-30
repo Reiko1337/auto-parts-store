@@ -1,0 +1,12 @@
+@media (max-width: 400px) {
+    .panel-input__form-container_phone {
+        flex-direction: column;
+    }
+    .panel-input__form-country-phone {
+        width: 100%;
+    }
+    .panel-input__form-phone {
+        margin-top: 5px;
+        width: 100%;
+    }
+}

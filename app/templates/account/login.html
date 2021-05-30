@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load account %}
 {% load widget_tweaks %}
 
 {% block title %}
@@ -23,22 +24,28 @@
                 <form method="post" class="panel-input__form">
                     {% csrf_token %}
                     {{ form.non_field_errors }}
-                    {% render_field form.username class="panel-input__form-input input__form" placeholder=form.username.label %}
-                    {{ form.username.errors }}
-                    {% render_field form.password class="panel-input__form-input input__form" placeholder=form.password.label %}
-                    {{ form.password.errors|striptags }}
-                    <input type="hidden" name="next" value="{{ next }}">
+                     <div class="panel-input__form-container">
+                            {% render_field form.login class="panel-input__form-input input__form" placeholder=form.login.label %}
+                            {{ form.username.errors }}
+                    </div>
+                    <div class="panel-input__form-container">
+                          {% render_field form.password class="panel-input__form-input input__form" placeholder=form.password.label %}
+                          {{ form.password.errors }}
+                    </div>
+                    {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+                    {% endif %}
                     <input class="panel-input__form-button button" type="submit" value="Войти">
                     <label class="panel-input__form-label">
-                        <input class="panel-input__form-checkbox" type="checkbox" value="3"
-                               name="delivery">
+                         {% render_field form.remember class="panel-input__form-checkbox" %}
                         <span class="panel-input__form-point"></span>
                         <span class="panel-input__form-text">Запомнить меня</span>
                     </label>
-                    <a class="panel-input__reset-password-link" href="#">
+                    <a class="panel-input__reset-password-link" href="{% url 'account_reset_password' %}">
                         Забыли пароль?
                     </a>
                 </form>
+                <a class="panel-input__link-button button" href="{% url 'account_signup' %}">Регистрация</a>
             </div>
         </div>
     </div>

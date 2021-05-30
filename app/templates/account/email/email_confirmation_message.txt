@@ -1,0 +1,7 @@
+{% extends "account/email/base_message.txt" %}
+{% load account %}
+{% load i18n %}
+
+{% block content %}{% autoescape off %}{% user_display user as user_display %}{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}Вы получаете это электронное письмо, потому что пользователь {{ user_display }} дал ваш адрес электронной почты для регистрации учетной записи на {{ site_domain }}.
+
+Чтобы подтвердить правильность этого, перейдите по ссылке {{ activate_url }}{% endblocktrans %}{% endautoescape %}{% endblock %}

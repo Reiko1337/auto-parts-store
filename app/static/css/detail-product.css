@@ -94,6 +94,14 @@
     text-align: center;
     margin-bottom: 30px;
 }
+.detail-product__buy_sold.button{
+    background: red;
+    cursor: pointer;
+}
+.detail-product__buy_sold.button:hover{
+    box-shadow: 1px 0px 7px rgba(255, 0, 0, 0.8);
+}
+
 .detail-product__spetification-list{
     width: 100%;
     list-style: none;

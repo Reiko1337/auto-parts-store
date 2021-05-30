@@ -215,3 +215,40 @@ body{
     opacity: 0;
     z-index: 1;
 }
+
+
+.profile-confirmation__content{
+    margin-bottom: 100px;
+}
+.profile-confirmation__title{
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28px;
+    margin-bottom: 10px;
+}
+.profile-confirmation__text{
+    font-size: 18px;
+    line-height: 21px;
+    margin-bottom: 10px;
+}
+.profile-confirmation__button{
+    border: none;
+    width: 200px;
+    text-align: center;
+    padding: 7px;
+    font-size: 18px;
+    line-height: 21px;
+    margin-top: 5px;
+}
+.profile-confirmation__help-text{
+    margin-top: 8px;
+    margin-bottom: 5px;
+}
+.profile-confirmation__link{
+    text-decoration: none;
+    color: #0064D9;
+}
+.help__text{
+    font-size: 18px;
+    line-height: 21px;
+}

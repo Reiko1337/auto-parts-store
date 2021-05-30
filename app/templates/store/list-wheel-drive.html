@@ -52,7 +52,7 @@
                                             <option value=""></option>
                                             <option value="*">Материал</option>
                                             {% for field in filter_fields.material %}
-                                                <option value="{{ field.material }}">{{ field.material }}</option>
+                                                <option value="{{ field.slug }}">{{ field.title }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -61,7 +61,7 @@
                                             <option value=""></option>
                                             <option value="*">Диаметр</option>
                                             {% for field in filter_fields.diameter %}
-                                                <option value="{{ field.diameter }}">{{ field.diameter }}</option>
+                                                 <option value="{{ field.slug }}">{{ field.title }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -70,7 +70,7 @@
                                             <option value=""></option>
                                             <option value="*">PCD</option>
                                              {% for field in filter_fields.pcd %}
-                                                <option value="{{ field.pcd }}">{{ field.pcd }}</option>
+                                                <option value="{{ field.slug }}">{{ field.title }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -86,9 +86,11 @@
                             </div>
 
                             <div class="list-product__items-row">
-
+                                {% if products %}
                                     {% tag_list_product model products %}
-
+                                {% else %}
+                                <p class="help__text">Ничего не найдено</p>
+                                {% endif %}
                                 {% if page_obj.has_other_pages %}
                                 <div class="pagination">
                                     <div class="pagination__container">

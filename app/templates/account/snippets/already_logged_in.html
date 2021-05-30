@@ -1,0 +1,5 @@
+{% load i18n %}
+{% load account %}
+
+{% user_display user as user_display %}
+<p class="profile-confirmation__help-text"><strong>Заметка:</strong> вы уже вошли как {{ user_display }}.</p>

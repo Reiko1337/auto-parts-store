@@ -5,7 +5,7 @@
 
 
 {% block title %}
-    Диски - Разборка в молодечно
+Машинокомплеты - Разборка в молодечно
 {% endblock %}
 
 {% block style %}
@@ -53,14 +53,14 @@
                                                 <option value=""></option>
                                                 <option value="*">Год от</option>
                                                {% for field in filter_fields.year %}
-                                                <option value="{{ field.year }}">{{ field.year }}</option>
+                                                <option value="{{ field.slug }}">{{ field.title }}</option>
                                                 {% endfor %}
                                             </select>
                                             <select class="year-to-select" placeholder="До">
                                                 <option value=""></option>
                                                 <option value="*">До</option>
                                                 {% for field in filter_fields.year %}
-                                                <option value="{{ field.year }}">{{ field.year }}</option>
+                                                <option value="{{ field.slug }}">{{ field.title }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -106,14 +106,14 @@
                                                 <option value=""></option>
                                                 <option value="*">Объем от</option>
                                                 {% for field in filter_fields.engine_capacity %}
-                                                <option value="{{ field.engine_capacity }}">{{ field.engine_capacity }}</option>
+                                               <option value="{{ field.slug }}">{{ field.title }}</option>
                                                 {% endfor %}
                                             </select>
                                             <select class="engine-capacity-to-select" placeholder="До">
                                                 <option value=""></option>
                                                 <option value="*">До</option>
                                                 {% for field in filter_fields.engine_capacity %}
-                                                <option value="{{ field.engine_capacity }}">{{ field.engine_capacity }}</option>
+                                               <option value="{{ field.slug }}">{{ field.title }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -141,7 +141,11 @@
 
                             <div class="list-product__items-row">
 
+                                {% if products %}
                                     {% tag_list_product model products %}
+                                {% else %}
+                              <p class="help__text">Ничего не найдено</p>
+                                {% endif %}
 
                                 {% if page_obj.has_other_pages %}
                                 <div class="pagination">

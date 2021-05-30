@@ -1,5 +1,5 @@
 from django import template
-from ..models import Car, AutoPart, WheelDrive
+from ..models import KitCar, SparePart, Wheel, Tire
 
 register = template.Library()
 
@@ -9,7 +9,7 @@ def tag_list_product(model, items):
     model = model.model_class()
     count_column = 2
     products = []
-    if model is AutoPart:
+    if model is SparePart:
         for item in items:
             info = {
                 'id': item.id,
@@ -19,13 +19,13 @@ def tag_list_product(model, items):
                 'price': item.price,
                 'url': item.get_absolute_url(),
                 'specification': {
-                    'Марка': item.get_car_brand__title(),
-                    'Модель': item.get_car_model__title(),
+                    'Марка': item.get_brand__title(),
+                    'Модель': item.get_model__title(),
                     'Артикул': item.article,
                 }
             }
             products.append(info)
-    elif model is Car:
+    elif model is KitCar:
         count_column = 1
         for item in items:
             info = {
@@ -36,8 +36,8 @@ def tag_list_product(model, items):
                 'price': item.price,
                 'url': item.get_absolute_url(),
                 'specification': {
-                    'Марка': item.get_car_brand__title(),
-                    'Модель': item.get_car_model__title(),
+                    'Марка': item.get_brand__title(),
+                    'Модель': item.get_model__title(),
                     'Год': item.year,
                     'Пробег': item.mileage,
                     'Кузов': item.bodywork.title,
@@ -49,7 +49,7 @@ def tag_list_product(model, items):
                 }
             }
             products.append(info)
-    elif model is WheelDrive:
+    elif model is Wheel:
         for item in items:
             info = {
                 'id': item.id,
@@ -59,8 +59,8 @@ def tag_list_product(model, items):
                 'price': item.price,
                 'url': item.get_absolute_url(),
                 'specification': {
-                    'Марка': item.get_car_brand__title(),
-                    'Модель': item.get_car_model__title(),
+                    'Марка': item.get_brand__title(),
+                    'Модель': item.get_model__title(),
                     'Артикул': item.article,
                     'Материал': item.material,
                     'Диаметр': f'R {item.diameter}',
@@ -68,6 +68,25 @@ def tag_list_product(model, items):
                 }
             }
             products.append(info)
+    elif model is Tire:
+        for item in items:
+            info = {
+                'id': item.id,
+                'model_name': item.get_model_name,
+                'title': item.get_title(),
+                'image': item.image.url,
+                'price': item.price,
+                'url': item.get_absolute_url(),
+                'specification': {
+                    'Производитель': item.get_manufacturer(),
+                    'Сезон': item.get_season_display(),
+                    'Диаметр': f'R {item.diameter}',
+                    'Ширина': item.width,
+                    'Профиль': item.profile
+                }
+            }
+            products.append(info)
+
 
     return {'products': products, 'count_column': count_column}
 
@@ -75,32 +94,34 @@ def tag_list_product(model, items):
 @register.inclusion_tag('store/tags/tag-detail-product.html')
 def tag_detail_product(product, similar_product):
     model = product.get_model_name()
-    if model == 'autopart':
+    if model == 'sparepart':
         info = {
             'id': product.id,
+            'in_stock': product.in_stock,
             'model_name': product.get_model_name,
             'title': product.get_title(),
             'image': product.image.url,
             'price': product.price,
             'specification': {
-                'Марка': product.get_car_brand__title(),
-                'Модель': product.get_car_model__title(),
+                'Марка': product.get_brand__title(),
+                'Модель': product.get_model__title(),
                 'Категория': product.get_category__title,
                 'Артикул': product.article,
             },
             'description': product.description,
             'additional_images': product.additional_photo.all()
         }
-    elif model == 'car':
+    elif model == 'kitcar':
         info = {
             'id': product.id,
+            'in_stock': product.in_stock,
             'model_name': product.get_model_name,
             'title': product.get_title(),
             'image': product.image.url,
             'price': product.price,
             'specification': {
-                'Марка': product.get_car_brand__title(),
-                'Модель': product.get_car_model__title(),
+                'Марка': product.get_brand__title(),
+                'Модель': product.get_model__title(),
                 'VIN': product.vin,
                 'Год': product.year,
                 'Пробег': product.mileage,
@@ -114,20 +135,39 @@ def tag_detail_product(product, similar_product):
             'description': product.description,
             'additional_images': product.additional_photo.all()
         }
-    elif model == 'wheeldrive':
+    elif model == 'wheel':
         info = {
             'id': product.id,
+            'in_stock': product.in_stock,
             'model_name': product.get_model_name,
             'title': product.get_title(),
             'image': product.image.url,
             'price': product.price,
             'specification': {
-                'Марка': product.get_car_brand__title(),
-                'Модель': product.get_car_model__title(),
+                'Марка': product.get_brand__title(),
+                'Модель': product.get_model__title(),
                 'Артикул': product.article,
                 'Материал': product.material,
                 'Диаметр': f'R {product.diameter}',
                 'Сверловка (PCD)': product.pcd
+            },
+            'description': product.description,
+            'additional_images': product.additional_photo.all()
+        }
+    elif model == 'tire':
+        info = {
+            'id': product.id,
+            'in_stock': product.in_stock,
+            'model_name': product.get_model_name,
+            'title': product.get_title(),
+            'image': product.image.url,
+            'price': product.price,
+            'specification': {
+                'Производитель': product.get_manufacturer(),
+                'Сезон': product.get_season_display(),
+                'Диаметр': f'R {product.diameter}',
+                'Ширина': product.width,
+                'Профиль': product.profile
             },
             'description': product.description,
             'additional_images': product.additional_photo.all()

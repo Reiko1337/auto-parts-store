@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load account %}
+{% load widget_tweaks %}
+
+{% block title %}
+История заказов - Разборка в молодечно
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/list-order.css' %}">
+<link rel="stylesheet" href="{% static 'css/list-order-media.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<section class="list-order">
+            <div class="list-order__content">
+                <div class="container">
+                    <div class="list-order__container">
+                        <div class="list-order__items">
+                            <h2 class="list-order__title">
+                                Текущие заказы
+                            </h2>
+                            {% if orders_process %}
+                            {% for order in orders_process %}
+
+                            <div class="list-order__item">
+                                <div class="list-order__item-info">
+                                    <a class="list-order__item-id" href="{% url 'order_detail' order.pk %}">
+                                        №{{ order.pk }}
+                                    </a>
+                                    <p class="list-order__item-price">
+                                        <span class="text__red text__bold list-order__item-info-spoiler">Цена:</span> {{ order.price }} BYN
+                                    </p>
+                                    <p class="list-order__item-date">
+                                        <span class="text__bold list-order__item-info-spoiler">Дата заказа:</span> {{ order.data_place }}
+                                    </p>
+                                    <p class="list-order__item-status">
+                                        <span class="text__bold list-order__item-info-spoiler">Статус:</span> {{ order.get_status_display }}
+                                    </p>
+                                </div>
+                                <ul class="list-order__item-content">
+                                    {% for item in order.get_order_content %}
+
+                                    <li>
+                                        <a class="list-order__item-content-link" href="{{ item.content_object.get_absolute_url }}">
+                                           {{ item.title }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                <a class="list-order__item-button button" href="{% url 'order_detail' order.pk %}" >
+                                    Подробнее о заказе
+                                </a>
+                            </div>
+                            {% endfor %}
+                            {% else %}
+                             <p class="help__text">У вас нет действующих заказов</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="list-order__items">
+                            <h2 class="list-order__title">
+                                Все заказы
+                            </h2>
+                            {% if orders %}
+                            {% for order in orders %}
+
+                            <div class="list-order__item">
+                                <div class="list-order__item-info">
+                                    <a class="list-order__item-id" href="{% url 'order_detail' order.pk %}">
+                                        №{{ order.pk }}
+                                    </a>
+                                    <p class="list-order__item-price">
+                                        <span class="text__red text__bold list-order__item-info-spoiler">Цена:</span> {{ order.price }} BYN
+                                    </p>
+                                    <p class="list-order__item-date">
+                                        <span class="text__bold list-order__item-info-spoiler">Дата заказа:</span> {{ order.data_place }}
+                                    </p>
+                                    <p class="list-order__item-status">
+                                        <span class="text__bold list-order__item-info-spoiler">Статус:</span> {{ order.get_status_display }}
+                                    </p>
+                                </div>
+                                <ul class="list-order__item-content">
+                                    {% for item in order.get_order_content %}
+
+                                    <li>
+                                        <a class="list-order__item-content-link" href="{{ item.content_object.get_absolute_url }}">
+                                           {{ item.title }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                <a class="list-order__item-button button" href="{% url 'order_detail' order.pk %}" >
+                                    Подробнее о заказе
+                                </a>
+                            </div>
+                            {% endfor %}
+                            {% else %}
+                             <p class="help__text">Вы не совершали заказы</p>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+{% endblock %}
+
+    
+

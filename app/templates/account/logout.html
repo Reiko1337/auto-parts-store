@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load account %}
+
+{% block title %}
+Выйти - Разборка в молодечно
+{% endblock %}
+
+
+{% block content %}
+    <section class="profile__confirmation">
+           <div class="profile-confirmation__content">
+                <div class="container">
+                    <div class="profile-confirmation__container">
+                        <h1 class="profile-confirmation__title">Выйти</h1>
+                        <p class="profile-confirmation__text">
+                            Вы уверены, что хотите выйти?
+                        </p>
+                        <form method="post" action="{% url 'account_logout' %}">
+                            {% csrf_token %}
+                            {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                            {% endif %}
+                        <input class="profile-confirmation__button button" type="submit" value="Выйти">
+                        </form>
+                    </div>
+                </div>
+           </div>
+       </section>
+{% endblock %}
+

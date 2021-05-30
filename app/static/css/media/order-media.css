@@ -1,0 +1,68 @@
+@media (max-width:1100px){
+    .order__registration{
+        max-width: 390px;
+    }
+    .order__registration-content{
+        width: 390px;   
+    }
+    .order__composition-item-image{
+        max-width: 230px;
+    }
+}
+@media (max-width:1000px){
+    .order__registration{
+        max-width: 350px;
+    }
+    .order__registration-content{
+        width: 350px;   
+    }
+    .order__composition-item-image{
+        max-width: 200px;
+    }
+    
+}
+@media (max-width:950px){
+    .order__container{
+        flex-direction: column-reverse;
+    }
+    .order__registration{
+        max-width: 100%;
+    }
+    .order__registration-content{
+        width: 100%;   
+    }
+    .order__composition{
+        margin-top: 50px;
+        margin-right: 0;
+        width: 100%;
+    }
+    .order__composition-item-image{
+        max-width: 280px;
+    }
+}
+@media (max-width:680px){
+    .order__composition-item-image{
+        max-width: 230px;
+    }
+}
+@media (max-width:570px){
+    .order__composition-item-info{
+        flex-direction: column;
+        width: 100%;
+    }
+    .order__composition-info{
+        margin-top: 5px;
+    }
+    .order__composition-delete-image{
+        text-align: right;
+        margin-bottom: 5px;
+    }
+
+    .order__composition-item-image{
+        height: 180px;
+        max-width: 100%;
+    }
+    .order__composition-info{
+        flex: 0 1 100%;
+    }
+}
