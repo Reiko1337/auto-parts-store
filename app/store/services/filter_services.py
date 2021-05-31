@@ -1,6 +1,8 @@
-from ..models import Model as ModelProduct, Brand, Category, SparePart, Tire, Wheel, KitCar, Bodywork, EngineType, Manufacturer
+from ..models import Model as ModelProduct, Brand, Category, SparePart, Tire, Wheel, KitCar, Bodywork, EngineType, \
+    Manufacturer
 from django.db.models import Q
 from .services import *
+
 
 def get_filter_fields(item_model, request, kwargs=None):
     """Поля фильтрации"""
@@ -184,13 +186,28 @@ def get_spare_part_filter(request, kwargs=None):
     chapter = kwargs.get('chapter')
 
     fields = get_filter_fields(SparePart, request, kwargs)
-    print(fields)
 
     list_products = filter_brand_and_model(SparePart, fields['brand'], fields['model'])
     list_products = list_products.filter(chapter=chapter).all()
 
     if fields['spare_part']:
         category = Category.objects.filter(slug=fields['spare_part']).first()
+        list_products = list_products.filter(category=category).all()
+
+    list_products = price_filter_validation(list_products, fields['price_from'], fields['price_to'])
+    return list_products.filter(in_stock=True).all()
+
+
+def filter_spare_part(request, kwargs=None):
+    fields = dict()
+    for key, value in request.GET.items():
+        fields[key] = value
+
+    list_products = filter_brand_and_model(SparePart, fields['brand'], fields['model'])
+    list_products = list_products.filter(chapter=fields['chapter']).all()
+
+    if fields['category']:
+        category = Category.objects.filter(slug=fields['category']).first()
         list_products = list_products.filter(category=category).all()
 
     list_products = price_filter_validation(list_products, fields['price_from'], fields['price_to'])

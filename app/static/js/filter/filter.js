@@ -1,119 +1,126 @@
 $(document).ready(function () {
-    $('.brand-select').select2({
-        placeholder: "Марка автомобиля",
-        maximumSelectionLength: 2,
-        language: "ru",
-        width: "100%",
-    });
-    $('.model-select').select2({
-        placeholder: "Модель автомобиля",
-        maximumSelectionLength: 2,
-        language: "ru",
-        width: "100%",
-    });
-    $('.spare-part-select').select2({
-        placeholder: "Запчасти",
+    // $('.brand-select').select2({
+    //     placeholder: "Марка автомобиля",
+    //     maximumSelectionLength: 2,
+    //     language: "ru",
+    //     width: "100%",
+    // });
+    // $('.model-select').select2({
+    //     placeholder: "Модель автомобиля",
+    //     maximumSelectionLength: 2,
+    //     language: "ru",
+    //     width: "100%",
+    // });
+    // $('.spare-part-select').select2({
+    //     placeholder: "Запчасти",
+    //     maximumSelectionLength: 2,
+    //     language: "ru",
+    //     width: "100%",
+    // });
+    //
+    // $('.transmission-select').select2({
+    //     placeholder: "Коробка передач",
+    //     maximumSelectionLength: 2,
+    //     language: "ru",
+    //     width: "100%",
+    // });
+    // $('.bodywork-select').select2({
+    //     placeholder: "Кузов",
+    //     maximumSelectionLength: 2,
+    //     language: "ru",
+    //     width: "100%",
+    // });
+    // $('.engine-type-select').select2({
+    //     placeholder: "Тип двигателя",
+    //     maximumSelectionLength: 2,
+    //     language: "ru",
+    //     width: "100%",
+    // });
+    // $('.drive-select').select2({
+    //     placeholder: "Привод",
+    //     maximumSelectionLength: 2,
+    //     language: "ru",
+    //     width: "100%",
+    // });
+    //
+    // $('.year-from-select').select2({
+    //     placeholder: "Год от",
+    //     maximumSelectionLength: 2,
+    //     language: "ru",
+    //     width: "100px",
+    // });
+    // $('.year-to-select').select2({
+    //     placeholder: "До",
+    //     maximumSelectionLength: 2,
+    //     language: "ru",
+    //     width: "100px",
+    // });
+    //
+    // $('.engine-capacity-from-select').select2({
+    //     placeholder: "Объем от",
+    //     maximumSelectionLength: 2,
+    //     language: "ru",
+    //     width: "100px",
+    // });
+    // $('.engine-capacity-to-select').select2({
+    //     placeholder: "До",
+    //     maximumSelectionLength: 2,
+    //     language: "ru",
+    //     width: "100px",
+    // });
+    //
+    // $('.material-select').select2({
+    //     placeholder: "Материал",
+    //     maximumSelectionLength: 2,
+    //     language: "ru",
+    //     width: "100%",
+    // });
+    //
+    // $('.diameter-select').select2({
+    //     placeholder: "Диаметр",
+    //     maximumSelectionLength: 2,
+    //     language: "ru",
+    //     width: "100%",
+    // });
+    // $('.pcd-select').select2({
+    //     placeholder: "PCD",
+    //     maximumSelectionLength: 2,
+    //     language: "ru",
+    //     width: "100%",
+    // });
+    //
+    //
+    // $('.manufacturer-select').select2({
+    //     placeholder: "Производитель",
+    //     maximumSelectionLength: 2,
+    //     language: "ru",
+    //     width: "100%",
+    // });
+    // $('.season-select').select2({
+    //     placeholder: "Сезон",
+    //     maximumSelectionLength: 2,
+    //     language: "ru",
+    //     width: "100%",
+    // });
+    // $('.width-select').select2({
+    //     placeholder: "Ширина",
+    //     maximumSelectionLength: 2,
+    //     language: "ru",
+    //     width: "100%",
+    // });
+    // $('.profile-select').select2({
+    //     placeholder: "Профиль",
+    //     maximumSelectionLength: 2,
+    //     language: "ru",
+    //     width: "100%",
+    // });
+    $('.select2-filter').select2({
+
         maximumSelectionLength: 2,
         language: "ru",
         width: "100%",
     });
 
-    $('.transmission-select').select2({
-        placeholder: "Коробка передач",
-        maximumSelectionLength: 2,
-        language: "ru",
-        width: "100%",
-    });
-    $('.bodywork-select').select2({
-        placeholder: "Кузов",
-        maximumSelectionLength: 2,
-        language: "ru",
-        width: "100%",
-    });
-    $('.engine-type-select').select2({
-        placeholder: "Тип двигателя",
-        maximumSelectionLength: 2,
-        language: "ru",
-        width: "100%",
-    });
-    $('.drive-select').select2({
-        placeholder: "Привод",
-        maximumSelectionLength: 2,
-        language: "ru",
-        width: "100%",
-    });
-
-    $('.year-from-select').select2({
-        placeholder: "Год от",
-        maximumSelectionLength: 2,
-        language: "ru",
-        width: "100px",
-    });
-    $('.year-to-select').select2({
-        placeholder: "До",
-        maximumSelectionLength: 2,
-        language: "ru",
-        width: "100px",
-    });
-
-    $('.engine-capacity-from-select').select2({
-        placeholder: "Объем от",
-        maximumSelectionLength: 2,
-        language: "ru",
-        width: "100px",
-    });
-    $('.engine-capacity-to-select').select2({
-        placeholder: "До",
-        maximumSelectionLength: 2,
-        language: "ru",
-        width: "100px",
-    });
-
-    $('.material-select').select2({
-        placeholder: "Материал",
-        maximumSelectionLength: 2,
-        language: "ru",
-        width: "100%",
-    });
-
-    $('.diameter-select').select2({
-        placeholder: "Диаметр",
-        maximumSelectionLength: 2,
-        language: "ru",
-        width: "100%",
-    });
-    $('.pcd-select').select2({
-        placeholder: "PCD",
-        maximumSelectionLength: 2,
-        language: "ru",
-        width: "100%",
-    });
-
-
-    $('.manufacturer-select').select2({
-        placeholder: "Производитель",
-        maximumSelectionLength: 2,
-        language: "ru",
-        width: "100%",
-    });
-    $('.season-select').select2({
-        placeholder: "Сезон",
-        maximumSelectionLength: 2,
-        language: "ru",
-        width: "100%",
-    });
-    $('.width-select').select2({
-        placeholder: "Ширина",
-        maximumSelectionLength: 2,
-        language: "ru",
-        width: "100%",
-    });
-    $('.profile-select').select2({
-        placeholder: "Профиль",
-        maximumSelectionLength: 2,
-        language: "ru",
-        width: "100%",
-    });
 });
 
 $(".year-from-select").on("select2:select", function (e) {

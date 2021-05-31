@@ -1,0 +1,4 @@
+<option value="*">Модель</option>
+{% for item in items %}
+<option value="{{ item.slug }}">{{ item.title }}</option>
+{% endfor %}

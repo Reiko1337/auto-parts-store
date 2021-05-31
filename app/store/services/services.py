@@ -161,6 +161,9 @@ def get_profile_tire():
     profile = get_list_tire().values('profile')
     return {item['profile'] for item in profile}
 
+
+# --------------------------------------
+
 def get_model_class(model):
     """Модель базы данных"""
     return get_object_or_404(ContentType, model=model)

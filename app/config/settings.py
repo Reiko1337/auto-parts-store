@@ -24,16 +24,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.staticfiles',
-
     'store.apps.StoreConfig',
     'profile.apps.ProfileConfig',
-
     'django_cleanup.apps.CleanupConfig',
-    'django_filters',
     'widget_tweaks',
     'allauth',
     'allauth.account',
-    'django_select2',
     'multiselectfield',
 ]
 

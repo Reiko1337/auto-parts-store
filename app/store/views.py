@@ -8,6 +8,8 @@ from django.contrib import messages
 from .models import Tire
 from django.http.response import Http404
 from .models import Category
+from .forms import SparePartFilter
+from django.views.generic.edit import FormMixin
 
 
 class AboutView(View):
@@ -19,18 +21,34 @@ class AboutView(View):
         return render(request, self.template_name)
 
 
-class ListSparePart(ListView):
+class ListSparePart(FormMixin, ListView):
     """Страница списка автозапчастей"""
 
     model = SparePart
     template_name = 'store/list-spare-part.html'
     context_object_name = 'products'
     paginate_by = 1
+    form_class = SparePartFilter
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         if self.kwargs.get('chapter') not in ['car', 'semi-trailer', 'trailer']:
             raise Http404
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['brand'] = self.kwargs.get('brand')
+        initial['model'] = self.kwargs.get('model')
+        initial['category'] = self.request.GET.get('category')
+        initial['price_from'] = self.request.GET.get('price_from')
+        initial['price_to'] = self.request.GET.get('price_to')
+        return initial
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['brand_queryset'] = get_brand_by_chapter(self.kwargs.get('chapter'))
+        kwargs['category_queryset'] = get_category_by_chapter(self.kwargs.get('chapter'))
+        return kwargs
 
     def get_queryset(self):
         return get_spare_part_filter(request=self.request, kwargs=self.kwargs)
@@ -39,12 +57,6 @@ class ListSparePart(ListView):
         context = super().get_context_data(**kwargs)
         context['count_products'] = self.get_queryset().count()
         context['model'] = get_model_class('sparepart')
-        chapter = self.kwargs.get('chapter')
-        context['filter_fields'] = {
-            'brand': get_brand_by_chapter(chapter),
-            'model': get_model_by_chapter_brand_slug(self.kwargs.get('brand'), chapter),
-            'category': get_category_by_chapter(chapter)
-        }
         return context
 
 
@@ -72,8 +84,8 @@ class SparePartFilter(View):
 
     def get(self, request, **kwargs):
         if request.is_ajax():
-            auto_part = get_spare_part_filter(request=self.request, kwargs=self.kwargs)
-            return JsonResponse({'count': auto_part.count()}, status=200, safe=False)
+            products = filter_spare_part(request=self.request)
+            return JsonResponse({'count': products.count()}, status=200, safe=False)
         return JsonResponse({'success': False}, status=404)
 
 
@@ -242,11 +254,12 @@ class FilterModelsGenerate(View):
     """Список моделей автомобилей (AJAX)"""
 
     def get(self, request):
-        if request.is_ajax():
-            queryset = get_model_by_chapter_brand_slug(request.GET.get('brand'), request.GET.get('chapter')).values(
-                'title', 'slug')
-            return JsonResponse({'models': list(queryset)}, status=200, safe=False)
-        return JsonResponse({'success': False}, status=404)
+        brand = request.GET.get('brand')
+        chapter = request.GET.get('chapter')
+        context = {
+            'items': get_model_by_chapter_brand_slug(brand, chapter)
+        }
+        return render(request, 'filter/filter_select.html', context)
 
 
 class AddToCart(View):
