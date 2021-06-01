@@ -5,12 +5,12 @@
 
 
 {% block title %}
-Автозапчасти - Разборка в молодечно
+    {{ title }} - Разборка в молодечно
 {% endblock %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'css/list-product.css' %}">
-<link rel="stylesheet" href="{% static 'css/media/list-product-media.css' %}">
+    <link rel="stylesheet" href="{% static 'css/list-product.css' %}">
+    <link rel="stylesheet" href="{% static 'css/media/list-product-media.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -19,7 +19,7 @@
         <div class="container">
             <div class="list-product__container">
                 <h1 class="list-product__title">
-                    Автозапчасти
+                    {{ title }}
                 </h1>
                 <div class="list-product__row">
                     <div class="list-product__filter">
@@ -32,7 +32,7 @@
                                 <select class="brand-select select2-filter" data-placeholder="Марка" name="brand">
                                     <option value="*">Марка</option>
                                     {% for value in form.brand %}
-                                    {{ value }}
+                                        {{ value }}
                                     {% endfor %}
                                 </select>
                             </div>
@@ -40,7 +40,7 @@
                                 <select class="model-select select2-filter" data-placeholder="Модель" name="model">
                                     <option value="*">Модель</option>
                                     {% for value in form.model %}
-                                    {{ value }}
+                                        {{ value }}
                                     {% endfor %}
                                 </select>
                             </div>
@@ -48,7 +48,7 @@
                                 <select class="category-select select2-filter" data-placeholder="Запчасти" name="category">
                                     <option value="*">Запчасти</option>
                                     {% for value in form.category %}
-                                    {{ value }}
+                                        {{ value }}
                                     {% endfor %}
                                 </select>
                             </div>
@@ -60,59 +60,55 @@
                                 </div>
                             </div>
                             <a class="list__filter-button button" href="#">Найдено ({{ count_products }})</a>
+                            <input type="hidden" name="ajaxURL" value="{{ url_ajax }}">
                         </div>
                     </div>
 
                     <div class="list-product__items-row">
                         {% if products %}
-                        {% tag_list_product model products %}
+                            {% tag_list_product model products %}
                         {% else %}
-                        <p class="help__text">Ничего не найдено</p>
+                            <p class="help__text">Ничего не найдено</p>
                         {% endif %}
 
                         {% if page_obj.has_other_pages %}
-                        <div class="pagination">
-                            <div class="pagination__container">
-                                <ul class="pagination__list">
-                                    {% if page_obj.has_previous %}
-                                    <li class="pagination__previous">
-                                        <a class="pagination__link"
-                                           href="?page={{ page_obj.previous_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.price_from %}&price_from={{ request.GET.price_from }}{% endif %}{% if request.GET.price_to %}&price_to={{ request.GET.price_to }}{% endif %}">&#10094
-                                            Назад</a>
-                                    </li>
-                                    {% else %}
-                                    <li class="pagination__previous pagination_active">
-                                        <a class="pagination__link">&#10094 Назад</a>
-                                    </li>
-                                    {% endif %}
+                            <div class="pagination">
+                                <div class="pagination__container">
+                                    <ul class="pagination__list">
+                                        {% if page_obj.has_previous %}
+                                            <li class="pagination__previous">
+                                                <a class="pagination__link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.price_from %}&price_from={{ request.GET.price_from }}{% endif %}{% if request.GET.price_to %}&price_to={{ request.GET.price_to }}{% endif %}">&#10094 Назад</a>
+                                            </li>
+                                        {% else %}
+                                            <li class="pagination__previous pagination_active">
+                                                <a class="pagination__link">&#10094 Назад</a>
+                                            </li>
+                                        {% endif %}
 
-                                    {% for num in page_obj.paginator.page_range %}
-                                    {% if page_obj.number == num %}
-                                    <li class="pagination__page pagination_active">
-                                        <a class="pagination__link">{{ num }}</a>
-                                    </li>
-                                    {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
-                                    <li class="pagination__page">
-                                        <a class="pagination__link"
-                                           href="?page={{ num }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.price_from %}&price_from={{ request.GET.price_from }}{% endif %}{% if request.GET.price_to %}&price_to={{ request.GET.price_to }}{% endif %}">{{ num }}</a>
-                                    </li>
-                                    {% endif %}
-                                    {% endfor %}
+                                        {% for num in page_obj.paginator.page_range %}
+                                            {% if page_obj.number == num %}
+                                                <li class="pagination__page pagination_active">
+                                                    <a class="pagination__link">{{ num }}</a>
+                                                </li>
+                                            {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
+                                                <li class="pagination__page">
+                                                    <a class="pagination__link" href="?page={{ num }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.price_from %}&price_from={{ request.GET.price_from }}{% endif %}{% if request.GET.price_to %}&price_to={{ request.GET.price_to }}{% endif %}">{{ num }}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
 
-                                    {% if page_obj.has_next %}
-                                    <li class="pagination__next">
-                                        <a class="pagination__link"
-                                           href="?page={{ page_obj.next_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.price_from %}&price_from={{ request.GET.price_from }}{% endif %}{% if request.GET.price_to %}&price_to={{ request.GET.price_to }}{% endif %}">Вперед
-                                            &#10095</a>
-                                    </li>
-                                    {% else %}
-                                    <li class="pagination__next pagination_active">
-                                        <a class="pagination__link">Вперед &#10095</a>
-                                    </li>
-                                    {% endif %}
-                                </ul>
+                                        {% if page_obj.has_next %}
+                                            <li class="pagination__next">
+                                                <a class="pagination__link" href="?page={{ page_obj.next_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.price_from %}&price_from={{ request.GET.price_from }}{% endif %}{% if request.GET.price_to %}&price_to={{ request.GET.price_to }}{% endif %}">Вперед &#10095</a>
+                                            </li>
+                                        {% else %}
+                                            <li class="pagination__next pagination_active">
+                                                <a class="pagination__link">Вперед &#10095</a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
                         {% endif %}
                     </div>
                 </div>
@@ -123,11 +119,9 @@
 {% endblock %}
 
 {% block script %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-<script src="{% static 'js/select2.min.js' %}"></script>
-<script src="{% static 'js/i18n/ru.js' %}"></script>
-<script src="{% static 'js/filter/filter.js' %}"></script>
-<script src="{% static 'js/filter/filter_models.js' %}"></script>
-<script src="{% static 'js/filter/filter_spare_part.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="{% static 'js/libraries/select2.min.js' %}"></script>
+    <script src="{% static 'js/i18n/ru.js' %}"></script>
+    <script src="{% static 'js/filter/filter_settings.js' %}"></script>
+    <script src="{% static 'js/filter/filter.js' %}"></script>
 {% endblock %}

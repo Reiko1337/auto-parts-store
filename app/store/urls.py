@@ -18,13 +18,11 @@ urlpatterns = [
     path('list/kit-car/<slug:brand>/<slug:model>/', views.ListKitCar.as_view(), name='list_kit_car_brand_model'),
     path('detail/kit-car/<slug:brand>/<slug:model>/<slug:slug>/', views.DetailKitCar.as_view(), name='detail_kit_car'),
 
-
     path('list/wheel/', views.ListWheel.as_view(), name='list_wheel'),
     path('list/wheel/filter/', views.WheelFilter.as_view(), name='list_wheel_filter'),
     path('list/wheel/<slug:brand>/', views.ListWheel.as_view(), name='list_wheel_brand'),
     path('list/wheel/<slug:brand>/<slug:model>/', views.ListWheel.as_view(), name='list_wheel_brand_model'),
     path('detail/wheel/<slug:brand>/<slug:model>/<slug:slug>/', views.DetailWheel.as_view(), name='detail_wheel'),
-
 
     path('list/tire/', views.ListTire.as_view(), name='list_tire'),
     path('list/tire/filter/', views.TireFilter.as_view(), name='list_tire_filter'),

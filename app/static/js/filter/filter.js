@@ -1,219 +1,85 @@
+$(".brand-select").change(function () {
+    let brandSlug = $(this).val();
+    const pageUrl = new URL(document.location.href);
+    let chapter = pageUrl.pathname.split('/')[3]
+    $.ajax({
+        url: '/filter-models/',
+        data: {
+            'brand': brandSlug,
+            'chapter': chapter
+        },
+        success: function (data) {
+            $(".model-select").html(data);
+        }
+    });
+});
 $(document).ready(function () {
-    // $('.brand-select').select2({
-    //     placeholder: "Марка автомобиля",
-    //     maximumSelectionLength: 2,
-    //     language: "ru",
-    //     width: "100%",
-    // });
-    // $('.model-select').select2({
-    //     placeholder: "Модель автомобиля",
-    //     maximumSelectionLength: 2,
-    //     language: "ru",
-    //     width: "100%",
-    // });
-    // $('.spare-part-select').select2({
-    //     placeholder: "Запчасти",
-    //     maximumSelectionLength: 2,
-    //     language: "ru",
-    //     width: "100%",
-    // });
-    //
-    // $('.transmission-select').select2({
-    //     placeholder: "Коробка передач",
-    //     maximumSelectionLength: 2,
-    //     language: "ru",
-    //     width: "100%",
-    // });
-    // $('.bodywork-select').select2({
-    //     placeholder: "Кузов",
-    //     maximumSelectionLength: 2,
-    //     language: "ru",
-    //     width: "100%",
-    // });
-    // $('.engine-type-select').select2({
-    //     placeholder: "Тип двигателя",
-    //     maximumSelectionLength: 2,
-    //     language: "ru",
-    //     width: "100%",
-    // });
-    // $('.drive-select').select2({
-    //     placeholder: "Привод",
-    //     maximumSelectionLength: 2,
-    //     language: "ru",
-    //     width: "100%",
-    // });
-    //
-    // $('.year-from-select').select2({
-    //     placeholder: "Год от",
-    //     maximumSelectionLength: 2,
-    //     language: "ru",
-    //     width: "100px",
-    // });
-    // $('.year-to-select').select2({
-    //     placeholder: "До",
-    //     maximumSelectionLength: 2,
-    //     language: "ru",
-    //     width: "100px",
-    // });
-    //
-    // $('.engine-capacity-from-select').select2({
-    //     placeholder: "Объем от",
-    //     maximumSelectionLength: 2,
-    //     language: "ru",
-    //     width: "100px",
-    // });
-    // $('.engine-capacity-to-select').select2({
-    //     placeholder: "До",
-    //     maximumSelectionLength: 2,
-    //     language: "ru",
-    //     width: "100px",
-    // });
-    //
-    // $('.material-select').select2({
-    //     placeholder: "Материал",
-    //     maximumSelectionLength: 2,
-    //     language: "ru",
-    //     width: "100%",
-    // });
-    //
-    // $('.diameter-select').select2({
-    //     placeholder: "Диаметр",
-    //     maximumSelectionLength: 2,
-    //     language: "ru",
-    //     width: "100%",
-    // });
-    // $('.pcd-select').select2({
-    //     placeholder: "PCD",
-    //     maximumSelectionLength: 2,
-    //     language: "ru",
-    //     width: "100%",
-    // });
-    //
-    //
-    // $('.manufacturer-select').select2({
-    //     placeholder: "Производитель",
-    //     maximumSelectionLength: 2,
-    //     language: "ru",
-    //     width: "100%",
-    // });
-    // $('.season-select').select2({
-    //     placeholder: "Сезон",
-    //     maximumSelectionLength: 2,
-    //     language: "ru",
-    //     width: "100%",
-    // });
-    // $('.width-select').select2({
-    //     placeholder: "Ширина",
-    //     maximumSelectionLength: 2,
-    //     language: "ru",
-    //     width: "100%",
-    // });
-    // $('.profile-select').select2({
-    //     placeholder: "Профиль",
-    //     maximumSelectionLength: 2,
-    //     language: "ru",
-    //     width: "100%",
-    // });
-    $('.select2-filter').select2({
-
-        maximumSelectionLength: 2,
-        language: "ru",
-        width: "100%",
+    $(".select2-filter").change(function () {
+        $.ajaxRequest();
+    });
+    $(".list__filter-input-container").on('input', function () {
+        $.ajaxRequest();
     });
 
-});
-
-$(".year-from-select").on("select2:select", function (e) {
-    let year_from = document.querySelector('.year-from-select');
-    let value = year_from.value
-
-    let items = document.querySelector('.year-to-select').children
-
-    for (i = 2; i < items.length; i++) {
-        if (parseInt(value) > parseInt(items[i].value)) {
-            items[i].disabled = true;
-        } else {
-            items[i].disabled = false;
-        }
-    }
-});
-
-$(".year-to-select").on("select2:select", function (e) {
-    let year_to = document.querySelector('.year-to-select');
-    let value = year_to.value
-
-    let items = document.querySelector('.year-from-select').children
-
-    for (i = 2; i < items.length; i++) {
-        if (parseInt(value) < parseInt(items[i].value)) {
-            items[i].disabled = true;
-        } else {
-            items[i].disabled = false;
-        }
-    }
-});
-
-
-$(".engine-capacity-from-select").on("select2:select", function (e) {
-    let year_from = document.querySelector('.engine-capacity-from-select');
-    let value = year_from.value
-
-    let items = document.querySelector('.engine-capacity-to-select').children
-
-    for (i = 2; i < items.length; i++) {
-        if (parseFloat(value) > parseFloat(items[i].value)) {
-            items[i].disabled = true;
-        } else {
-            items[i].disabled = false;
-        }
-    }
-});
-
-$(".engine-capacity-to-select").on("select2:select", function (e) {
-    let year_to = document.querySelector('.engine-capacity-to-select');
-    let value = year_to.value
-
-    let items = document.querySelector('.engine-capacity-from-select').children
-
-    for (i = 2; i < items.length; i++) {
-        if (parseFloat(value) < parseFloat(items[i].value)) {
-            items[i].disabled = true;
-        } else {
-            items[i].disabled = false;
-        }
-    }
-});
-
-
-document.querySelector('.filter__burger').addEventListener('click', function () {
-    let listFilter = document.querySelector('.list__filter-items');
-    listFilter.classList.toggle("filter_active");
-});
-
-const maskPrice = document.querySelectorAll('.mask__price');
-
-
-for (i = 0; i < maskPrice.length; i++) {
-    maskPrice[i].addEventListener('input', function (e) {
-        let value = this.value;
-        let valueValid = value.replace(/[^0-9.]/g, '');
-
-        if (valueValid.split('.')[1]) {
-            if (valueValid.split('.')[1].length > 2) {
-                valueValid = valueValid.slice(0, -1)
+    $.getValueForm = function () {
+        let dataValue = {}
+        let selectForm = $(".select2-filter");
+        let inputForm = $(".list__filter-input-container").children().not('span');
+        $.each(selectForm, function (index, value) {
+            let selectValue = $(value).val();
+            if (selectValue === '*') {
+                selectValue = '';
             }
+            dataValue[$(value).attr('name')] = selectValue;
+        })
+        $.each(inputForm, function (index, value) {
+            dataValue[$(value).attr('name')] = $(value).val().replace(',', '.');
+        })
+        return dataValue;
+    };
+
+
+    $.getUrlFilter = function () {
+        return $('input[name=ajaxURL]').val();
+    };
+
+
+    $.ajaxRequest = function () {
+        let dataValue = $.getValueForm();
+        const pageUrl = new URL(document.location.href);
+        let chapter = pageUrl.pathname.split('/')[3];
+        dataValue['chapter'] = chapter;
+        $.ajax({
+            url: $.getUrlFilter() + 'filter/',
+            data: dataValue,
+            success: function (data) {
+                $('.list__filter-button').text(`Найдено (${data.count})`);
+            }
+        });
+    };
+});
+
+$.getSearchParams = function () {
+    let dataValue = $.getValueForm();
+    let searchParams = '';
+    for (let key in dataValue) {
+        if (key !== 'brand' && key !== 'model') {
+            searchParams += `${key}=${dataValue[key]}&`;
         }
-        this.value = valueValid;
-    });
-}
-
-const maskMileage = document.querySelectorAll('.mask__mileage');
+    }
+    return searchParams.slice(0, -1).toString();
+};
 
 
-for (i = 0; i < maskMileage.length; i++) {
-    maskMileage[i].addEventListener('input', function (e) {
-        let value = this.value;
-        let valueValid = value.replace(/[^0-9]/g, '');
-        this.value = valueValid;
-    });
-}
+$('.list__filter-button').click(function () {
+    let dataValue = $.getValueForm();
+    let url = $.getUrlFilter();
+    if (dataValue.brand) {
+        url += `${dataValue.brand}/`
+        if (dataValue.model) {
+            url += `${dataValue.model}/`
+        }
+    }
+    url += `?${$.getSearchParams()}`;
+    $(this).attr("href", url);
+});

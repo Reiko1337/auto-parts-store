@@ -8,7 +8,7 @@ from django.contrib import messages
 from .models import Tire
 from django.http.response import Http404
 from .models import Category
-from .forms import SparePartFilter
+from .forms import SparePartFilter, KitCarFilter, WheelFilter, TireFilter
 from django.views.generic.edit import FormMixin
 
 
@@ -48,15 +48,26 @@ class ListSparePart(FormMixin, ListView):
         kwargs = super().get_form_kwargs()
         kwargs['brand_queryset'] = get_brand_by_chapter(self.kwargs.get('chapter'))
         kwargs['category_queryset'] = get_category_by_chapter(self.kwargs.get('chapter'))
+
+        if self.kwargs.get('brand'):
+            kwargs['model_queryset'] = get_model_by_chapter_brand_slug(self.kwargs.get('brand'),
+                                                                       self.kwargs.get('chapter'))
         return kwargs
 
     def get_queryset(self):
-        return get_spare_part_filter(request=self.request, kwargs=self.kwargs)
+        return filter_spare_part(request=self.request, kwargs=self.kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['count_products'] = self.get_queryset().count()
         context['model'] = get_model_class('sparepart')
+        if self.kwargs.get('chapter') == 'car':
+            context['title'] = 'Автозапчасти'
+        elif self.kwargs.get('chapter') == 'trailer':
+            context['title'] = 'Запчасти на прицеп'
+        elif self.kwargs.get('chapter') == 'semi-trailer':
+            context['title'] = 'Запчасти на полуприцеп'
+        context['url_ajax'] = '/list/spare-part/{0}/'.format(self.kwargs.get('chapter'))
         return context
 
 
@@ -89,13 +100,32 @@ class SparePartFilter(View):
         return JsonResponse({'success': False}, status=404)
 
 
-class ListKitCar(ListView):
+class ListKitCar(FormMixin, ListView):
     """Страница списка машинокомплектов"""
 
     template_name = 'store/list-kit-car.html'
     model = KitCar
     context_object_name = 'products'
     paginate_by = 1
+    form_class = KitCarFilter
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['brand'] = self.kwargs.get('brand')
+        initial['model'] = self.kwargs.get('model')
+        initial['year_from'] = self.request.GET.get('year_from')
+        initial['year_to'] = self.request.GET.get('year_to')
+        initial['mileage_from'] = self.request.GET.get('mileage_from')
+        initial['mileage_to'] = self.request.GET.get('mileage_to')
+        initial['transmission'] = self.request.GET.get('transmission')
+        initial['bodywork'] = self.request.GET.get('bodywork')
+        initial['engine_type'] = self.request.GET.get('engine_type')
+        initial['drive'] = self.request.GET.get('drive')
+        initial['engine_capacity_from'] = self.request.GET.get('engine_capacity_from')
+        initial['engine_capacity_to'] = self.request.GET.get('engine_capacity_to')
+        initial['price_from'] = self.request.GET.get('price_from')
+        initial['price_to'] = self.request.GET.get('price_to')
+        return initial
 
     def get_queryset(self):
         return get_kit_car_filter(request=self.request, kwargs=self.kwargs)
@@ -104,17 +134,7 @@ class ListKitCar(ListView):
         context = super().get_context_data(**kwargs)
         context['count_products'] = self.get_queryset().count()
         context['model'] = get_model_class('kitcar')
-        list_filter = namedtuple('filter', ['slug', 'title'])
-        context['filter_fields'] = {
-            'brand': get_brand_by_chapter(),
-            'model': get_model_by_chapter_brand_slug(self.kwargs.get('brand')),
-            'transmission': [list_filter(slug=item[0], title=item[1]) for item in KitCar.TRANSMISSION[1:]],
-            'bodywork': Bodywork.objects.all(),
-            'engine_type': EngineType.objects.all(),
-            'drive': [list_filter(slug=item[0], title=item[1]) for item in KitCar.DRIVE[1:]],
-            'year': [list_filter(slug=item, title=item) for item in get_kit_car_year()],
-            'engine_capacity': [list_filter(slug=item, title=item) for item in get_kit_car_engine_capacity()]
-        }
+        context['url_ajax'] = '/list/kit-car/'
         return context
 
 
@@ -140,34 +160,40 @@ class KitCarFilter(View):
 
     def get(self, request):
         if request.is_ajax():
+            print(request.GET)
             kid_car = get_kit_car_filter(request=self.request)
             return JsonResponse({'count': kid_car.count()}, status=200, safe=False)
         return JsonResponse({'success': False}, status=404)
 
 
-class ListWheel(ListView):
+class ListWheel(FormMixin, ListView):
     """Страница списка дисков"""
 
-    template_name = 'store/list-wheel-drive.html'
+    template_name = 'store/list-wheel.html'
     model = Wheel
     context_object_name = 'products'
     paginate_by = 1
+    form_class = WheelFilter
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['brand'] = self.kwargs.get('brand')
+        initial['model'] = self.kwargs.get('model')
+        initial['material'] = self.request.GET.get('material')
+        initial['diameter'] = self.request.GET.get('diameter')
+        initial['pcd'] = self.request.GET.get('pcd')
+        initial['price_from'] = self.request.GET.get('price_from')
+        initial['price_to'] = self.request.GET.get('price_to')
+        return initial
 
     def get_queryset(self):
         return get_wheel_filter(request=self.request, kwargs=self.kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        list_filter = namedtuple('filter', ['slug', 'title'])
         context['count_products'] = self.get_queryset().count()
         context['model'] = get_model_class('wheel')
-        context['filter_fields'] = {
-            'brand': get_brand_by_chapter(),
-            'model': get_model_by_chapter_brand_slug(self.kwargs.get('brand')),
-            'material': [list_filter(slug=item, title=item) for item in get_wheel_drive_material()],
-            'pcd': [list_filter(slug=item, title=item) for item in get_wheel_drive_pcd()],
-            'diameter': [list_filter(slug=item, title=item) for item in get_wheel_drive_diameter()],
-        }
+        context['url_ajax'] = '/list/wheel/'
         return context
 
 
@@ -198,29 +224,33 @@ class WheelFilter(View):
         return JsonResponse({'success': False}, status=404)
 
 
-class ListTire(ListView):
+class ListTire(FormMixin, ListView):
     """Страница списка шин"""
     template_name = 'store/list-tire.html'
     model = Tire
     context_object_name = 'products'
     paginate_by = 1
+    form_class = TireFilter
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['manufacturer'] = self.request.GET.get('manufacturer')
+        initial['season'] = self.request.GET.get('season')
+        initial['diameter'] = self.request.GET.get('diameter')
+        initial['width'] = self.request.GET.get('width')
+        initial['profile'] = self.request.GET.get('profile')
+        initial['price_from'] = self.request.GET.get('price_from')
+        initial['price_to'] = self.request.GET.get('price_to')
+        return initial
 
     def get_queryset(self):
         return get_tire_filter(request=self.request, kwargs=self.kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        list_filter = namedtuple('filter', ['slug', 'title'])
         context['count_products'] = self.get_queryset().count()
         context['model'] = get_model_class('tire')
-        context['filter_fields'] = {
-            'manufacturer': get_list_manufacturer(),
-            'season': [list_filter(slug=item[0], title=item[1]) for item in Tire.SEASON[1:]],
-            'diameter': [list_filter(slug=item, title=item) for item in get_diameter_tire()],
-            'width': [list_filter(slug=item, title=item) for item in get_width_tire()],
-            'profile': [list_filter(slug=item, title=item) for item in get_profile_tire()],
-        }
-        get_diameter_tire()
+        context['url_ajax'] = '/list/tire/'
         return context
 
 
@@ -259,7 +289,7 @@ class FilterModelsGenerate(View):
         context = {
             'items': get_model_by_chapter_brand_slug(brand, chapter)
         }
-        return render(request, 'filter/filter_select.html', context)
+        return render(request, 'filter/filter_select_option.html', context)
 
 
 class AddToCart(View):

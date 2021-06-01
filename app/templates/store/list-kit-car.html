@@ -5,7 +5,7 @@
 
 
 {% block title %}
-Машинокомплеты - Разборка в молодечно
+    Машинокомплеты - Разборка в молодечно
 {% endblock %}
 
 {% block style %}
@@ -14,191 +14,180 @@
 {% endblock %}
 
 {% block content %}
-
-<section class="list-product">
-            <div class="list-product__content">
-                <div class="container">
-                    <div class="list-product__container">
-                        <h1 class="list-product__title">
-                            Машинокомплект
-                        </h1>
-                        <div class="list-product__row">
-                            <div class="list-product__filter">
-                                <div class="filter__burger">
-                                    <span></span>
-                                    <p class="filter__burger-title">Фильтр</p>
-                                </div>
-                                <div class="list__filter-items">
-                                    <div class="list__filter-item">
-                                        <select class="brand-select" placeholder="Марка автомобиля">
-                                            <option value=""></option>
-                                            <option value="*">Марка автомобиля</option>
-                                            {% for field in filter_fields.brand %}
-                                                <option value="{{ field.slug }}">{{ field.title }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="list__filter-item">
-                                        <select class="model-select" placeholder="Модель автомобиля">
-                                            <option value=""></option>
-                                            <option value="*">Модель автомобиля</option>
-                                            {% for field in filter_fields.model %}
-                                                <option value="{{ field.slug }}">{{ field.title }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                     <div class="list__filter-item">
-                                        <div class="list__filter-input-container">
-                                            <select class="year-from-select" placeholder="Год от">
-                                                <option value=""></option>
-                                                <option value="*">Год от</option>
-                                               {% for field in filter_fields.year %}
-                                                <option value="{{ field.slug }}">{{ field.title }}</option>
-                                                {% endfor %}
-                                            </select>
-                                            <select class="year-to-select" placeholder="До">
-                                                <option value=""></option>
-                                                <option value="*">До</option>
-                                                {% for field in filter_fields.year %}
-                                                <option value="{{ field.slug }}">{{ field.title }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="list__filter-item">
-                                        <p class="list__filter-item-title">Пробег</p>
-                                        <div class="list__filter-input-container list__filter-input-container_mileage">
-                                            <input class="list__filter-input input__form mask__mileage" type="text" placeholder="От">
-                                            <input class="list__filter-input input__form mask__mileage" type="text" placeholder="До">
-                                        </div>
-                                    </div>
-                                    <div class="list__filter-item">
-                                        <select class="transmission-select" placeholder="Коробка передач">
-                                            <option value=""></option>
-                                            <option value="*">Коробка передач</option>
-                                            {% for field in filter_fields.transmission %}
-                                                <option value="{{ field.slug }}">{{ field.title }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="list__filter-item">
-                                        <select class="bodywork-select" placeholder="Кузов">
-                                            <option value=""></option>
-                                            <option value="*">Кузов</option>
-                                             {% for field in filter_fields.bodywork %}
-                                                <option value="{{ field.slug }}">{{ field.title }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="list__filter-item">
-                                        <select class="engine-type-select" placeholder="Тип двигателя">
-                                            <option value=""></option>
-                                            <option value="*">Тип двигателя</option>
-                                             {% for field in filter_fields.engine_type %}
-                                                <option value="{{ field.slug }}">{{ field.title }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-
-                                    <div class="list__filter-item">
-                                         <div class="list__filter-input-container">
-                                            <select class="engine-capacity-from-select" placeholder="Объем от">
-                                                <option value=""></option>
-                                                <option value="*">Объем от</option>
-                                                {% for field in filter_fields.engine_capacity %}
-                                               <option value="{{ field.slug }}">{{ field.title }}</option>
-                                                {% endfor %}
-                                            </select>
-                                            <select class="engine-capacity-to-select" placeholder="До">
-                                                <option value=""></option>
-                                                <option value="*">До</option>
-                                                {% for field in filter_fields.engine_capacity %}
-                                               <option value="{{ field.slug }}">{{ field.title }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                     <div class="list__filter-item">
-                                        <select class="drive-select" placeholder="Привод">
-                                            <option value=""></option>
-                                            <option value="*">Привод</option>
-                                             {% for field in filter_fields.drive %}
-                                                <option value="{{ field.slug }}">{{ field.title }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="list__filter-item">
-                                        <p class="list__filter-item-title">Цена</p>
-                                        <div class="list__filter-input-container list__filter-input-container_price">
-                                            <input class="list__filter-input input__form mask__price" type="text" placeholder="От">
-                                            <input class="list__filter-input input__form mask__price" type="text" placeholder="До">
-                                        </div>
-                                    </div>
-                                    <a class="list__filter-button button" href="#">Найдено ({{ count_products }})</a>
-                                </div>
+    <section class="list-product">
+        <div class="list-product__content">
+            <div class="container">
+                <div class="list-product__container">
+                    <h1 class="list-product__title">
+                        Машинокомплект
+                    </h1>
+                    <div class="list-product__row">
+                        <div class="list-product__filter">
+                            <div class="filter__burger">
+                                <span></span>
+                                <p class="filter__burger-title">Фильтр</p>
                             </div>
+                            <div class="list__filter-items">
+                                <div class="list__filter-item">
+                                    <select class="brand-select select2-filter" data-placeholder="Марка" name="brand">
+                                        <option value="*">Марка</option>
+                                        {% for value in form.brand %}
+                                            {{ value }}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="list__filter-item">
+                                    <select class="model-select select2-filter" data-placeholder="Модель" name="model">
+                                        <option value="*">Модель</option>
+                                        {% for value in form.model %}
+                                            {{ value }}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="list__filter-item">
+                                    <div class="list__filter-input-container">
+                                        <select class="select2-filter-between year-from-select" data-placeholder="Год от" name="year_from">
+                                            <option value=""></option>
+                                            <option value="*">Год от</option>
+                                            {% for value in form.year_from %}
+                                                {{ value }}
+                                            {% endfor %}
+                                        </select>
+                                        <select class="select2-filter-between year-to-select" data-placeholder="До" name="year_to">
+                                            <option value=""></option>
+                                            <option value="*">До</option>
+                                            {% for value in form.year_to %}
+                                                {{ value }}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="list__filter-item">
+                                    <p class="list__filter-item-title">Пробег</p>
+                                    <div class="list__filter-input-container list__filter-input-container_mileage">
+                                        {{ form.mileage_from }}
+                                        {{ form.mileage_to }}
+                                    </div>
+                                </div>
+                                <div class="list__filter-item">
+                                    <select class="transmission-select select2-filter" data-placeholder="Коробка передач" name="transmission">
+                                        <option value=""></option>
+                                        <option value="*">Коробка передач</option>
+                                        {% for value in form.transmission %}
+                                            {{ value }}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="list__filter-item">
+                                    <select class="bodywork-select select2-filter" data-placeholder="Кузов" name="bodywork">
+                                        <option value="*">Кузов</option>
+                                        {% for value in form.bodywork %}
+                                            {{ value }}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="list__filter-item">
+                                    <select class="engine-type-select select2-filter" data-placeholder="Тип двигателя" name="engine_type">
+                                        <option value="*">Тип двигателя</option>
+                                        {% for value in form.engine_type %}
+                                            {{ value }}
+                                        {% endfor %}
+                                    </select>
+                                </div>
 
-                            <div class="list-product__items-row">
-
-                                {% if products %}
-                                    {% tag_list_product model products %}
-                                {% else %}
-                              <p class="help__text">Ничего не найдено</p>
-                                {% endif %}
-
-                                {% if page_obj.has_other_pages %}
+                                <div class="list__filter-item">
+                                    <div class="list__filter-input-container">
+                                        <select class="select2-filter-between engine-capacity-from-select" data-placeholder="Объем от" name="engine_capacity_from">
+                                            <option value=""></option>
+                                            <option value="*">Объем от</option>
+                                            {% for value in form.engine_capacity_from %}
+                                                {{ value }}
+                                            {% endfor %}
+                                        </select>
+                                        <select class="select2-filter-between engine-capacity-to-select" data-placeholder="До" name="engine_capacity_to">
+                                            <option value=""></option>
+                                            <option value="*">До</option>
+                                            {% for value in form.engine_capacity_to %}
+                                                {{ value }}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="list__filter-item">
+                                    <select class="drive-select select2-filter" data-placeholder="Привод" name="drive">
+                                        <option value=""></option>
+                                        <option value="*">Привод</option>
+                                        {% for value in form.drive %}
+                                            {{ value }}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="list__filter-item">
+                                    <p class="list__filter-item-title">Цена</p>
+                                    <div class="list__filter-input-container list__filter-input-container_price">
+                                        {{ form.price_from }}
+                                        {{ form.price_to }}
+                                    </div>
+                                </div>
+                                <a class="list__filter-button button" href="#">Найдено ({{ count_products }})</a>
+                                <input type="hidden" name="ajaxURL" value="{{ url_ajax }}">
+                            </div>
+                        </div>
+                        <div class="list-product__items-row">
+                            {% if products %}
+                                {% tag_list_product model products %}
+                            {% else %}
+                                <p class="help__text">Ничего не найдено</p>
+                            {% endif %}
+                            {% if page_obj.has_other_pages %}
                                 <div class="pagination">
                                     <div class="pagination__container">
                                         <ul class="pagination__list">
                                             {% if page_obj.has_previous %}
                                                 <li class="pagination__previous">
-                                                    <a class="pagination__link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.part %}&part={{ request.GET.part }}{% endif %}{% if request.GET.priceFrom %}&priceFrom={{ request.GET.priceFrom }}{% endif %}{% if request.GET.priceTo %}&priceTo={{ request.GET.priceTo }}{% endif %}{% if request.GET.transmission %}&transmission={{ request.GET.transmission }}{% endif %}{% if request.GET.bodywork %}&bodywork={{ request.GET.bodywork }}{% endif %}{% if request.GET.engineType %}&engineType={{ request.GET.engineType }}{% endif %}{% if request.GET.drive %}&drive={{ request.GET.drive }}{% endif %}{% if request.GET.yearFrom %}&yearFrom={{ request.GET.yearFrom }}{% endif %}{% if request.GET.yearTo %}&yearTo={{ request.GET.yearTo }}{% endif %}{% if request.GET.engineCapacityFrom %}&engineCapacityFrom={{ request.GET.engineCapacityFrom }}{% endif %} {% if request.GET.engineCapacityTo %}&engineCapacityTo={{ request.GET.engineCapacityTo }}{% endif %}{% if request.GET.mileageFrom %}&mileageFrom={{ request.GET.mileageFrom }}{% endif %}{% if request.GET.mileageTo %}&mileageTo={{ request.GET.mileageTo }}{% endif %}">&#10094 Назад</a>
+                                                    <a class="pagination__link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.year_from %}&year_from={{ request.GET.year_from }}{% endif %}{% if request.GET.year_to %}&year_to={{ request.GET.year_to }}{% endif %}{% if request.GET.mileage_from %}&mileage_from={{ request.GET.mileage_from }}{% endif %}{% if request.GET.mileage_to %}&mileage_to={{ request.GET.mileage_to }}{% endif %}{% if request.GET.transmission %}&transmission={{ request.GET.transmission }}{% endif %}{% if request.GET.bodywork %}&bodywork={{ request.GET.bodywork }}{% endif %}{% if request.GET.engine_type %}&engine_type={{ request.GET.engine_type }}{% endif %}{% if request.GET.engine_capacity_from %}&engine_capacity_from={{ request.GET.engine_capacity_from }}{% endif %}{% if request.GET.engine_capacity_to %}&engine_capacity_to={{ request.GET.engine_capacity_to }}{% endif %}{% if request.GET.drive %}&drive={{ request.GET.drive }}{% endif %}{% if request.GET.price_from %}&price_from={{ request.GET.price_from }}{% endif %}{% if request.GET.price_to %}&price_to={{ request.GET.price_to }}{% endif %}">&#10094 Назад</a>
                                                 </li>
                                             {% else %}
                                                 <li class="pagination__previous pagination_active">
                                                     <a class="pagination__link">&#10094 Назад</a>
                                                 </li>
                                             {% endif %}
-
                                             {% for num in page_obj.paginator.page_range %}
-                                                {% if page_obj.number == num  %}
+                                                {% if page_obj.number == num %}
                                                     <li class="pagination__page pagination_active">
                                                         <a class="pagination__link">{{ num }}</a>
                                                     </li>
-                                                 {% elif num > page_obj.number|add:-3 and  num < page_obj.number|add:3 %}
+                                                {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
                                                     <li class="pagination__page">
-                                                        <a class="pagination__link" href="?page={{ num }}{% if request.GET.part %}&part={{ request.GET.part }}{% endif %}{% if request.GET.priceFrom %}&priceFrom={{ request.GET.priceFrom }}{% endif %}{% if request.GET.priceTo %}&priceTo={{ request.GET.priceTo }}{% endif %}{% if request.GET.transmission %}&transmission={{ request.GET.transmission }}{% endif %}{% if request.GET.bodywork %}&bodywork={{ request.GET.bodywork }}{% endif %}{% if request.GET.engineType %}&engineType={{ request.GET.engineType }}{% endif %}{% if request.GET.drive %}&drive={{ request.GET.drive }}{% endif %}{% if request.GET.yearFrom %}&yearFrom={{ request.GET.yearFrom }}{% endif %}{% if request.GET.yearTo %}&yearTo={{ request.GET.yearTo }}{% endif %}{% if request.GET.engineCapacityFrom %}&engineCapacityFrom={{ request.GET.engineCapacityFrom }}{% endif %}{% if request.GET.engineCapacityTo %}&engineCapacityTo={{ request.GET.engineCapacityTo }}{% endif %}{% if request.GET.mileageFrom %}&mileageFrom={{ request.GET.mileageFrom }}{% endif %}{% if request.GET.mileageTo %}&mileageTo={{ request.GET.mileageTo }}{% endif %}">{{ num }}</a>
+                                                        <a class="pagination__link" href="?page={{ num }}{% if request.GET.year_from %}&year_from={{ request.GET.year_from }}{% endif %}{% if request.GET.year_to %}&year_to={{ request.GET.year_to }}{% endif %}{% if request.GET.mileage_from %}&mileage_from={{ request.GET.mileage_from }}{% endif %}{% if request.GET.mileage_to %}&mileage_to={{ request.GET.mileage_to }}{% endif %}{% if request.GET.transmission %}&transmission={{ request.GET.transmission }}{% endif %}{% if request.GET.bodywork %}&bodywork={{ request.GET.bodywork }}{% endif %}{% if request.GET.engine_type %}&engine_type={{ request.GET.engine_type }}{% endif %}{% if request.GET.engine_capacity_from %}&engine_capacity_from={{ request.GET.engine_capacity_from }}{% endif %}{% if request.GET.engine_capacity_to %}&engine_capacity_to={{ request.GET.engine_capacity_to }}{% endif %}{% if request.GET.drive %}&drive={{ request.GET.drive }}{% endif %}{% if request.GET.price_from %}&price_from={{ request.GET.price_from }}{% endif %}{% if request.GET.price_to %}&price_to={{ request.GET.price_to }}{% endif %}">{{ num }}</a>
                                                     </li>
                                                 {% endif %}
-                                             {% endfor %}
-
+                                            {% endfor %}
                                             {% if page_obj.has_next %}
-                                            <li class="pagination__next">
-                                                <a class="pagination__link" href="?page={{ page_obj.next_page_number }}{% if request.GET.part %}&part={{ request.GET.part }}{% endif %}{% if request.GET.priceFrom %}&priceFrom={{ request.GET.priceFrom }}{% endif %}{% if request.GET.priceTo %}&priceTo={{ request.GET.priceTo }}{% endif %}{% if request.GET.transmission %}&transmission={{ request.GET.transmission }}{% endif %}{% if request.GET.bodywork %}&bodywork={{ request.GET.bodywork }}{% endif %}{% if request.GET.engineType %}&engineType={{ request.GET.engineType }}{% endif %}{% if request.GET.drive %}&drive={{ request.GET.drive }}{% endif %}{% if request.GET.yearFrom %}&yearFrom={{ request.GET.yearFrom }}{% endif %}{% if request.GET.yearTo %}&yearTo={{ request.GET.yearTo }}{% endif %}{% if request.GET.engineCapacityFrom %}&engineCapacityFrom={{ request.GET.engineCapacityFrom }}{% endif %}{% if request.GET.engineCapacityTo %}&engineCapacityTo={{ request.GET.engineCapacityTo }}{% endif %}{% if request.GET.mileageFrom %}&mileageFrom={{ request.GET.mileageFrom }}{% endif %}{% if request.GET.mileageTo %}&mileageTo={{ request.GET.mileageTo }}{% endif %}">Вперед &#10095</a>
-                                            </li>
-                                             {% else %}
-                                             <li class="pagination__next pagination_active">
-                                                <a class="pagination__link">Вперед &#10095</a>
-                                            </li>
-                                             {% endif %}
+                                                <li class="pagination__next">
+                                                    <a class="pagination__link" href="?page={{ page_obj.next_page_number }}{% if request.GET.year_from %}&year_from={{ request.GET.year_from }}{% endif %}{% if request.GET.year_to %}&year_to={{ request.GET.year_to }}{% endif %}{% if request.GET.mileage_from %}&mileage_from={{ request.GET.mileage_from }}{% endif %}{% if request.GET.mileage_to %}&mileage_to={{ request.GET.mileage_to }}{% endif %}{% if request.GET.transmission %}&transmission={{ request.GET.transmission }}{% endif %}{% if request.GET.bodywork %}&bodywork={{ request.GET.bodywork }}{% endif %}{% if request.GET.engine_type %}&engine_type={{ request.GET.engine_type }}{% endif %}{% if request.GET.engine_capacity_from %}&engine_capacity_from={{ request.GET.engine_capacity_from }}{% endif %}{% if request.GET.engine_capacity_to %}&engine_capacity_to={{ request.GET.engine_capacity_to }}{% endif %}{% if request.GET.drive %}&drive={{ request.GET.drive }}{% endif %}{% if request.GET.price_from %}&price_from={{ request.GET.price_from }}{% endif %}{% if request.GET.price_to %}&price_to={{ request.GET.price_to }}{% endif %}">Вперед &#10095</a>
+                                                </li>
+                                            {% else %}
+                                                <li class="pagination__next pagination_active">
+                                                    <a class="pagination__link">Вперед &#10095</a>
+                                                </li>
+                                            {% endif %}
                                         </ul>
                                     </div>
                                 </div>
-                                {% endif %}
-                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 {% endblock %}
 
 {% block script %}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="{% static 'js/select2.min.js' %}"></script>
+    <script src="{% static 'js/libraries/select2.min.js' %}"></script>
     <script src="{% static 'js/i18n/ru.js' %}"></script>
+    <script src="{% static 'js/filter/filter_settings.js' %}"></script>
     <script src="{% static 'js/filter/filter.js' %}"></script>
-    <script src="{% static 'js/filter/filter_models.js' %}"></script>
-    <script src="{% static 'js/filter/filter_kit_car.js' %}"></script>
 {% endblock %}

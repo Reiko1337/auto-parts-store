@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.utils.text import slugify
-from profile.models import AddressUser, User
+from profile.models import User
 from django.utils.html import mark_safe
 from multiselectfield import MultiSelectField
 
@@ -100,7 +100,7 @@ class SparePart(MetaTag):
     slug = models.SlugField(verbose_name='URL', unique=True, db_index=True)
     description = models.TextField(verbose_name='Описание', null=True, blank=True)
     article = models.CharField(verbose_name='Артикул', max_length=120, db_index=True)
-    price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12, validators=[MinValueValidator(0)])
+    price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12, default=0, validators=[MinValueValidator(0)])
     in_stock = models.BooleanField(verbose_name='В наличии', default=True)
 
     cart_content = GenericRelation('CartContent')

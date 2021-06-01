@@ -14,12 +14,13 @@
 {% endblock %}
 
 {% block content %}
+
     <section class="list-product">
         <div class="list-product__content">
             <div class="container">
                 <div class="list-product__container">
                     <h1 class="list-product__title">
-                        Шины
+                        Диски
                     </h1>
                     <div class="list-product__row">
                         <div class="list-product__filter">
@@ -29,18 +30,26 @@
                             </div>
                             <div class="list__filter-items">
                                 <div class="list__filter-item">
-                                    <select class="manufacturer-select select2-filter" data-placeholder="Производитель" name="manufacturer">
-                                        <option value="*">Производитель</option>
-                                        {% for value in form.manufacturer %}
+                                    <select class="brand-select select2-filter" data-placeholder="Марка" name="brand">
+                                        <option value="*">Марка</option>
+                                        {% for value in form.brand %}
                                             {{ value }}
                                         {% endfor %}
                                     </select>
                                 </div>
                                 <div class="list__filter-item">
-                                    <select class="season-select select2-filter" data-placeholder="Сезон" name="season">
+                                    <select class="model-select select2-filter" data-placeholder="Модель" name="model">
+                                        <option value="*">Модель</option>
+                                        {% for value in form.model %}
+                                            {{ value }}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="list__filter-item">
+                                    <select class="material-select select2-filter" data-placeholder="Материал" name="material">
                                         <option value=""></option>
-                                        <option value="*">Сезон</option>
-                                        {% for value in form.season %}
+                                        <option value="*">Материал</option>
+                                        {% for value in form.material %}
                                             {{ value }}
                                         {% endfor %}
                                     </select>
@@ -55,19 +64,10 @@
                                     </select>
                                 </div>
                                 <div class="list__filter-item">
-                                    <select class="width-select select2-filter" data-placeholder="Ширина" name="width">
+                                    <select class="pcd-select select2-filter" data-placeholder="PCD" name="pcd">
                                         <option value=""></option>
-                                        <option value="*">Ширина</option>
-                                        {% for value in form.width %}
-                                            {{ value }}
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="list__filter-item">
-                                    <select class="profile-select select2-filter" data-placeholder="Профиль" name="profile">
-                                        <option value=""></option>
-                                        <option value="*">Профиль</option>
-                                        {% for value in form.profile %}
+                                        <option value="*">PCD</option>
+                                        {% for value in form.pcd %}
                                             {{ value }}
                                         {% endfor %}
                                     </select>
@@ -83,6 +83,7 @@
                                 <input type="hidden" name="ajaxURL" value="{{ url_ajax }}">
                             </div>
                         </div>
+
                         <div class="list-product__items-row">
                             {% if products %}
                                 {% tag_list_product model products %}
@@ -95,13 +96,14 @@
                                         <ul class="pagination__list">
                                             {% if page_obj.has_previous %}
                                                 <li class="pagination__previous">
-                                                    <a class="pagination__link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.manufacturer %}&manufacturer={{ request.GET.manufacturer }}{% endif %}{% if request.GET.season %}&season={{ request.GET.season }}{% endif %}{% if request.GET.diameter %}&diameter={{ request.GET.diameter }}{% endif %}{% if request.GET.width %}&width={{ request.GET.width }}{% endif %}{% if request.GET.profile %}&profile={{ request.GET.profile }}{% endif %}{% if request.GET.price_from %}&price_from={{ request.GET.price_from }}{% endif %}{% if request.GET.price_to %}&price_to={{ request.GET.price_to }}{% endif %}">&#10094 Назад</a>
+                                                    <a class="pagination__link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.material %}&material={{ request.GET.material }}{% endif %}{% if request.GET.diameter %}&diameter={{ request.GET.diameter }}{% endif %}{% if request.GET.pcd %}&pcd={{ request.GET.pcd }}{% endif %}{% if request.GET.price_from %}&price_from={{ request.GET.price_from }}{% endif %}{% if request.GET.price_to %}&price_to={{ request.GET.price_to }}{% endif %}">&#10094 Назад</a>
                                                 </li>
                                             {% else %}
                                                 <li class="pagination__previous pagination_active">
                                                     <a class="pagination__link">&#10094 Назад</a>
                                                 </li>
                                             {% endif %}
+
                                             {% for num in page_obj.paginator.page_range %}
                                                 {% if page_obj.number == num %}
                                                     <li class="pagination__page pagination_active">
@@ -109,14 +111,14 @@
                                                     </li>
                                                 {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
                                                     <li class="pagination__page">
-                                                        <a class="pagination__link" href="?page={{ num }}{% if request.GET.manufacturer %}&manufacturer={{ request.GET.manufacturer }}{% endif %}{% if request.GET.season %}&season={{ request.GET.season }}{% endif %}{% if request.GET.diameter %}&diameter={{ request.GET.diameter }}{% endif %}{% if request.GET.width %}&width={{ request.GET.width }}{% endif %}{% if request.GET.profile %}&profile={{ request.GET.profile }}{% endif %}{% if request.GET.price_from %}&price_from={{ request.GET.price_from }}{% endif %}{% if request.GET.price_to %}&price_to={{ request.GET.price_to }}{% endif %}">{{ num }}</a>
+                                                        <a class="pagination__link" href="?page={{ num }}{% if request.GET.material %}&material={{ request.GET.material }}{% endif %}{% if request.GET.diameter %}&diameter={{ request.GET.diameter }}{% endif %}{% if request.GET.pcd %}&pcd={{ request.GET.pcd }}{% endif %}{% if request.GET.price_from %}&price_from={{ request.GET.price_from }}{% endif %}{% if request.GET.price_to %}&price_to={{ request.GET.price_to }}{% endif %}">{{ num }}</a>
                                                     </li>
                                                 {% endif %}
                                             {% endfor %}
 
                                             {% if page_obj.has_next %}
                                                 <li class="pagination__next">
-                                                    <a class="pagination__link" href="?page={{ page_obj.next_page_number }}{% if request.GET.manufacturer %}&manufacturer={{ request.GET.manufacturer }}{% endif %}{% if request.GET.season %}&season={{ request.GET.season }}{% endif %}{% if request.GET.diameter %}&diameter={{ request.GET.diameter }}{% endif %}{% if request.GET.width %}&width={{ request.GET.width }}{% endif %}{% if request.GET.profile %}&profile={{ request.GET.profile }}{% endif %}{% if request.GET.price_from %}&price_from={{ request.GET.price_from }}{% endif %}{% if request.GET.price_to %}&price_to={{ request.GET.price_to }}{% endif %}">Вперед &#10095</a>
+                                                    <a class="pagination__link" href="?page={{ page_obj.next_page_number }}{% if request.GET.material %}&material={{ request.GET.material }}{% endif %}{% if request.GET.diameter %}&diameter={{ request.GET.diameter }}{% endif %}{% if request.GET.pcd %}&pcd={{ request.GET.pcd }}{% endif %}{% if request.GET.price_from %}&price_from={{ request.GET.price_from }}{% endif %}{% if request.GET.price_to %}&price_to={{ request.GET.price_to }}{% endif %}">Вперед &#10095</a>
                                                 </li>
                                             {% else %}
                                                 <li class="pagination__next pagination_active">

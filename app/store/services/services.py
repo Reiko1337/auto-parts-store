@@ -144,22 +144,22 @@ def get_list_manufacturer():
     return Manufacturer.objects.all()
 
 
-def get_diameter_tire():
-    """Диаметр шин"""
-    diameter = get_list_tire().values('diameter')
-    return {item['diameter'] for item in diameter}
-
-
-def get_width_tire():
-    """Ширина шин"""
-    width = get_list_tire().values('width')
-    return {item['width'] for item in width}
-
-
-def get_profile_tire():
-    """Профиль шин"""
-    profile = get_list_tire().values('profile')
-    return {item['profile'] for item in profile}
+# def get_diameter_tire():
+#     """Диаметр шин"""
+#     diameter = get_list_tire().values('diameter')
+#     return {item['diameter'] for item in diameter}
+#
+#
+# def get_width_tire():
+#     """Ширина шин"""
+#     width = get_list_tire().values('width')
+#     return {item['width'] for item in width}
+#
+#
+# def get_profile_tire():
+#     """Профиль шин"""
+#     profile = get_list_tire().values('profile')
+#     return {item['profile'] for item in profile}
 
 
 # --------------------------------------
@@ -242,50 +242,59 @@ def get_category_by_chapter(chapter):
 
 def get_kit_car_year():
     """Список годов машинокомплектов"""
-    year = KitCar.objects.all().values('year')
-    return {item['year'] for item in year}
+    year = KitCar.objects.all().values('year').order_by('-year')
+    year_uniq = {item['year'] for item in year}
+    return sorted(((year, year) for year in year_uniq), key=lambda x: x[0], reverse=True)
 
 
 def get_kit_car_engine_capacity():
     """Список объемов двигателя машинокомплектов"""
     engine_capacity = KitCar.objects.all().values('engine_capacity')
-    return {item['engine_capacity'] for item in engine_capacity}
+    engine_capacity_uniq = {item['engine_capacity'] for item in engine_capacity}
+    return sorted(((engine_capacity, engine_capacity) for engine_capacity in engine_capacity_uniq), key=lambda x: x[0],
+                  reverse=True)
 
 
-def get_wheel_drive_material():
+def get_wheel_material():
     """Список материалов диска"""
     material = Wheel.objects.all().values('material')
-    return {item['material'] for item in material}
+    material_uniq = {item['material'] for item in material}
+    return sorted(((material, material) for material in material_uniq), key=lambda x: x[0], reverse=True)
 
 
-def get_wheel_drive_pcd():
+def get_wheel_pcd():
     """Список PCD диска"""
     pcd = Wheel.objects.all().values('pcd')
-    return {item['pcd'] for item in pcd}
+    pcd_uniq = {item['pcd'] for item in pcd}
+    return sorted(((pcd, pcd) for pcd in pcd_uniq), key=lambda x: x[0], reverse=True)
 
 
-def get_wheel_drive_diameter():
+def get_wheel_diameter():
     """Список диаметров диска"""
     diameter = Wheel.objects.all().values('diameter')
-    return {item['diameter'] for item in diameter}
+    diameter_uniq = {item['diameter'] for item in diameter}
+    return sorted(((diameter, diameter) for diameter in diameter_uniq), key=lambda x: x[0], reverse=True)
 
 
 def get_diameter_tire():
     """Диаметр шин"""
     diameter = Tire.objects.all().values('diameter')
-    return {item['diameter'] for item in diameter}
+    diameter_uniq = {item['diameter'] for item in diameter}
+    return sorted(((diameter, diameter) for diameter in diameter_uniq), key=lambda x: x[0], reverse=True)
 
 
 def get_width_tire():
     """Ширина шин"""
     width = Tire.objects.all().values('width')
-    return {item['width'] for item in width}
+    width_uniq = {item['width'] for item in width}
+    return sorted(((width, width) for width in width_uniq), key=lambda x: x[0], reverse=True)
 
 
 def get_profile_tire():
     """Профиль шин"""
     profile = Tire.objects.all().values('profile')
-    return {item['profile'] for item in profile}
+    profile_uniq = {item['profile'] for item in profile}
+    return sorted(((profile, profile) for profile in profile_uniq), key=lambda x: x[0], reverse=True)
 
 
 def get_list_manufacturer():
