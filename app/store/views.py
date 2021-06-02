@@ -27,7 +27,7 @@ class ListSparePart(FormMixin, ListView):
     model = SparePart
     template_name = 'store/list-spare-part.html'
     context_object_name = 'products'
-    paginate_by = 1
+    paginate_by = 12
     form_class = SparePartFilter
 
     def setup(self, request, *args, **kwargs):
@@ -103,7 +103,7 @@ class ListKitCar(FormMixin, ListView):
     template_name = 'store/list-kit-car.html'
     model = KitCar
     context_object_name = 'products'
-    paginate_by = 1
+    paginate_by = 12
     form_class = KitCarFilter
 
     def get_initial(self):
@@ -165,7 +165,7 @@ class ListWheel(FormMixin, ListView):
     template_name = 'store/list-wheel.html'
     model = Wheel
     context_object_name = 'products'
-    paginate_by = 1
+    paginate_by = 12
     form_class = WheelFilter
 
     def get_initial(self):
@@ -219,7 +219,7 @@ class ListTire(FormMixin, ListView):
     template_name = 'store/list-tire.html'
     model = Tire
     context_object_name = 'products'
-    paginate_by = 1
+    paginate_by = 12
     form_class = TireFilter
 
     def get_initial(self):
