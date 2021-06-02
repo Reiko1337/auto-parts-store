@@ -36,7 +36,7 @@
   </ul>
 {% endif %}{% endif %}
 {% endblock %}
-<form data-models-url="{% url 'store:ajax_load_models' %} {% if has_file_field %}enctype="multipart/form-data" {% endif %}{% if form_url %}action="{{ form_url }}" {% endif %}method="post" id="{{ opts.model_name }}_form" novalidate>{% csrf_token %}{% block form_top %}{% endblock %}
+<form {% if has_file_field %}enctype="multipart/form-data" {% endif %}{% if form_url %}action="{{ form_url }}" {% endif %}method="post" id="{{ opts.model_name }}_form" novalidate>{% csrf_token %}{% block form_top %}{% endblock %}
 <div>
 {% if is_popup %}<input type="hidden" name="{{ is_popup_var }}" value="1">{% endif %}
 {% if to_field %}<input type="hidden" name="{{ to_field_var }}" value="{{ to_field }}">{% endif %}
@@ -87,7 +87,7 @@
   src="https://code.jquery.com/jquery-3.6.0.js"
   integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
   crossorigin="anonymous"></script>
-<script src="{% static 'js/select2.min.js' %}"></script>
+<script src="{% static 'js/libraries/select2.min.js' %}"></script>
 <script src="{% static 'js/i18n/ru.js' %}"></script>
 <script>
     $('#id_brand').select2({
@@ -100,7 +100,7 @@
         var brandId = $(this).val();
 
         $.ajax({
-            url: '/ajax/load-models/',
+            url: '/admin-filter/ajax/load-models/',
             data: {
                 'brand': brandId
             },

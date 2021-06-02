@@ -5,15 +5,14 @@ from django.views.generic import CreateView, View, ListView, UpdateView, DetailV
 from store.services.cart_services import get_cart_auth_user
 from store.models import OrderContent, Order
 from django.db import transaction
-from store.session import CartSession
-from store.services_auth_user import CartUser
+from store.cart.cart_anonymous import CartSession
+from store.cart.cart_auth_user import CartUser
 from django.contrib import messages
 from allauth.account.views import LoginView
 from django.http.response import Http404
 from django.urls import reverse_lazy
 from .models import AddressUser, User
-from django.shortcuts import get_object_or_404
-from django.db.models import Q
+
 from django.http import JsonResponse
 
 from .services.services import *

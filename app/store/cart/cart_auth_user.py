@@ -1,4 +1,4 @@
-from .models import Cart, SparePart, CartContent
+from ..models import Cart, CartContent
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType

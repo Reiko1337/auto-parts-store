@@ -3,7 +3,7 @@ $(".brand-select").change(function () {
     const pageUrl = new URL(document.location.href);
     let chapter = pageUrl.pathname.split('/')[3]
     $.ajax({
-        url: '/filter-models/',
+        url: '/ajax/filter-models/',
         data: {
             'brand': brandSlug,
             'chapter': chapter

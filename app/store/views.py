@@ -1,13 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.generic import View, ListView, DetailView
-from .services.services import *
 from .services.filter_services import *
 from .services.cart_services import *
 from django.contrib import messages
 from .models import Tire
 from django.http.response import Http404
-from .models import Category
 from .forms import SparePartFilter, KitCarFilter, WheelFilter, TireFilter
 from django.views.generic.edit import FormMixin
 
@@ -316,42 +314,3 @@ class DeleteItemInCart(View):
         delete_item_to_cart(request, model, id)
         messages.info(request, 'Товар был удален из корзины')
         return redirect(request.META['HTTP_REFERER'])
-
-
-def load_categories(request):
-    chapter = request.GET.get('chapter')
-    if chapter:
-        if chapter == 'car':
-            categories = Category.objects.filter(subcategory__icontains='car').all()
-        else:
-            categories = Category.objects.filter(subcategory__icontains='truck').all()
-    else:
-        categories = Category.objects.none()
-    return render(request, 'admin/model_dropdown_list_options.html', {'models': categories})
-
-
-def load_brands(request):
-    chapter = request.GET.get('chapter')
-    list_filter = namedtuple('filter', ['pk', 'title'])
-    if chapter == 'car':
-        model = Model.objects.filter(type_model='car').all()
-        brand = {item.brand for item in model}
-        brand_list = [list_filter(pk=item.pk, title=item.title) for item in brand]
-    else:
-        model = Model.objects.exclude(type_model='car').all()
-        brand = {item.brand for item in model}
-        brand_list = [list_filter(pk=item.pk, title=item.title) for item in brand]
-    return render(request, 'admin/model_dropdown_list_options.html', {'models': brand_list})
-
-
-def load_models(request):
-    brand_id = request.GET.get('brand')
-    if brand_id:
-        if request.GET.get('chapter') == 'semi-trailer' or request.GET.get('chapter') == 'trailer':
-            model = Model.objects.exclude(type_model='car').order_by('title')
-        else:
-            model = Model.objects.filter(brand_id=brand_id, type_model='car').order_by('title')
-    else:
-        model = Model.objects.none()
-
-    return render(request, 'admin/model_dropdown_list_options.html', {'models': model})

@@ -5,6 +5,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 from django.utils.text import slugify
 from profile.models import User
+from django.core.exceptions import ValidationError
 from django.utils.html import mark_safe
 from multiselectfield import MultiSelectField
 
@@ -100,7 +101,8 @@ class SparePart(MetaTag):
     slug = models.SlugField(verbose_name='URL', unique=True, db_index=True)
     description = models.TextField(verbose_name='Описание', null=True, blank=True)
     article = models.CharField(verbose_name='Артикул', max_length=120, db_index=True)
-    price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12, default=0, validators=[MinValueValidator(0)])
+    price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12,
+                                validators=[MinValueValidator(0)])
     in_stock = models.BooleanField(verbose_name='В наличии', default=True)
 
     cart_content = GenericRelation('CartContent')
@@ -121,6 +123,12 @@ class SparePart(MetaTag):
     def get_title(self):
         return '{0}'.format(self.category.title)
 
+    def get_price(self):
+        exchange = Exchange.objects.first()
+        if exchange:
+            return round(exchange.currency_rate * self.price, 2)
+        return self.price
+
     def get_category__title(self):
         return '{0}'.format(self.category.title)
 
@@ -134,10 +142,10 @@ class SparePart(MetaTag):
         return self.model.title
 
     def get_absolute_url(self):
-        return reverse('store:detail_auto_part', kwargs={'brand': self.model.brand.slug,
-                                                         'model': self.model.slug,
-                                                         'category': self.category.slug,
-                                                         'slug': self.slug})
+        return reverse('store:detail_spare_part', kwargs={'brand': self.model.brand.slug,
+                                                          'model': self.model.slug,
+                                                          'category': self.category.slug,
+                                                          'slug': self.slug})
 
     def __str__(self):
         return '{0} {1}'.format(self.model, self.category)
@@ -174,6 +182,12 @@ class Wheel(MetaTag):
 
     def get_title(self):
         return self.title
+
+    def get_price(self):
+        exchange = Exchange.objects.first()
+        if exchange:
+            return round(exchange.currency_rate * self.price, 2)
+        return self.price
 
     def get_model_name(self):
         return self._meta.model_name
@@ -244,6 +258,12 @@ class Tire(MetaTag):
 
     def get_title(self):
         return 'Шины {0}/{1} R{2}'.format(self.width, self.profile, self.diameter)
+
+    def get_price(self):
+        exchange = Exchange.objects.first()
+        if exchange:
+            return round(exchange.currency_rate * self.price, 2)
+        return self.price
 
     def get_model_name(self):
         return self._meta.model_name
@@ -334,6 +354,12 @@ class KitCar(MetaTag):
     def get_title(self):
         return self.model
 
+    def get_price(self):
+        exchange = Exchange.objects.first()
+        if exchange:
+            return round(exchange.currency_rate * self.price, 2)
+        return self.price
+
     def get_model_name(self):
         return self._meta.model_name
 
@@ -380,7 +406,7 @@ class Cart(models.Model):
 
     def get_total_price(self):
         items = self.get_cart_content()
-        return sum(item.content_object.price for item in items)
+        return sum(item.content_object.get_price() for item in items)
 
     def get_cart_content_count(self):
         return self.get_cart_content().count()
@@ -490,6 +516,22 @@ class OrderContent(models.Model):
         return mark_safe('<a href="/admin/{0}/{1}/{2}/change/">ССЫЛКА</a>'.format(self.content_type.app_label,
                                                                                   self.content_type.model,
                                                                                   self.content_object.pk))
+
+
+class Exchange(models.Model):
+    """Курс доллара"""
+    currency_rate = models.DecimalField(verbose_name='Курс доллара', decimal_places=2, max_digits=12)
+
+    class Meta:
+        verbose_name = 'Курс доллара'
+        verbose_name_plural = 'Курс доллара'
+
+    def clean(self):
+        if Exchange.objects.count() > 0:
+            raise ValidationError('Вы можете создать только одну запись о курсе доллара')
+
+    def __str__(self):
+        return 'USD {0}'.format(self.currency_rate)
 
 
 def validation_in_stock_for_cart_content(in_stock, cart_contents):

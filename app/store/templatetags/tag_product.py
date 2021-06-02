@@ -16,7 +16,7 @@ def tag_list_product(model, items):
                 'model_name': item.get_model_name,
                 'title': item.get_title(),
                 'image': item.image.url,
-                'price': item.price,
+                'price': item.get_price(),
                 'url': item.get_absolute_url(),
                 'specification': {
                     'Марка': item.get_brand__title(),
@@ -33,7 +33,7 @@ def tag_list_product(model, items):
                 'model_name': item.get_model_name,
                 'title': item.get_title(),
                 'image': item.image.url,
-                'price': item.price,
+                'price': item.get_price(),
                 'url': item.get_absolute_url(),
                 'specification': {
                     'Марка': item.get_brand__title(),
@@ -56,7 +56,7 @@ def tag_list_product(model, items):
                 'model_name': item.get_model_name,
                 'title': item.get_title(),
                 'image': item.image.url,
-                'price': item.price,
+                'price': item.get_price(),
                 'url': item.get_absolute_url(),
                 'specification': {
                     'Марка': item.get_brand__title(),
@@ -75,7 +75,7 @@ def tag_list_product(model, items):
                 'model_name': item.get_model_name,
                 'title': item.get_title(),
                 'image': item.image.url,
-                'price': item.price,
+                'price': item.get_price(),
                 'url': item.get_absolute_url(),
                 'specification': {
                     'Производитель': item.get_manufacturer(),
@@ -101,7 +101,7 @@ def tag_detail_product(product, similar_product):
             'model_name': product.get_model_name,
             'title': product.get_title(),
             'image': product.image.url,
-            'price': product.price,
+            'price': product.get_price(),
             'specification': {
                 'Марка': product.get_brand__title(),
                 'Модель': product.get_model__title(),
@@ -118,7 +118,7 @@ def tag_detail_product(product, similar_product):
             'model_name': product.get_model_name,
             'title': product.get_title(),
             'image': product.image.url,
-            'price': product.price,
+            'price': product.get_price(),
             'specification': {
                 'Марка': product.get_brand__title(),
                 'Модель': product.get_model__title(),
@@ -142,7 +142,7 @@ def tag_detail_product(product, similar_product):
             'model_name': product.get_model_name,
             'title': product.get_title(),
             'image': product.image.url,
-            'price': product.price,
+            'price': product.get_price(),
             'specification': {
                 'Марка': product.get_brand__title(),
                 'Модель': product.get_model__title(),
@@ -161,7 +161,7 @@ def tag_detail_product(product, similar_product):
             'model_name': product.get_model_name,
             'title': product.get_title(),
             'image': product.image.url,
-            'price': product.price,
+            'price': product.get_price(),
             'specification': {
                 'Производитель': product.get_manufacturer(),
                 'Сезон': product.get_season_display(),

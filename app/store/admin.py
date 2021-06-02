@@ -1,8 +1,8 @@
 from django.contrib import admin
 from .models import Category, Model, Brand, SparePart, Cart, CartContent, Wheel, AdditionalPhoto, KitCar, \
-    EngineType, Bodywork, Order, OrderContent, Manufacturer, Tire
+    EngineType, Bodywork, Order, OrderContent, Manufacturer, Tire, Exchange
 from django.contrib.contenttypes.admin import GenericTabularInline
-from .forms import SparePartAdminForm, BrandModelFilterAdminForm
+from .admin_filter.forms import SparePartAdminForm, BrandModelFilterAdminForm, TireFormFilterAdmin
 
 
 class ModelPanel(admin.TabularInline):
@@ -110,20 +110,29 @@ class SparePartAdmin(admin.ModelAdmin):
     search_fields = ('model__title', 'model__brand__title')
     readonly_fields = ('slug',)
     save_on_top = True
-    fieldsets = (
-        (None, {
-            'fields': ('chapter', 'brand', 'model', 'category', 'article', 'description', 'price', 'in_stock')
-        }),
-        ('URL', {
-            'fields': ('slug',)
-        }),
-        ('Фотографии', {
-            'fields': ('image',)
-        }),
-        ('Meta', {
-            'fields': ('meta_description', 'meta_keywords')
-        })
-    )
+
+    def get_fieldsets(self, request, obj=None):
+        exchange = Exchange.objects.first()
+
+        fieldsets = (
+            (None, {
+                'fields': ('chapter', 'brand', 'model', 'category', 'article', 'description', 'in_stock',)
+            }),
+            (f'Курс доллара составляет: {exchange if exchange else "Вы не указали курс доллара"}', {
+                'fields': ('price',),
+                'description': f"""{'' if exchange else '<font color="red">Цена товара будет учитываться без курса доллара.</font> <a href="/admin/store/exchange/add/">Указать курс доллара</a>'}"""
+            }),
+            ('URL', {
+                'fields': ('slug',)
+            }),
+            ('Фотографии', {
+                'fields': ('image',)
+            }),
+            ('Meta', {
+                'fields': ('meta_description', 'meta_keywords')
+            })
+        )
+        return fieldsets
 
     def get_brand_and_model_title(self, rec):
         return '{0} {1}'.format(rec.model.brand.title, rec.model.title)
@@ -142,21 +151,29 @@ class WheelAdmin(admin.ModelAdmin):
     search_fields = ('model__title', 'model__brand__title')
     readonly_fields = ('slug',)
     save_on_top = True
-    fieldsets = (
-        (None, {
-            'fields': (
-                'brand', 'model', 'title', 'diameter', 'material', 'pcd', 'description', 'article', 'price', 'in_stock')
-        }),
-        ('URL', {
-            'fields': ('slug',)
-        }),
-        ('Фотографии', {
-            'fields': ('image',)
-        }),
-        ('Meta', {
-            'fields': ('meta_keywords', 'meta_description')
-        })
-    )
+
+    def get_fieldsets(self, request, obj=None):
+        exchange = Exchange.objects.first()
+        fieldsets = (
+            (None, {
+                'fields': (
+                'brand', 'model', 'title', 'diameter', 'material', 'pcd', 'description', 'article', 'in_stock')
+            }),
+            (f'Курс доллара составляет: {exchange if exchange else "Вы не указали курс доллара"}', {
+                'fields': ('price',),
+                'description': f"""{'' if exchange else '<font color="red">Цена товара будет учитываться без курса доллара.</font> <a href="/admin/store/exchange/add/">Указать курс доллара</a>'}"""
+            }),
+            ('URL', {
+                'fields': ('slug',)
+            }),
+            ('Фотографии', {
+                'fields': ('image',)
+            }),
+            ('Meta', {
+                'fields': ('meta_keywords', 'meta_description')
+            })
+        )
+        return fieldsets
 
     def get_brand_and_model_title(self, rec):
         return '{0} {1}'.format(rec.model.brand.title, rec.model.title)
@@ -186,6 +203,7 @@ class ManufacturerAdmin(admin.ModelAdmin):
 @admin.register(Tire)
 class TireAdmin(admin.ModelAdmin):
     """Админ панель (Шины)"""
+    form = TireFormFilterAdmin
     inlines = (AdditionalPhotoPanel,)
     list_display = ('id', 'manufacturer', 'season', 'get_title', 'in_stock')
     list_filter = ('in_stock', 'manufacturer__title', 'season', 'diameter', 'width', 'profile')
@@ -193,21 +211,30 @@ class TireAdmin(admin.ModelAdmin):
     autocomplete_fields = ('manufacturer',)
     readonly_fields = ('slug',)
     save_on_top = True
-    fieldsets = (
-        (None, {
-            'fields': (
-                'manufacturer', 'season', 'diameter', 'width', 'profile', 'description', 'article', 'price', 'in_stock')
-        }),
-        ('URL', {
-            'fields': ('slug',)
-        }),
-        ('Фотографии', {
-            'fields': ('image',)
-        }),
-        ('Meta', {
-            'fields': ('meta_keywords', 'meta_description')
-        })
-    )
+
+    def get_fieldsets(self, request, obj=None):
+        exchange = Exchange.objects.first()
+        fieldsets = (
+            (None, {
+                'fields': (
+                    'manufacturer', 'season', 'diameter', 'width', 'profile', 'description', 'article',
+                    'in_stock')
+            }),
+            (f'Курс доллара составляет: {exchange if exchange else "Вы не указали курс доллара"}', {
+                'fields': ('price',),
+                'description': f"""{'' if exchange else '<font color="red">Цена товара будет учитываться без курса доллара.</font> <a href="/admin/store/exchange/add/">Указать курс доллара</a>'}"""
+            }),
+            ('URL', {
+                'fields': ('slug',)
+            }),
+            ('Фотографии', {
+                'fields': ('image',)
+            }),
+            ('Meta', {
+                'fields': ('meta_keywords', 'meta_description')
+            })
+        )
+        return fieldsets
 
     def get_title(self, rec):
         return '{0}/{1} R{2}'.format(rec.width, rec.profile, rec.diameter)
@@ -264,26 +291,34 @@ class KitCarAdmin(admin.ModelAdmin):
     search_fields = ('model__title', 'model__brand__title', 'vin')
     readonly_fields = ('slug',)
     save_on_top = True
-    fieldsets = (
-        (None, {
-            'fields': ('brand', 'model', 'bodywork', 'transmission', 'drive', 'vin', 'in_stock')
-        }),
-        ('Двигатель', {
-            'fields': ('engine_type', 'engine_capacity')
-        }),
-        ('Характеристики', {
-            'fields': ('mileage', 'year', 'color', 'price', 'description')
-        }),
-        ('URL', {
-            'fields': ('slug',)
-        }),
-        ('Фотографии', {
-            'fields': ('image',)
-        }),
-        ('Meta', {
-            'fields': ('meta_description',)
-        })
-    )
+
+    def get_fieldsets(self, request, obj=None):
+        exchange = Exchange.objects.first()
+        fieldsets = (
+            (None, {
+                'fields': ('brand', 'model', 'bodywork', 'transmission', 'drive', 'vin', 'in_stock')
+            }),
+            (f'Курс доллара составляет: {exchange if exchange else "Вы не указали курс доллара"}', {
+                'fields': ('price',),
+                'description': f"""{'' if exchange else '<font color="red">Цена товара будет учитываться без курса доллара.</font> <a href="/admin/store/exchange/add/">Указать курс доллара</a>'}"""
+            }),
+            ('Двигатель', {
+                'fields': ('engine_type', 'engine_capacity')
+            }),
+            ('Характеристики', {
+                'fields': ('mileage', 'year', 'color', 'description')
+            }),
+            ('URL', {
+                'fields': ('slug',)
+            }),
+            ('Фотографии', {
+                'fields': ('image',)
+            }),
+            ('Meta', {
+                'fields': ('meta_description',)
+            })
+        )
+        return fieldsets
 
     def get_brand_and_model_title(self, rec):
         return '{0} {1}'.format(rec.model.brand.title, rec.model.title)
@@ -354,6 +389,18 @@ class OrderAdmin(admin.ModelAdmin):
 class OrderContentAdmin(admin.ModelAdmin):
     """Админ панель (Содержимое заказа)"""
     list_display = ('order', 'title', 'price')
+
+
+@admin.register(Exchange)
+class ExchangeAdmin(admin.ModelAdmin):
+    """Админ панель (Курс доллара)"""
+    list_display = ('link_open', 'currency_rate',)
+    list_editable = ('currency_rate',)
+
+    def link_open(self, rec):
+        return 'РЕДАКТИРОВАТЬ'
+
+    link_open.short_description = 'РЕДАКТИРОВАТЬ'
 
 
 admin.site.site_title = 'Разборка в Молодечно'

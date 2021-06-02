@@ -124,6 +124,7 @@ def mileage_filter_validation(list_products, mileage_from, mileage_to):
 
 
 def filter_spare_part(request, kwargs=None):
+    """++++++++++++++++++++++"""
     """Фильтр Запчастей"""
     fields = get_filter_fields(request, kwargs)
 
@@ -139,6 +140,7 @@ def filter_spare_part(request, kwargs=None):
 
 
 def get_wheel_filter(request, kwargs=None):
+    "++++++++++++++++++++++"
     """Фильтр дисков"""
     fields = get_filter_fields(request, kwargs)
 
@@ -160,6 +162,7 @@ def get_wheel_filter(request, kwargs=None):
 
 
 def get_tire_filter(request, kwargs=None):
+    "++++++++++++++++++++++++++++"
     """Фильтр шин"""
     fields = get_filter_fields(request, kwargs)
 
@@ -201,6 +204,7 @@ def get_tire_filter(request, kwargs=None):
 
 
 def get_kit_car_filter(request, kwargs=None):
+    """=++++++++++++"""
     """Фильтр машинокомплектов"""
     fields = get_filter_fields(request, kwargs)
     list_products = filter_brand_and_model(KitCar, fields.get('brand', ''), fields.get('model', ''))
