@@ -7,7 +7,6 @@ urlpatterns = [
     path('profile/update/', views.ProfileUpdate.as_view(), name='account_profile_update'),
     path('email/', views.show_404, name='account_email'),
 
-
     path('list-order/', views.OrderHistory.as_view(), name='list_order'),
     path('orders/detail/<int:id>/', views.OrderHistoryDetail.as_view(), name='order_detail'),
     path('address/', views.AddressUserView.as_view(), name='address'),

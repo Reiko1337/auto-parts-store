@@ -12,7 +12,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = env('DEBUG')
 
-AUTH_USER_MODEL = 'profile.User'
+AUTH_USER_MODEL = 'customer.User'
 
 ALLOWED_HOSTS = []
 
@@ -24,8 +24,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+
+    'customer.apps.CustomerConfig',
     'store.apps.StoreConfig',
-    'profile.apps.ProfileConfig',
+
     'django_cleanup.apps.CleanupConfig',
     'widget_tweaks',
     'allauth',

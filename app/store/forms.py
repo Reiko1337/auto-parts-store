@@ -1,7 +1,6 @@
-from .models import KitCar, Brand, Model, Category, Bodywork, EngineType, Manufacturer, Tire
 from django import forms
-from django.db.models import Q
 from .services.services import *
+from .models import KitCar, Brand, Model, Category, Bodywork, EngineType, Manufacturer, Tire
 
 
 class SparePartFilter(forms.Form):

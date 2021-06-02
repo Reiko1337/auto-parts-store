@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.utils.text import slugify
-from profile.models import User
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.html import mark_safe
 from multiselectfield import MultiSelectField
@@ -394,7 +394,7 @@ class AdditionalPhoto(models.Model):
 class Cart(models.Model):
     """Корзина пользователя"""
 
-    customer = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Пользователь', on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Корзина пользователя'
@@ -464,7 +464,7 @@ class Order(models.Model):
         ('ru', 'Россия')
     )
 
-    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Пользователь', on_delete=models.CASCADE)
     shipping_method = models.CharField(verbose_name='Доставка', choices=SHIPPING, max_length=24)
     payment_type = models.CharField(max_length=100, verbose_name='Способ оплаты', choices=PAYMENT_TYPE_CHOICES)
     status = models.CharField(max_length=100, verbose_name='Статус заказ', choices=STATUS_CHOICES, default='new')

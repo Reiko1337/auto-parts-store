@@ -11,7 +11,7 @@ urlpatterns = [
     path('list/spare-part/<str:chapter>/filter/', views.SparePartFilter.as_view(), name='list_spare_part_filter'),
     path('list/spare-part/<str:chapter>/<slug:brand>/', views.ListSparePart.as_view(), name='list_spare_part_brand'),
     path('list/spare-part/<str:chapter>/<slug:brand>/<slug:model>/', views.ListSparePart.as_view(), name='list_spare_part_brand_model'),
-    path('detail/spare-part/<slug:brand>/<slug:model>/<slug:category>/<slug:slug>/', views.DetailAutoPart.as_view(), name='detail_spare_part'),
+    path('detail/spare-part/<slug:brand>/<slug:model>/<slug:category>/<slug:slug>/', views.DetailSparePart.as_view(), name='detail_spare_part'),
 
     path('list/kit-car/', views.ListKitCar.as_view(), name='list_kit_car'),
     path('list/kit-car/filter/', views.KitCarFilter.as_view(), name='list_kit_car_filter'),

@@ -1,5 +1,5 @@
 from ..models import Model as ModelProduct, Brand, Category, SparePart, Tire, Wheel, KitCar, Bodywork, EngineType, \
-    Manufacturer
+    Manufacturer, Exchange
 from django.db.models import Q
 from .services import *
 
@@ -47,11 +47,20 @@ def price_filter_validation(list_products, price_from, price_to):
     except ValueError:
         price_to = ''
 
+    exchange = Exchange.objects.first()
+
     if price_from and price_to:
+        if exchange:
+            price_from = price_from / float(exchange.currency_rate)
+            price_to = price_to / float(exchange.currency_rate)
         list_products = list_products.filter(price__range=(price_from, price_to)).all()
     elif price_from:
+        if exchange:
+            price_from = price_from / float(exchange.currency_rate)
         list_products = list_products.filter(price__gte=price_from).all()
     elif price_to:
+        if exchange:
+            price_to = price_to / float(exchange.currency_rate)
         list_products = list_products.filter(price__lte=price_to).all()
 
     return list_products

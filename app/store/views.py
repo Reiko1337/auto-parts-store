@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.generic import View, ListView, DetailView
-from .services.filter_services import *
-from .services.cart_services import *
+from .services.filter_services import get_brand_by_chapter, get_category_by_chapter, get_model_by_chapter_brand_slug, \
+    filter_spare_part, get_model_class, get_similar_spare_parts, get_kit_car_filter, get_similar_kit_cat, \
+    get_wheel_filter, get_similar_wheel, get_tire_filter, get_similar_tire, get_model_by_id
+from .services.cart_services import add_item_to_cart, delete_item_to_cart
 from django.contrib import messages
-from .models import Tire
+from .models import Tire, KitCar, SparePart, Wheel
 from django.http.response import Http404
 from .forms import SparePartFilter, KitCarFilter, WheelFilter, TireFilter
 from django.views.generic.edit import FormMixin
@@ -69,7 +71,7 @@ class ListSparePart(FormMixin, ListView):
         return context
 
 
-class DetailAutoPart(DetailView):
+class DetailSparePart(DetailView):
     """Страница товара (Автозапчасть)"""
 
     model = SparePart
@@ -77,14 +79,11 @@ class DetailAutoPart(DetailView):
     context_object_name = 'product'
     slug_url_kwarg = 'slug'
 
-    def get_queryset(self):
-        return get_list_auto_part_for_detail(self.kwargs.get('model'))
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product = super().get_object()
-        context['similar_products'] = get_similar_auto_parts(self.kwargs.get('model'), self.kwargs.get('category'),
-                                                             product)
+        context['similar_products'] = get_similar_spare_parts(self.kwargs.get('model'), self.kwargs.get('category'),
+                                                              product)
         return context
 
 
@@ -143,9 +142,6 @@ class DetailKitCar(DetailView):
     template_name = 'store/detail-product.html'
     context_object_name = 'product'
 
-    def get_queryset(self):
-        return get_list_kit_car_for_detail(self.kwargs.get('model'))
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product = super().get_object()
@@ -158,7 +154,6 @@ class KitCarFilter(View):
 
     def get(self, request):
         if request.is_ajax():
-            print(request.GET)
             kid_car = get_kit_car_filter(request=self.request)
             return JsonResponse({'count': kid_car.count()}, status=200, safe=False)
         return JsonResponse({'success': False}, status=404)
@@ -201,9 +196,6 @@ class DetailWheel(DetailView):
     model = Wheel
     template_name = 'store/detail-product.html'
     context_object_name = 'product'
-
-    def get_queryset(self):
-        return get_list_wheel_for_detail(self.kwargs.get('model'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -257,9 +249,6 @@ class DetailTire(DetailView):
     model = Tire
     template_name = 'store/detail-product.html'
     context_object_name = 'product'
-
-    def get_queryset(self):
-        return get_list_tire()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import AddressUser, User
 
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'email', 'username')
@@ -8,7 +9,7 @@ class UserAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Данные', {
             'fields': (
-            'email', 'username', 'last_name', 'first_name', 'patronymic', 'phone_number', 'password', 'date_joined')
+                'email', 'username', 'last_name', 'first_name', 'patronymic', 'phone_number', 'password', 'date_joined')
         }),
         ('Статус', {
             'fields': ('is_superuser', 'is_staff', 'is_active')

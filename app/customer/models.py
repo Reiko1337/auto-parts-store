@@ -3,11 +3,13 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
+    """Пользователь"""
     patronymic = models.CharField(verbose_name='Отчество', max_length=255, blank=True, null=True)
     phone_number = models.CharField(verbose_name='Номер телефона', max_length=255, blank=True, null=True)
 
 
 class AddressUser(models.Model):
+    """Адрес доставки"""
     COUNTRY = (
         (None, 'Выберите страну'),
         ('Bel', 'Беларусь'),
