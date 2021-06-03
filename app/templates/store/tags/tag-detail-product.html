@@ -31,7 +31,14 @@
                 <span class="text__red text__bold">Цена:</span> {{ product.price }} BYN
             </p>
             {% if product.in_stock  %}
-            <a class="detail-product__buy button" href="{% url 'store:add_to_cart' product.model_name product.id %}">КУПИТЬ</a>
+            <div class="detail-product__buttons">
+                <a class="detail-product__buy button" href="{% url 'store:add_to_cart' product.model_name product.id %}">КУПИТЬ</a>
+                {% if product.is_favorite %}
+                     <a class="detail-product__favorite button" href="{% url 'favorite_delete'  product.model_name product.id %}">Удалить из избранных</a>
+                {% else %}
+                    <a class="detail-product__favorite button" href="{% url 'favorite_add'  product.model_name product.id %}">Добавить в избранное</a>
+                {% endif %}
+            </div>
             {% else %}
             <a class="detail-product__buy detail-product__buy_sold button">Нет в наличии</a>
             {% endif %}

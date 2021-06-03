@@ -29,6 +29,8 @@ urlpatterns = [
     path('list/tire/filter/', views.TireFilter.as_view(), name='list_tire_filter'),
     path('detail/tire/<slug:slug>/', views.DetailTire.as_view(), name='detail_tire'),
 
+    path('search/', views.SearchResultView.as_view(), name='search'),
+
 
     path('ajax/filter-models/', views.FilterModelsGenerate.as_view(), name='ajax_filter_models'),
 

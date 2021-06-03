@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import AddressUser, User
+from .models import AddressUser, User, Favorite
 
 
 @admin.register(User)
@@ -48,3 +48,21 @@ class AddressUserAdmin(admin.ModelAdmin):
     get_user__email.short_description = 'E-mail Пользователя'
     get_user__username.short_description = 'Имя пользователя'
     get_address_title.short_description = 'Адрес'
+
+
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ('id', 'get_content_type_model_name', 'get_content_object_title', 'get_user__email')
+
+    def get_content_type_model_name(self, rec):
+        return rec.content_type.name
+
+    def get_content_object_title(self, rec):
+        return rec.content_object.get_title()
+
+    def get_user__email(self, rec):
+        return rec.user.email
+
+    get_user__email.short_description = 'E-mail Пользователя'
+    get_content_type_model_name.short_description = 'Модель'
+    get_content_object_title.short_description = 'Товар'

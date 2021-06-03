@@ -105,6 +105,7 @@ class SparePart(MetaTag):
                                 validators=[MinValueValidator(0)])
     in_stock = models.BooleanField(verbose_name='В наличии', default=True)
 
+    favorite = GenericRelation('customer.Favorite')
     cart_content = GenericRelation('CartContent')
     additional_photo = GenericRelation('AdditionalPhoto')
 
@@ -165,6 +166,7 @@ class Wheel(MetaTag):
     price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12, validators=[MinValueValidator(0)])
     in_stock = models.BooleanField(verbose_name='В наличии', default=True)
 
+    favorite = GenericRelation('customer.Favorite')
     cart_content = GenericRelation('CartContent')
     additional_photo = GenericRelation('AdditionalPhoto')
 
@@ -241,6 +243,8 @@ class Tire(MetaTag):
     in_stock = models.BooleanField(verbose_name='В наличии', default=True)
     image = models.ImageField(verbose_name='Фотография', upload_to='tire', default='default.png')
     description = models.TextField(verbose_name='Описание', null=True, blank=True)
+
+    favorite = GenericRelation('customer.Favorite')
     cart_content = GenericRelation('CartContent')
     additional_photo = GenericRelation('AdditionalPhoto')
 
@@ -336,6 +340,7 @@ class KitCar(MetaTag):
     price = models.DecimalField(verbose_name='Цена', decimal_places=2, max_digits=12, validators=[MinValueValidator(0)])
     in_stock = models.BooleanField(verbose_name='В наличии', default=True)
 
+    favorite = GenericRelation('customer.Favorite')
     cart_content = GenericRelation('CartContent')
     additional_photo = GenericRelation('AdditionalPhoto')
 

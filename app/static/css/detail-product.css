@@ -87,12 +87,22 @@
     line-height: 21px;
     margin-bottom: 5px;
 }
+.detail-product__buttons{
+    margin-bottom: 30px;
+    /*display: flex;*/
+}
+.detail-product__favorite{
+    display: block;
+    width: 224px;
+    padding: 10px;
+    text-align: center;
+}
 .detail-product__buy{
     display: block;
     width: 224px;
     padding: 10px;
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 .detail-product__buy_sold.button{
     background: red;

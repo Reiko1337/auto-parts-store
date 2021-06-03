@@ -183,3 +183,23 @@ def get_similar_tire(product):
     return Tire.objects.filter(
         Q(in_stock=True) & Q(diameter=product.diameter) & Q(width=product.width) & Q(profile=product.profile) & Q(
             season=product.season)).exclude(pk=product.pk).all()
+
+
+def search_spare_part(q):
+    """Поиск запчасти"""
+    return SparePart.objects.filter(Q(in_stock=True) & Q(article__icontains=q))
+
+
+def search_wheel(q):
+    """Поиск дисков"""
+    return Wheel.objects.filter(Q(in_stock=True) & Q(article__icontains=q))
+
+
+def search_tire(q):
+    """Поиск шин"""
+    return Tire.objects.filter(Q(in_stock=True) & Q(article__icontains=q))
+
+
+def search_kit_car(q):
+    """Поиск машинокомплекта"""
+    return KitCar.objects.filter(Q(in_stock=True) & Q(vin__icontains=q))

@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import AddressUserForm, CheckoutForm, ProfileUpdate
 from django.views.generic import CreateView, View, ListView, UpdateView, DetailView
 from store.services.cart_services import get_cart_auth_user
+from store.services.services import get_model_class, get_model_by_id
 from django.db import transaction
 from store.cart.cart_anonymous import CartSession
 from store.cart.cart_auth_user import CartUser
@@ -10,7 +11,10 @@ from django.contrib import messages
 from allauth.account.views import LoginView
 from django.http.response import Http404
 from django.urls import reverse_lazy
-from .models import User
+from .models import User, Favorite
+from .services.favorite_services import favorite_add, get_favorite_products, favorite_delete
+
+from store.models import SparePart, Tire, KitCar, Wheel
 
 from django.http import JsonResponse
 
@@ -185,7 +189,7 @@ class CheckoutView(LoginRequiredMixin, View):
         return render(request, self.template_name, {'form': form})
 
 
-class CheckoutAddressUser(View):
+class CheckoutAddressUser(LoginRequiredMixin, View):
     """Адрес пользователя (AJAX)"""
 
     def get(self, request, id):
@@ -208,3 +212,64 @@ class CheckoutAddressUser(View):
             else:
                 return JsonResponse({'success': False}, status=404)
         return JsonResponse({'success': False}, status=404)
+
+
+class FavoriteList(LoginRequiredMixin, View):
+    """Список избранных товаро"""
+    template_name = 'store/list-search.html'
+
+    def get(self, request):
+        favorite_user = Favorite.objects.filter(user=self.request.user).all()
+        context = {
+            'title': 'Список желаемого',
+            'spare_part': {
+                'list': get_favorite_products(favorite_user, SparePart),
+                'model': get_model_class('sparepart')
+            },
+            'kit_car': {
+                'list': get_favorite_products(favorite_user, KitCar),
+                'model': get_model_class('kitcar')
+            },
+            'wheel': {
+                'list': get_favorite_products(favorite_user, Wheel),
+                'model': get_model_class('wheel')
+            },
+            'tire': {
+                'list': get_favorite_products(favorite_user, Tire),
+                'model': get_model_class('tire')
+            }
+        }
+
+        return render(request, self.template_name, context)
+
+
+class FavoriteAdd(LoginRequiredMixin, View):
+    """Добавить в избранное"""
+
+    def handle_no_permission(self):
+        messages.info(self.request, 'Для товара в избранно необходимо авторизоваться')
+        return super().handle_no_permission()
+
+    def get(self, request, model, id):
+        content_type = get_model_class(model)
+        item = get_model_by_id(content_type, id)
+        if item.in_stock:
+            result = favorite_add(item, self.request.user)
+            if result:
+                messages.success(request, 'Товар добавлен в избранное')
+            else:
+                messages.info(request, 'Товар уже в списке избранных вами товаров')
+        else:
+            messages.error(request, 'Товара нет в наличии')
+        return redirect(request.META['HTTP_REFERER'])
+
+
+class FavoriteDelete(LoginRequiredMixin, View):
+    """Удалить товар из избранных"""
+
+    def get(self, request, model, id):
+        content_type = get_model_class(model)
+        item = get_model_by_id(content_type, id)
+        favorite_delete(item, self.request.user)
+        messages.info(request, 'Товар был удален из избранных')
+        return redirect(request.META['HTTP_REFERER'])

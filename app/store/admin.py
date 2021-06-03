@@ -143,7 +143,7 @@ class SparePartAdmin(admin.ModelAdmin):
 @admin.register(Wheel)
 class WheelAdmin(admin.ModelAdmin):
     """Админ панель (Диски)"""
-    change_form_template = 'admin/bran_model_filter_change_form.html'
+    change_form_template = 'admin/brand_model_filter_change_form.html'
     form = BrandModelFilterAdminForm
     inlines = (AdditionalPhotoPanel,)
     list_display = ('id', 'get_brand_and_model_title', 'title', 'in_stock')
@@ -283,7 +283,7 @@ class EngineTypeAdmin(admin.ModelAdmin):
 @admin.register(KitCar)
 class KitCarAdmin(admin.ModelAdmin):
     """Админ панель (Машинокомплект)"""
-    change_form_template = 'admin/bran_model_filter_change_form.html'
+    change_form_template = 'admin/brand_model_filter_change_form.html'
     form = BrandModelFilterAdminForm
     inlines = (AdditionalPhotoPanel,)
     list_display = ('id', 'get_brand_and_model_title', 'year', 'vin', 'in_stock')

@@ -16,4 +16,8 @@ urlpatterns = [
 
     path('chekout/', views.CheckoutView.as_view(), name='checkout'),
     path('chekout/address/<int:id>/', views.CheckoutAddressUser.as_view(), name='checkout_address_user'),
+
+    path('favorite/', views.FavoriteList.as_view(), name='favorite'),
+    path('favorite/add/<str:model>/<str:id>/', views.FavoriteAdd.as_view(), name='favorite_add'),
+    path('favorite/delete/<str:model>/<str:id>/', views.FavoriteDelete.as_view(), name='favorite_delete'),
 ]

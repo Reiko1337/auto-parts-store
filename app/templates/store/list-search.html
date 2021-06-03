@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% load tag_product %}
+{% load static %}
+
+
+{% block title %}
+Диски - Разборка в молодечно
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/list-product.css' %}">
+<link rel="stylesheet" href="{% static 'css/media/list-product-media.css' %}">
+{% endblock %}
+
+<!--A31435353-->
+
+{% block content %}
+<section class="list-product">
+    <div class="list-product__content">
+        <div class="container">
+            <div class="list-product__container">
+                <h1 class="list-product__title">
+                    {{ title }}
+                </h1>
+                <div class="list-product__row">
+
+                    {% if spare_part.list or wheel.list or tire.list or kit_car.list %}
+
+                        <div class="list-product__filter">
+                            <ul class="search__filter">
+                                {% if spare_part.list %}
+                                    <li>
+                                        <a class="search__filter-link" href="#spare_part">
+                                            Запчасти ({{ spare_part.list.count }})
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if wheel.list %}
+                                    <li>
+                                        <a class="search__filter-link" href="#wheel">
+                                            Диски ({{ wheel.list.count }})
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if tire.list %}
+                                    <li>
+                                        <a class="search__filter-link" href="#tire">
+                                            Шины ({{ tire.list.count }})
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if kit_car.list %}
+                                    <li>
+                                        <a class="search__filter-link" href="#kit_car">
+                                            Машинокомплекты ({{ kit_car.list.count }})
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+
+                        <div class="list-product__items-row">
+                            {% if spare_part.list %}
+                                <div class="list-product__catalog">
+                                    <p class="list-product__category-title" id="spare_part">
+                                        Запчасти
+                                    </p>
+                                    {% tag_list_product spare_part.model spare_part.list %}
+                                </div>
+                            {% endif %}
+                            {% if wheel.list %}
+                            <div class="list-product__catalog">
+
+                                    <p class="list-product__category-title" id="wheel">
+                                        Диски
+                                    </p>
+                                    {% tag_list_product wheel.model wheel.list %}
+
+                            </div>
+                            {% endif %}
+                            {% if tire.list %}
+                            <div class="list-product__catalog">
+
+                                    <p class="list-product__category-title" id="tire">
+                                        Шины
+                                    </p>
+                                    {% tag_list_product tire.model tire.list %}
+
+                            </div>
+                            {% endif %}
+                            {% if kit_car.list %}
+                            <div class="list-product__catalog">
+
+                                    <p class="list-product__category-title" id="kit_car">
+                                        Машинокомплекты
+                                    </p>
+                                    {% tag_list_product kit_car.model kit_car.list %}
+
+                            </div>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <p class="help__text">Ничего не найдено</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

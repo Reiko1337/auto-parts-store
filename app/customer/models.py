@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
+from django.utils.html import mark_safe
 
 class User(AbstractUser):
     """Пользователь"""
@@ -38,3 +40,21 @@ class AddressUser(models.Model):
         return '{0} {1}. {2}. {3}, {4}, {5}, {6}'.format(self.last_name, self.first_name[0], self.patronymic[0],
                                                          self.get_country_display(), self.region, self.city,
                                                          self.address)
+
+
+class Favorite(models.Model):
+    """Избранное"""
+    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey(ct_field='content_type', fk_field='object_id')
+
+    class Meta:
+        verbose_name = 'Список избранных товаров'
+        verbose_name_plural = 'Список избранных товаров'
+        ordering = ['-id']
+
+    def __str__(self):
+        return mark_safe('<a href="/admin/{0}/{1}/{2}/change/">ССЫЛКА</a>'.format(self.content_type.app_label,
+                                                                                  self.content_type.model,
+                                                                                  self.content_object.pk))

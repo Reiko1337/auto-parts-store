@@ -193,5 +193,33 @@
     color: rgba(0, 0, 0, 0.8);
     background: #fff;
 }
+.list-product__catalog + .list-product__catalog{
+    margin-top: 50px;
+}
+.list-product__category-title{
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 26px;
+    margin-bottom: 25px;
+}
+.search__filter{
+    list-style: none;
+}
+.search__filter li{
+    margin-bottom: 15px;
+}
+.search__filter li:last-child{
+    margin-bottom: 0;
+}
+.search__filter-link{
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: rgba(255, 255, 255, 1);
+}
+.search__filter-link:hover{
+    text-decoration: underline #0064D9;
+}
 
 

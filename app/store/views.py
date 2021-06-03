@@ -5,6 +5,7 @@ from .services.filter_services import get_brand_by_chapter, get_category_by_chap
     filter_spare_part, get_model_class, get_similar_spare_parts, get_kit_car_filter, get_similar_kit_cat, \
     get_wheel_filter, get_similar_wheel, get_tire_filter, get_similar_tire, get_model_by_id
 from .services.cart_services import add_item_to_cart, delete_item_to_cart
+from .services.services import search_spare_part, search_wheel, search_tire, search_kit_car
 from django.contrib import messages
 from .models import Tire, KitCar, SparePart, Wheel
 from django.http.response import Http404
@@ -277,6 +278,38 @@ class FilterModelsGenerate(View):
             'items': get_model_by_chapter_brand_slug(brand, chapter)
         }
         return render(request, 'filter/filter_select_option.html', context)
+
+
+class SearchResultView(View):
+    """Результат поиска"""
+    template_name = 'store/list-search.html'
+
+    def get(self, request):
+        q = request.GET.get('q', '')
+        if q:
+            context = {
+                'q': q,
+                'title': 'Результат поиска',
+                'spare_part': {
+                    'list': search_spare_part(q),
+                    'model': get_model_class('sparepart')
+                },
+                'kit_car': {
+                    'list': search_kit_car(q),
+                    'model': get_model_class('kitcar')
+                },
+                'wheel': {
+                    'list': search_wheel(q),
+                    'model': get_model_class('wheel')
+                },
+                'tire': {
+                    'list': search_tire(q),
+                    'model': get_model_class('tire')
+                }
+            }
+        else:
+            context = {}
+        return render(request, self.template_name, context)
 
 
 class AddToCart(View):

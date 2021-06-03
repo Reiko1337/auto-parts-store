@@ -1,5 +1,6 @@
 from django import template
 from ..models import KitCar, SparePart, Wheel, Tire
+from customer.services.favorite_services import product_is_favorite
 
 register = template.Library()
 
@@ -87,12 +88,11 @@ def tag_list_product(model, items):
             }
             products.append(info)
 
-
     return {'products': products, 'count_column': count_column}
 
 
 @register.inclusion_tag('store/tags/tag-detail-product.html')
-def tag_detail_product(product, similar_product):
+def tag_detail_product(product, similar_product, user):
     model = product.get_model_name()
     if model == 'sparepart':
         info = {
@@ -109,7 +109,8 @@ def tag_detail_product(product, similar_product):
                 'Артикул': product.article,
             },
             'description': product.description,
-            'additional_images': product.additional_photo.all()
+            'additional_images': product.additional_photo.all(),
+            'is_favorite': product_is_favorite(product, user)
         }
     elif model == 'kitcar':
         info = {
@@ -133,7 +134,8 @@ def tag_detail_product(product, similar_product):
                 'Цвет': product.color
             },
             'description': product.description,
-            'additional_images': product.additional_photo.all()
+            'additional_images': product.additional_photo.all(),
+            'is_favorite': product_is_favorite(product, user)
         }
     elif model == 'wheel':
         info = {
@@ -152,7 +154,8 @@ def tag_detail_product(product, similar_product):
                 'Сверловка (PCD)': product.pcd
             },
             'description': product.description,
-            'additional_images': product.additional_photo.all()
+            'additional_images': product.additional_photo.all(),
+            'is_favorite': product_is_favorite(product, user)
         }
     elif model == 'tire':
         info = {
@@ -170,6 +173,7 @@ def tag_detail_product(product, similar_product):
                 'Профиль': product.profile
             },
             'description': product.description,
-            'additional_images': product.additional_photo.all()
+            'additional_images': product.additional_photo.all(),
+            'is_favorite': product_is_favorite(product, user)
         }
     return {'product': info, 'similar_product': similar_product}

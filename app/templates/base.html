@@ -60,8 +60,8 @@
                             <a href="{% url 'store:about' %}#location" class="header__address-link">
                                 г. Молодечно, ул. Т. Дудко 4
                             </a>
-                            <form class="header__form-search" action="#" method="POST">
-                                <input class="header__input-search input__form" type="text" placeholder="Поиск">
+                            <form class="header__form-search" method="GET" action="{% url 'store:search' %}">
+                                <input class="header__input-search input__form" type="text" placeholder="Поиск" name="q" value="{{ q }}">
                                 <input class="header__form-button" type="submit" value="">
                             </form>
                         </div>
