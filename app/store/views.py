@@ -308,7 +308,7 @@ class SearchResultView(View):
                 }
             }
         else:
-            context = {}
+            context = {'title': 'Результат поиска'}
         return render(request, self.template_name, context)
 
 
