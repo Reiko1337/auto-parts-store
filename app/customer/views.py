@@ -216,7 +216,7 @@ class CheckoutAddressUser(LoginRequiredMixin, View):
 
 class FavoriteList(LoginRequiredMixin, View):
     """Список избранных товаро"""
-    template_name = 'store/list-search.html'
+    template_name = 'store/list-search(favorite).html'
 
     def get(self, request):
         favorite_user = Favorite.objects.filter(user=self.request.user).all()

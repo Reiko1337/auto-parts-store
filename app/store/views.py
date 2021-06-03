@@ -282,7 +282,7 @@ class FilterModelsGenerate(View):
 
 class SearchResultView(View):
     """Результат поиска"""
-    template_name = 'store/list-search.html'
+    template_name = 'store/list-search(favorite).html'
 
     def get(self, request):
         q = request.GET.get('q', '')
