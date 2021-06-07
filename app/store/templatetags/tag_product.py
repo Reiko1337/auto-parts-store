@@ -177,3 +177,49 @@ def tag_detail_product(product, similar_product, user):
             'is_favorite': product_is_favorite(product, user)
         }
     return {'product': info, 'similar_product': similar_product}
+
+
+@register.inclusion_tag('store/tags/tag-media-product.html')
+def tag_media(product):
+    model_db = product.get_model_name()
+    context = {
+        'meta_description': '',
+        'meta_keywords': ''
+    }
+    if model_db == 'kitcar':
+        context['meta_description'] += f'{product.meta_description} '
+        context['meta_description'] += f'{product.model.meta_description} '
+        context['meta_description'] += f'{product.model.brand.meta_description} '
+        context['meta_description'] += f'{product.bodywork.meta_description} '
+        context['meta_description'] += f'{product.engine_type.meta_description} '
+
+        context['meta_keywords'] += f'{product.meta_keywords} '
+        context['meta_keywords'] += f'{product.model.meta_keywords} '
+        context['meta_keywords'] += f'{product.model.brand.meta_keywords} '
+        context['meta_keywords'] += f'{product.bodywork.meta_keywords} '
+        context['meta_keywords'] += f'{product.engine_type.meta_keywords} '
+    elif model_db == 'sparepart':
+        context['meta_description'] += f'{product.meta_description} '
+        context['meta_description'] += f'{product.model.meta_description} '
+        context['meta_description'] += f'{product.model.brand.meta_description} '
+        context['meta_description'] += f'{product.category.meta_description} '
+
+        context['meta_keywords'] += f'{product.meta_keywords} '
+        context['meta_keywords'] += f'{product.model.meta_keywords} '
+        context['meta_keywords'] += f'{product.model.brand.meta_keywords} '
+        context['meta_keywords'] += f'{product.category.meta_keywords} '
+    elif model_db == 'wheel':
+        context['meta_description'] += f'{product.meta_description} '
+        context['meta_description'] += f'{product.model.meta_description} '
+        context['meta_description'] += f'{product.model.brand.meta_description} '
+
+        context['meta_keywords'] += f'{product.meta_keywords} '
+        context['meta_keywords'] += f'{product.model.meta_keywords} '
+        context['meta_keywords'] += f'{product.model.brand.meta_keywords} '
+    elif model_db == 'tire':
+        context['meta_description'] += f'{product.meta_description} '
+        context['meta_description'] += f'{product.manufacturer.meta_description} '
+        context['meta_keywords'] += f'{product.meta_keywords} '
+        context['meta_keywords'] += f'{product.manufacturer.meta_keywords} '
+
+    return context

@@ -157,7 +157,7 @@ class WheelAdmin(admin.ModelAdmin):
         fieldsets = (
             (None, {
                 'fields': (
-                'brand', 'model', 'title', 'diameter', 'material', 'pcd', 'description', 'article', 'in_stock')
+                    'brand', 'model', 'title', 'diameter', 'material', 'pcd', 'description', 'article', 'in_stock')
             }),
             (f'Курс доллара составляет: {exchange if exchange else "Вы не указали курс доллара"}', {
                 'fields': ('price',),
@@ -315,7 +315,7 @@ class KitCarAdmin(admin.ModelAdmin):
                 'fields': ('image',)
             }),
             ('Meta', {
-                'fields': ('meta_description',)
+                'fields': ('meta_description', 'meta_keywords')
             })
         )
         return fieldsets
@@ -363,7 +363,7 @@ class OrderAdmin(admin.ModelAdmin):
     """Админ панель (Заказ)"""
     inlines = (OrderContentPanel,)
     list_display = ('id', 'get_user__email', 'user', 'data_place', 'get_status_display')
-    readonly_fields = ('data_place',)
+    list_filter = ('status',)
     fieldsets = (
         ('Клиент', {
             'fields': ('user',)
@@ -378,6 +378,11 @@ class OrderAdmin(admin.ModelAdmin):
             'fields': ('status', 'data_place')
         })
     )
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj and obj.status == 'cancel':
+            return ('data_place', 'status',)
+        return ('data_place',)
 
     def get_user__email(self, rec):
         return rec.user.email

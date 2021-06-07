@@ -126,6 +126,7 @@
     padding: 12px;
     text-align: center;
     margin-top: 30px;
+    margin-bottom: 5px;
 }
 .filter__burger{
     display: none;
@@ -221,5 +222,12 @@
 .search__filter-link:hover{
     text-decoration: underline #0064D9;
 }
-
+.list__filter-reset{
+    text-decoration: none;
+    color: rgba(255, 255, 255, 1);
+    text-align: center;
+}
+.list__filter-reset:hover{
+   text-decoration: underline #0064D9;
+}
 

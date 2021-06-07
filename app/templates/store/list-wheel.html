@@ -80,6 +80,7 @@
                                     </div>
                                 </div>
                                 <a class="list__filter-button button" href="#">Найдено ({{ count_products }})</a>
+                                <a class="list__filter-reset" href="{% url 'store:list_wheel' %}">X Сбросить</a>
                                 <input type="hidden" name="ajaxURL" value="{{ url_ajax }}">
                             </div>
                         </div>

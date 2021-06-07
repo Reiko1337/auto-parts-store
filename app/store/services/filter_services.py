@@ -111,7 +111,6 @@ def year_filter_validation(list_products, year_from, year_to):
 
 
 def mileage_filter_validation(list_products, mileage_from, mileage_to):
-    """Фильтр по пробегу"""
     try:
         mileage_from = int(mileage_from)
     except ValueError:
@@ -133,7 +132,6 @@ def mileage_filter_validation(list_products, mileage_from, mileage_to):
 
 
 def filter_spare_part(request, kwargs=None):
-    """++++++++++++++++++++++"""
     """Фильтр Запчастей"""
     fields = get_filter_fields(request, kwargs)
 
@@ -149,7 +147,6 @@ def filter_spare_part(request, kwargs=None):
 
 
 def get_wheel_filter(request, kwargs=None):
-    "++++++++++++++++++++++"
     """Фильтр дисков"""
     fields = get_filter_fields(request, kwargs)
 
@@ -158,7 +155,7 @@ def get_wheel_filter(request, kwargs=None):
     list_products = price_filter_validation(list_products, fields.get('price_from', ''), fields.get('price_to', ''))
 
     try:
-        diameter = int(fields.get('diameter', ''))
+        diameter = round(float(fields.get('diameter', '').replace(',', '.')), 1)
     except ValueError:
         diameter = None
 
@@ -171,7 +168,6 @@ def get_wheel_filter(request, kwargs=None):
 
 
 def get_tire_filter(request, kwargs=None):
-    "++++++++++++++++++++++++++++"
     """Фильтр шин"""
     fields = get_filter_fields(request, kwargs)
 

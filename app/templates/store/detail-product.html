@@ -8,6 +8,11 @@
 {{ product.get_title }} - Разборка в молодечно
 {% endblock %}
 
+
+{% block media %}
+    {% tag_media product %}
+{% endblock %}
+
 {% block style %}
 <link rel="stylesheet" href="{% static 'css/detail-product.css' %}">
 <link rel="stylesheet" href="{% static 'css/media/detail-product-media.css' %}">

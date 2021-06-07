@@ -96,6 +96,9 @@
     $('#id_model').select2({
         width: "260px"
     });
+    $('#id_category').select2({
+        width: "260px"
+    });
     $("#id_chapter").change(function () {
         var chapter = $(this).val();
         $("#id_brand").val('').trigger('change');
@@ -136,5 +139,4 @@
         });
     });
 </script>
-
 {% endblock %}

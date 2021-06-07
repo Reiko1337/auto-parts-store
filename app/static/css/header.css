@@ -265,3 +265,10 @@ body.mouse .navigation__item_wheel-tires:hover .sub-navigation__list-container{
 .header__burger{
     display: none;
 }
+.navigation__item-link:hover,
+.sub-navigation__item-link:hover{
+    text-decoration: underline #0064D9;
+}
+.navigation__item-link.navigation__item-link_shopping-cart:hover{
+    text-decoration: none;
+}

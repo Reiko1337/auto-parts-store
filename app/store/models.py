@@ -67,7 +67,7 @@ class Model(MetaTag):
     """Модель (автомобиля/прицепа)"""
     TYPE_MODEL = (
         (None, 'Выберите тип модели'),
-        ('car', 'Легковая'),
+        ('car', 'Грузовые'),
         ('truck', 'Прицеп/Полуприцеп')
     )
 
@@ -89,7 +89,7 @@ class SparePart(MetaTag):
     """Запчасти"""
     CHAPTER = (
         (None, 'Выберите раздел'),
-        ('car', 'Легковые'),
+        ('car', 'Грузовые'),
         ('semi-trailer', 'Полуприцепы'),
         ('trailer', 'Прицепы')
     )
@@ -158,7 +158,7 @@ class Wheel(MetaTag):
     title = models.CharField(verbose_name='Название', max_length=255, db_index=True)
     image = models.ImageField(verbose_name='Фотография', upload_to='wheel', default='default.png')
     slug = models.SlugField(verbose_name='URL', unique=True, db_index=True)
-    diameter = models.PositiveSmallIntegerField(verbose_name='Диаметр')
+    diameter = models.DecimalField(verbose_name='Диаметр', decimal_places=1, max_digits=3)
     material = models.CharField(verbose_name='Материал', max_length=255)
     pcd = models.CharField(verbose_name='PCD', max_length=255)
     description = models.TextField(verbose_name='Описание', null=True, blank=True)
@@ -489,6 +489,13 @@ class Order(models.Model):
         verbose_name_plural = 'Заказы'
         ordering = ['-id']
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.status == 'cancel':
+            for item in self.get_order_content():
+                item.content_object.in_stock = True
+                item.content_object.save()
+
     def get_order_content(self):
         return self.ordercontent_set.all()
 
@@ -532,7 +539,7 @@ class Exchange(models.Model):
         verbose_name_plural = 'Курс доллара'
 
     def clean(self):
-        if Exchange.objects.count() > 0:
+        if not self.pk and Exchange.objects.exists():
             raise ValidationError('Вы можете создать только одну запись о курсе доллара')
 
     def __str__(self):
