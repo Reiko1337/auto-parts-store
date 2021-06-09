@@ -222,12 +222,22 @@
 .search__filter-link:hover{
     text-decoration: underline #0064D9;
 }
+
+
 .list__filter-reset{
-    text-decoration: none;
-    color: rgba(255, 255, 255, 1);
+    display: block;
+    width: 100%;
+    font-weight: 700;
+    padding: 12px;
     text-align: center;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    background: #9b3f3f;
 }
-.list__filter-reset:hover{
-   text-decoration: underline #0064D9;
+.list__filter-reset.button:hover{
+     box-shadow: 1px 0px 7px rgba(155, 63, 63, 0.8);
+}
+.list__filter-reset.button:active{
+    background: #7c3232;
 }
 

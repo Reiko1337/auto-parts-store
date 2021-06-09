@@ -48,6 +48,7 @@ class SparePartAdminForm(forms.ModelForm):
             self.fields['model'].queryset = brand.model_set.order_by('title')
 
     brand = forms.ModelChoiceField(label='Марка', queryset=Brand.objects.none())
+    model = forms.ModelChoiceField(label='Модель', queryset=Model.objects.none())
 
     class Meta:
         model = SparePart
@@ -75,6 +76,7 @@ class BrandModelFilterAdminForm(forms.ModelForm):
             self.fields['model'].queryset = brand.model_set.filter(type_model='car').order_by('title')
 
     brand = forms.ModelChoiceField(label='Марка', queryset=Brand.objects.all())
+    model = forms.ModelChoiceField(label='Модель', queryset=Model.objects.all())
 
     class Meta:
         model = SparePart
