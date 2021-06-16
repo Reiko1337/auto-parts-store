@@ -4,6 +4,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 from django.utils.html import mark_safe
 
+
 class User(AbstractUser):
     """Пользователь"""
     patronymic = models.CharField(verbose_name='Отчество', max_length=255, blank=True, null=True)

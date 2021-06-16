@@ -187,7 +187,7 @@ def get_similar_tire(product):
 
 def search_spare_part(q):
     """Поиск запчасти"""
-    return SparePart.objects.filter(Q(in_stock=True) & Q(article__icontains=q))
+    return SparePart.objects.filter(Q(in_stock=True) & Q(description__icontains=q))
 
 
 def search_wheel(q):

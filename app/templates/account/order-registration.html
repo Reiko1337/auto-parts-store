@@ -43,11 +43,6 @@
                                 <a class="order__composition-item-title" href="{{ item.item.get_absolute_url }}">
                                     {{ item.item.get_title }}
                                 </a>
-                                <p class="order__composition-item-article">
-                                    {% if item.item.article %}Артикул: {{ item.item.article }}
-                                    {% else %}VIN: {{ item.item.vin }}
-                                    {% endif %}
-                                </p>
                                 <p class="order__composition-price">
                                     <span class="text__bold text__red">Цена:</span> {{ item.item.get_price }} BYN
                                 </p>

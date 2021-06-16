@@ -116,7 +116,7 @@ class SparePartAdmin(admin.ModelAdmin):
 
         fieldsets = (
             (None, {
-                'fields': ('chapter', 'brand', 'model', 'category', 'article', 'description', 'in_stock',)
+                'fields': ('chapter', 'brand', 'model', 'category', 'year', 'description', 'in_stock',)
             }),
             (f'Курс доллара составляет: {exchange if exchange else "Вы не указали курс доллара"}', {
                 'fields': ('price',),

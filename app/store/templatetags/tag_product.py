@@ -22,9 +22,10 @@ def tag_list_product(model, items):
                 'specification': {
                     'Марка': item.get_brand__title(),
                     'Модель': item.get_model__title(),
-                    'Артикул': item.article,
                 }
             }
+            if item.year:
+                info['specification']['Год'] = item.year
             products.append(info)
     elif model is KitCar:
         count_column = 1
@@ -106,12 +107,14 @@ def tag_detail_product(product, similar_product, user):
                 'Марка': product.get_brand__title(),
                 'Модель': product.get_model__title(),
                 'Категория': product.get_category__title,
-                'Артикул': product.article,
             },
             'description': product.description,
             'additional_images': product.additional_photo.all(),
             'is_favorite': product_is_favorite(product, user)
         }
+        if product.year:
+            info['specification']['Год'] = product.year
+
     elif model == 'kitcar':
         info = {
             'id': product.id,

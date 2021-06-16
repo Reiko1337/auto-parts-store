@@ -209,7 +209,6 @@ def get_tire_filter(request, kwargs=None):
 
 
 def get_kit_car_filter(request, kwargs=None):
-    """=++++++++++++"""
     """Фильтр машинокомплектов"""
     fields = get_filter_fields(request, kwargs)
     list_products = filter_brand_and_model(KitCar, fields.get('brand', ''), fields.get('model', ''))
